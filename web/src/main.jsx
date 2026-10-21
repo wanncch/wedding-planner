@@ -1,0 +1,15 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import './styles.css';
+import App from './App.jsx';
+import { AuthProvider, ToastProvider } from './lib/store.jsx';
+import { ConfirmHost } from './components/ui.jsx';
+
+createRoot(document.getElementById('root')).render(
+  <ToastProvider>
+    <AuthProvider>
+      <App />
+      <ConfirmHost />
+    </AuthProvider>
+  </ToastProvider>
+);
