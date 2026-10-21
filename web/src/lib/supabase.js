@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Kunci publishable memang boleh ada di browser: semua data dilindungi Row Level Security.
-const URL = import.meta.env.VITE_SUPABASE_URL || 'https://yzpdswuoskecnedanzam.supabase.co';
-const KEY = import.meta.env.VITE_SUPABASE_KEY || 'sb_publishable_FujLHngzQ5VHozSOv1ia2Q_U50bvJlW';
+const URL = import.meta.env.VITE_SUPABASE_URL || 'https://whpkypbmzkvzgnygpvpg.supabase.co';
+const KEY = import.meta.env.VITE_SUPABASE_KEY || 'sb_publishable_ELyQyo_TLQ_l34wgR3j0jw_XlvyaMib';
 
 export const supabase = window.__MOCK_SUPABASE__ || createClient(URL, KEY, {
   auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }

@@ -4,7 +4,7 @@ Web app perencanaan pernikahan untuk banyak pasangan. Satu akun bisa punya beber
 dan setiap pernikahan bisa dibagikan ke pasangan, keluarga, atau WO.
 
 - **Tampilan**: React + Vite, di-hosting di **Cloudflare Pages** (statis, gratis, cepat).
-- **Database & login**: **Supabase** (Postgres + Auth + Storage). Project: `wedding-planner` (Singapura).
+- **Database & login**: **Supabase** (Postgres + Auth + Storage). Project: `Wedding-planner` (`whpkypbmzkvzgnygpvpg`, Singapura).
 - Semua input lewat web. Tidak ada lagi Google Sheets / Apps Script.
 
 ## Menu
