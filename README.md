@@ -11,6 +11,12 @@ dan setiap pernikahan bisa dibagikan ke pasangan, keluarga, atau WO.
 Beranda · Persiapan · Anggaran · Vendor · Seserahan (Seserahan & Mahar, Hantaran Balasan, Bawaan Hari H) ·
 Tamu · Rundown · Dokumen · Catatan · Pengaturan, plus layar HP **Mode hari H** (rundown live) dan **Mode check-in tamu**.
 
+## Akun & langganan (v3)
+- Akun baru otomatis **trial 14 hari**. Setelah habis, data hanya bisa dilihat sampai upgrade.
+- Pelanggan upgrade di `#/upgrade` (QRIS / transfer + upload bukti).
+- Admin mengelola semuanya di **Pusat Kontrol** `#/admin`: ringkasan & pendapatan, akun pelanggan (paket, masa berlaku, blokir, hapus, reset sandi), pembayaran, paket & harga, pengumuman, pengaturan bayar.
+- Menambah admin: `insert into public.platform_admins (user_id) select id from auth.users where email = '...';`
+
 ## Struktur
 ```
 supabase/migrations/   SQL skema, keamanan (RLS), template, fungsi

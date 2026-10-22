@@ -12,6 +12,7 @@ const TABS = [
   { key: 'akun', label: 'Akun pelanggan', icon: 'users' },
   { key: 'pembayaran', label: 'Pembayaran', icon: 'card' },
   { key: 'paket', label: 'Paket & harga', icon: 'crown' },
+  { key: 'pengumuman', label: 'Pengumuman', icon: 'megaphone' },
   { key: 'pengaturan', label: 'Pengaturan bayar', icon: 'gear' },
 ];
 const BULAN3 = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
@@ -110,6 +111,7 @@ export default function Admin({ tab: tabParam }) {
             {tab === 'akun' && <Akun {...ctx} />}
             {tab === 'pembayaran' && <Pembayaran {...ctx} />}
             {tab === 'paket' && <Paket {...ctx} />}
+            {tab === 'pengumuman' && <Pengumuman {...ctx} />}
             {tab === 'pengaturan' && <Pengaturan {...ctx} />}
           </>
         )}
@@ -537,6 +539,98 @@ function PlanModal({ p, onClose, reload, toast }) {
 }
 
 /* ------------------------------ Pengaturan ------------------------------ */
+const LEVELS = [{ key: 'info', label: 'Info' }, { key: 'promo', label: 'Promo', cls: 's-wait' }, { key: 'penting', label: 'Penting' }];
+const AUDS = [{ value: 'all', label: 'Semua pengguna' }, { value: 'trial', label: 'Pengguna trial' }, { value: 'paid', label: 'Pelanggan berbayar' }, { value: 'expired', label: 'Akun kedaluwarsa' }];
+function annState(a) {
+  const now = Date.now();
+  if (!a.is_active) return ['Nonaktif', 'p-no'];
+  if (new Date(a.starts_at).getTime() > now) return ['Terjadwal', 'p-wait'];
+  if (a.ends_at && new Date(a.ends_at).getTime() <= now) return ['Selesai', 'p-no'];
+  return ['Tayang', 'p-ok'];
+}
+
+function Pengumuman({ toast }) {
+  const [list, setList] = useState(null);
+  const [edit, setEdit] = useState(null);
+  const load = useCallback(() => supabase.from('announcements').select('*').order('created_at', { ascending: false }).then(({ data, error }) => { if (error) toast(friendlyError(error), 'error'); setList(data || []); }), [toast]);
+  useEffect(() => { load(); }, [load]);
+  async function toggle(a) {
+    const { error } = await supabase.from('announcements').update({ is_active: !a.is_active }).eq('id', a.id);
+    if (error) toast(friendlyError(error), 'error'); else load();
+  }
+  async function remove(a) {
+    if (!(await confirm({ title: 'Hapus pengumuman?', text: '“' + a.title + '” akan dihapus.', ok: 'Hapus', danger: true }))) return;
+    const { error } = await supabase.from('announcements').delete().eq('id', a.id);
+    if (error) toast(friendlyError(error), 'error'); else { toast('Pengumuman dihapus.', 'ok'); load(); }
+  }
+  return (
+    <>
+      <Head eyebrow="Pesan yang tampil di atas aplikasi pelanggan" title="Pengumuman">
+        <button type="button" className="btn" onClick={() => setEdit({ _new: true, title: '', body: '', level: 'info', audience: 'all', link_label: '', link_url: '', is_active: true, starts_at: isoDay(new Date()), ends_at: '' })}><Icon name="plus" size={15} />Pengumuman</button>
+      </Head>
+      <section className="g col">
+        {!list ? <Spinner /> : !list.length ? <Empty icon="megaphone" title="Belum ada pengumuman" text="Contoh: promo akhir tahun, jadwal perbaikan sistem, atau fitur baru." /> : list.map(a => {
+          const [lbl, cls] = annState(a);
+          return (
+            <div key={a.id} className="li" style={{ alignItems: 'flex-start' }}>
+              <span className={'ico ann-' + a.level}><Icon name="megaphone" size={18} /></span>
+              <div className="grow">
+                <div className="row" style={{ gap: 8 }}><b>{a.title}</b><Pill cls={cls}>{lbl}</Pill></div>
+                {a.body && <div className="sm" style={{ marginTop: 2, whiteSpace: 'pre-line' }}>{a.body}</div>}
+                <div className="xs muted" style={{ marginTop: 4 }}>{(AUDS.find(x => x.value === a.audience) || {}).label} · {(LEVELS.find(x => x.key === a.level) || {}).label} · mulai {dMed(a.starts_at)}{a.ends_at ? ' s/d ' + dMed(a.ends_at) : ''}</div>
+              </div>
+              <div className="row" style={{ gap: 6, flexWrap: 'nowrap' }}>
+                <Toggle on={a.is_active} onChange={() => toggle(a)} />
+                <button type="button" className="ibtn" onClick={() => setEdit({ ...a, starts_at: isoDay(a.starts_at), ends_at: a.ends_at ? isoDay(a.ends_at) : '' })} aria-label="Ubah"><Icon name="edit" size={15} /></button>
+                <button type="button" className="ibtn" onClick={() => remove(a)} aria-label="Hapus"><Icon name="trash" size={15} /></button>
+              </div>
+            </div>
+          );
+        })}
+      </section>
+      <div className="note">Pengumuman muncul sebagai pita di atas halaman pelanggan sesuai sasaran yang dipilih. Pelanggan bisa menutupnya.</div>
+      {edit && <AnnModal a={edit} onClose={() => setEdit(null)} reload={load} toast={toast} />}
+    </>
+  );
+}
+
+function AnnModal({ a, onClose, reload, toast }) {
+  const [f, setF] = useState(a);
+  const [err, setErr] = useState('');
+  const set = (k) => (v) => setF(x => ({ ...x, [k]: v }));
+  async function submit() {
+    if (!f.title.trim()) { setErr('Isi judul.'); return; }
+    if (f.ends_at && f.starts_at && f.ends_at < f.starts_at) { setErr('Tanggal selesai harus setelah tanggal mulai.'); return; }
+    let url = (f.link_url || '').trim();
+    if (url && !/^(https?:\/\/|#\/)/i.test(url)) url = 'https://' + url;
+    const row = { title: f.title.trim(), body: f.body, level: f.level, audience: f.audience, link_label: f.link_label, link_url: url, is_active: f.is_active,
+      starts_at: !f.starts_at || f.starts_at <= isoDay(new Date()) ? (a._new || f.starts_at !== a.starts_at ? new Date().toISOString() : new Date(f.starts_at + 'T00:00:00+07:00').toISOString()) : new Date(f.starts_at + 'T00:00:00+07:00').toISOString(),
+      ends_at: f.ends_at ? untilTs(f.ends_at) : null };
+    const res = a._new ? await supabase.from('announcements').insert(row) : await supabase.from('announcements').update(row).eq('id', a.id);
+    if (res.error) { setErr(friendlyError(res.error)); return; }
+    toast('Pengumuman disimpan.', 'ok'); onClose(); reload();
+  }
+  return (
+    <Modal open onClose={onClose} title={a._new ? 'Pengumuman baru' : 'Ubah pengumuman'}
+      footer={<><button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" onClick={submit}>Simpan</button></>}>
+      <div className={'banner ann ann-' + f.level}><Icon name="megaphone" size={20} /><span className="grow"><b>{f.title || 'Judul pengumuman'}</b>{f.body ? ' ' + f.body : ''}</span>{f.link_label && <span className="btn2 sm">{f.link_label}</span>}</div>
+      <Field label="Judul" error={err}><Text value={f.title} onChange={set('title')} placeholder="mis. Promo akhir tahun: Premium Rp99.000" /></Field>
+      <Field label="Isi" hint="opsional"><Area value={f.body} onChange={set('body')} rows={3} placeholder="mis. Berlaku sampai 31 Desember." /></Field>
+      <Field label="Jenis"><Seg value={f.level} onChange={set('level')} items={LEVELS} /></Field>
+      <Field label="Tampil untuk"><Select value={f.audience} onChange={set('audience')} options={AUDS} /></Field>
+      <div className="g2">
+        <Field label="Tulisan tombol" hint="opsional"><Text value={f.link_label} onChange={set('link_label')} placeholder="mis. Upgrade sekarang" /></Field>
+        <Field label="Link tombol"><Text value={f.link_url} onChange={set('link_url')} placeholder="#/upgrade atau https://…" /></Field>
+      </div>
+      <div className="g2">
+        <Field label="Mulai tayang"><DateIn value={f.starts_at} onChange={set('starts_at')} /></Field>
+        <Field label="Selesai" hint="kosong = terus"><DateIn value={f.ends_at} onChange={set('ends_at')} /></Field>
+      </div>
+      <div className="row nowrap" style={{ gap: 12 }}><Toggle on={f.is_active} onChange={set('is_active')} /><span className="sm"><b>Aktif</b></span></div>
+    </Modal>
+  );
+}
+
 function Pengaturan({ toast }) {
   const [st, setSt] = useState(null);
   const [busy, setBusy] = useState(false);

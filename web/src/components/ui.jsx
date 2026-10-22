@@ -46,6 +46,7 @@ const P = {
   ban: <><circle cx="12" cy="12" r="9" /><path d="M6 6l12 12" /></>,
   mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>,
   qr: <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2M14 18h2v2M18 18h2v2h-2z" />,
+  megaphone: <path d="M3 10v4a1 1 0 0 0 1 1h3l6 4V5L7 9H4a1 1 0 0 0-1 1zM17 8a5 5 0 0 1 0 8M7 15l1.5 5h2.5L10 15" />,
   calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></>,
   /* ikon kategori seserahan */
   cincin: <><circle cx="12" cy="15" r="6" /><path d="M9 3h6l-3 5z" /></>,

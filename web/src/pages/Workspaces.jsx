@@ -3,7 +3,7 @@ import { supabase, friendlyError } from '../lib/supabase.js';
 import { useAuth, useToast } from '../lib/store.jsx';
 import { go, signOut } from '../lib/nav.js';
 import { dLong, daysBetween, today, dMed } from '../lib/format.js';
-import { AccountBanner, PlanBadge } from '../components/Account.jsx';
+import { AccountBanner, AnnouncementBar, PlanBadge } from '../components/Account.jsx';
 import { Icon, Field, Text, DateIn, TimeIn, Money, NumIn, Seg, Spinner, Avatar, Pill } from '../components/ui.jsx';
 
 const ROLE = { owner: 'Pemilik', editor: 'Bisa edit', viewer: 'Lihat saja' };
@@ -43,6 +43,7 @@ export default function Workspaces({ create }) {
           </div>
         </div>
 
+        <AnnouncementBar />
         <AccountBanner />
         {!showForm && (
           <div className="g col">

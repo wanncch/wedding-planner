@@ -7,7 +7,7 @@ import { taskState } from './lib/calc.js';
 import { go } from './lib/nav.js';
 import AuthPage, { ResetPassword } from './pages/Auth.jsx';
 import Workspaces, { InviteAccept } from './pages/Workspaces.jsx';
-import { AccountBanner } from './components/Account.jsx';
+import { AccountBanner, AnnouncementBar } from './components/Account.jsx';
 
 const Beranda = lazy(() => import('./pages/Beranda.jsx'));
 const Persiapan = lazy(() => import('./pages/Persiapan.jsx'));
@@ -159,6 +159,7 @@ function Shell({ menu, q }) {
             </a>
             <SaveBadge />
           </div>
+          <AnnouncementBar />
           <AccountBanner weddingActive={w.active} isOwner={w.isOwner} />
           <Suspense fallback={<div className="skel" style={{ height: 400 }} />}>
             <Page q={q} />

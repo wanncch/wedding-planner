@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../lib/store.jsx';
 import { fileUrl } from '../lib/files.js';
 import { Icon } from './ui.jsx';
@@ -68,4 +69,46 @@ export function StoredImg({ src, alt, className, style }) {
   }, [src]);
   if (!u) return null;
   return <img src={u} alt={alt || ''} className={className} style={style} />;
+}
+
+/* ---------------- Pengumuman dari admin ---------------- */
+let annCache = null;
+const DKEY = 'wp-ann-tutup';
+function readDismissed() { try { return JSON.parse(localStorage.getItem(DKEY) || '[]'); } catch (e) { return []; } }
+
+function audienceOk(a, acc) {
+  if (a.audience === 'all') return true;
+  if (!acc || acc.unknown) return false;
+  if (acc.is_admin) return true;
+  if (a.audience === 'expired') return !acc.active;
+  if (a.audience === 'trial') return acc.active && acc.status === 'trial';
+  if (a.audience === 'paid') return acc.active && acc.status === 'active';
+  return false;
+}
+
+export function AnnouncementBar() {
+  const { account, session } = useAuth();
+  const [list, setList] = useState(annCache);
+  const [hidden, setHidden] = useState(readDismissed);
+  useEffect(() => {
+    if (!session) return;
+    if (annCache && annCache.uid === session.user.id && Date.now() - annCache.at < 300000) { setList(annCache); return; }
+    supabase.from('announcements').select('*').eq('is_active', true).order('created_at', { ascending: false }).limit(10).then(({ data }) => {
+      annCache = { uid: session.user.id, at: Date.now(), rows: data || [] };
+      setList(annCache);
+    });
+  }, [session && session.user.id]);
+  if (!list) return null;
+  const now = Date.now();
+  const rows = list.rows.filter(a => !hidden.includes(a.id) && new Date(a.starts_at).getTime() <= now && (!a.ends_at || new Date(a.ends_at).getTime() > now) && audienceOk(a, account)).slice(0, 2);
+  if (!rows.length) return null;
+  const close = (id) => { const n = [...hidden, id].slice(-50); setHidden(n); try { localStorage.setItem(DKEY, JSON.stringify(n)); } catch (e) { /* abaikan */ } };
+  return rows.map(a => (
+    <div key={a.id} className={'banner ann ann-' + a.level} role="status">
+      <Icon name="megaphone" size={20} />
+      <span className="grow"><b>{a.title}</b>{a.body ? <span style={{ display: 'block', fontWeight: 500, whiteSpace: 'pre-line' }}>{a.body}</span> : null}</span>
+      {a.link_url && <a className="btn2 sm" href={a.link_url} target={a.link_url.startsWith('#') ? undefined : '_blank'} rel="noreferrer">{a.link_label || 'Buka'}</a>}
+      <button type="button" className="x" style={{ width: 30, height: 30, background: 'rgba(255,255,255,.5)' }} onClick={() => close(a.id)} aria-label="Tutup pengumuman"><Icon name="x" size={15} /></button>
+    </div>
+  ));
 }

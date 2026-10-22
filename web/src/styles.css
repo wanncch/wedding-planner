@@ -273,6 +273,10 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 .banner.trial{background:linear-gradient(135deg,rgba(244,239,252,.92),rgba(203,186,233,.75));color:#4A3275}
 .banner.exp{background:linear-gradient(135deg,rgba(255,236,239,.95),rgba(244,186,198,.85));color:#7A2E44}
 .banner .grow{flex:1;min-width:200px}
+.ann-info{background:linear-gradient(135deg,rgba(239,245,252,.95),rgba(211,227,244,.85));color:#2E5680}
+.ann-promo{background:linear-gradient(135deg,rgba(255,243,232,.95),rgba(249,201,162,.85));color:#7A4214}
+.ann-penting{background:linear-gradient(135deg,rgba(255,236,239,.95),rgba(240,170,185,.88));color:#7A2E44}
+.ico.ann-info,.ico.ann-promo,.ico.ann-penting{border:1px solid rgba(255,255,255,.8)}
 .plancard{border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;border:2px solid rgba(255,255,255,.9);background:rgba(255,255,255,.6)}
 .plancard.on{border-color:var(--rose);background:#fff;box-shadow:0 14px 30px rgba(176,86,107,.18)}
 .plancard .price{font-family:var(--serif);font-weight:700;font-size:26px}
