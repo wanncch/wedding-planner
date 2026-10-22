@@ -76,10 +76,10 @@ export default function Rundown() {
       {tabs.length > 1 && <Tabs value={cur.key} onChange={setEvId} items={tabs} />}
 
       <section className="tiles">
-        <Tile w="w1" k="Mulai" v={first ? hm(first.start_time) : '–'} sub={first ? first.title : 'Belum ada sesi'} />
-        {akad && <Tile w="w2" k={akad.name} v={hm(akad.start_time) || '–'} sub={akad.location || '–'} />}
-        {res ? <Tile w="w3" k="Resepsi" v={hm(res.start_time) + (res.end_time ? '–' + hm(res.end_time) : '')} sub={res.location || '–'} /> : !akad && <Tile w="w3" k={ev.name} v={hm(ev.start_time) || '–'} sub={ev.location || '–'} />}
-        <Tile w="w4" k="Total sesi" v={items.length} sub={durLabel(span) + ' · ' + pics.length + ' PIC'} />
+        <Tile w="w1" icon="clock" k="Mulai" v={first ? hm(first.start_time) : '–'} sub={first ? first.title : 'Belum ada sesi'} />
+        {akad && <Tile w="w2" icon="rings" k={akad.name} v={hm(akad.start_time) || '–'} sub={akad.location || '–'} />}
+        {res ? <Tile w="w3" icon="sparkle" k="Resepsi" v={hm(res.start_time) + (res.end_time ? '–' + hm(res.end_time) : '')} sub={res.location || '–'} /> : !akad && <Tile w="w3" icon="sparkle" k={ev.name} v={hm(ev.start_time) || '–'} sub={ev.location || '–'} />}
+        <Tile w="w4" icon="list" k="Total sesi" v={items.length} sub={durLabel(span) + ' · ' + pics.length + ' PIC'} />
       </section>
 
       <section className="split">

@@ -16,12 +16,17 @@ async function shrink(file) {
   } catch (e) { return file; }
 }
 
-export async function uploadFile(wid, folder, file) {
+export function uploadFile(wid, folder, file) {
+  return uploadPath(wid + '/' + folder, file);
+}
+
+/** Unggah ke folder bebas di bucket, mis. payments/<uid> atau public. */
+export async function uploadPath(dir, file) {
   if (!file) return null;
   if (file.size > MAX) throw new Error('Ukuran file maksimal 10 MB.');
   const f = await shrink(file);
   const safe = f.name.toLowerCase().replace(/[^a-z0-9.\-_]+/g, '-').slice(-60);
-  const path = wid + '/' + folder + '/' + Date.now() + '-' + safe;
+  const path = dir + '/' + Date.now() + '-' + safe;
   const { error } = await supabase.storage.from(BUCKET).upload(path, f, { upsert: false, contentType: f.type });
   if (error) throw new Error(friendlyError(error));
   return 'sb:' + path;

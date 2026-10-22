@@ -1,13 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useW } from '../lib/store.jsx';
 import { supabase } from '../lib/supabase.js';
-import { Icon, Tabs, Pill, Tile, Seg, Drawer, Modal, Field, Text, Area, Money, NumIn, DateIn, PersonPick, Toggle, Select, confirm, Empty, Bar, Check, Spinner } from '../components/ui.jsx';
+import { Icon, CAT_ICONS, CAT_COLORS, Tabs, Pill, Tile, Seg, Drawer, Modal, Field, Text, Area, Money, NumIn, DateIn, PersonPick, Toggle, Select, confirm, Empty, Bar, Check, Spinner } from '../components/ui.jsx';
 import FileField from '../components/FileField.jsx';
 import { openFile } from '../lib/files.js';
 import { GIFT_LISTS } from '../lib/calc.js';
 import { rp, rpShort, num, pct, dShort, parseMoney } from '../lib/format.js';
 
 const STATUS = [{ key: 'belum', label: 'Belum' }, { key: 'dipesan', label: 'Dipesan', cls: 's-wait' }, { key: 'siap', label: 'Siap', cls: 's-ok' }];
+/** Ikon & warna awal kategori dari namanya (sama dengan fungsi gift_style di database). */
+const STYLE_RULES = [
+  [/mahar|akad|cincin|perhiasan/i, 'cincin', 'k1'], [/ibadah|sholat|mukena/i, 'ibadah', 'k2'], [/dalam|tidur|piyama/i, 'bulan', 'k4'],
+  [/pakaian|baju|busana/i, 'baju', 'k3'], [/skincare|makeup|kosmetik/i, 'botol', 'k5'], [/body|mandi|perawatan/i, 'tetes', 'k6'],
+  [/tas|sepatu|dompet/i, 'tas', 'k7'], [/rumah|dapur/i, 'rumah', 'k8'], [/kue|buah|makan|minum/i, 'kue', 'k9'], [/kotak|hantaran|kemasan/i, 'kado', 'k10'],
+  [/aksesori|jam/i, 'jam', 'k5'], [/dokumen/i, 'buku', 'k2'], [/kesehatan|darurat|obat/i, 'hati', 'k8'], [/elektronik|charger/i, 'bintang', 'k6'], [/tamu|vendor|amplop/i, 'uang', 'k3'],
+];
+export function guessStyle(name, sort = 0) {
+  const r = STYLE_RULES.find(([re]) => re.test(name || ''));
+  return r ? { icon: r[1], color: r[2] } : { icon: 'kado', color: 'k' + ((Number(sort) || 0) % 10 + 1) };
+}
 const UNITS = ['pcs', 'set', 'pasang', 'kotak', 'botol', 'lembar', 'map', 'dus', 'pak', 'kg'];
 
 let tplCache = null;
@@ -57,36 +68,38 @@ export default function Seserahan({ q }) {
 
       {isHariH ? (
         <section className="tiles">
-          <Tile w="w3" k="Sudah disiapkan" v={ready + ' / ' + all.length}><Bar value={pct(ready, all.length)} cls="fs" style={{ marginTop: 6 }} /></Tile>
-          <Tile w="w2" k="Belum" v={String(all.length - ready - ordered)} sub="centang saat masuk tas / mobil" />
-          <Tile w="w1" k="Dipakai saat" v="Hari H" sub="buka di HP saat packing" />
+          <Tile w="w3" icon="check" k="Sudah disiapkan" v={ready + ' / ' + all.length}><Bar value={pct(ready, all.length)} cls="fs" style={{ marginTop: 6 }} /></Tile>
+          <Tile w="w2" icon="clock" k="Belum" v={String(all.length - ready - ordered)} sub="centang saat masuk tas / mobil" />
+          <Tile w="w1" icon="calendar" k="Dipakai saat" v="Hari H" sub="buka di HP saat packing" />
         </section>
       ) : (
         <section className="tiles">
-          <Tile w="w1" k={list === 'seserahan' ? 'Budget seserahan & mahar' : 'Rencana hantaran balasan'} v={rpShort(budget)} sub={list === 'seserahan' ? 'Rencana barang ' + rpShort(planned) + (canEdit ? ' · ketuk untuk ubah' : '') : all.length + ' barang'} onClick={list === 'seserahan' && canEdit ? () => setBudgetEdit(true) : undefined} />
-          <Tile w="w2" k="Realisasi (sudah dibeli)" v={rpShort(bought)} sub="Termasuk barang dipesan" />
-          <Tile w="w3" k="Sisa budget" v={<span style={{ color: budget - bought < 0 ? '#8E3A30' : undefined }}>{rpShort(budget - bought)}</span>} sub="Masuk ke Anggaran otomatis" />
-          <Tile w="w4" k="Barang siap" v={ready + ' / ' + all.length} sub={ready + ' siap · ' + ordered + ' dipesan · ' + (all.length - ready - ordered) + ' belum'} />
+          <Tile w="w1" icon="wallet" k={list === 'seserahan' ? 'Budget seserahan & mahar' : 'Rencana hantaran balasan'} v={rpShort(budget)} sub={list === 'seserahan' ? 'Rencana barang ' + rpShort(planned) + (canEdit ? ' · ketuk untuk ubah' : '') : all.length + ' barang'} onClick={list === 'seserahan' && canEdit ? () => setBudgetEdit(true) : undefined} />
+          <Tile w="w2" icon="card" k="Realisasi (sudah dibeli)" v={rpShort(bought)} sub="Termasuk barang dipesan" />
+          <Tile w="w3" icon="chart" k="Sisa budget" v={<span style={{ color: budget - bought < 0 ? '#8E3A30' : undefined }}>{rpShort(budget - bought)}</span>} sub="Masuk ke Anggaran otomatis" />
+          <Tile w="w4" icon="gift" k="Barang siap" v={ready + ' / ' + all.length} sub={ready + ' siap · ' + ordered + ' dipesan · ' + (all.length - ready - ordered) + ' belum'} />
         </section>
       )}
 
       <section className="g col">
         <div className="between"><div className="h2">{cats.length} kategori</div><span className="xs muted">+ kategori sendiri</span></div>
-        <div className="cats">
+        <div className="cats3">
           {cats.map(c => {
             const its = itemsOf(c.id);
             const r = its.filter(i => i.status === 'siap').length;
             const tot = its.reduce((s, i) => s + Number((i.status !== 'belum' ? (i.actual ?? i.planned) : i.planned) || 0), 0);
             const on = cat && c.id === cat.id;
             return (
-              <button type="button" key={c.id} className={'catc' + (on ? ' on' : '')} onClick={() => setCatId(c.id)}>
-                <b className="ell" style={{ fontSize: 13.5 }}>{c.name}</b>
-                <span className="xs" style={{ color: r === its.length && its.length ? '#3F7457' : on ? '#8E3B50' : 'var(--mut)', fontWeight: 600 }}>{r}/{its.length}{!isHariH ? ' · ' + rpShort(tot) : ''}</span>
-                <Bar value={pct(r, its.length)} cls={r === its.length && its.length ? 'fs' : 'fr'} style={{ height: 5 }} />
+              <button type="button" key={c.id} className={'cc ' + (c.color || 'k1') + (on ? ' on' : '')} onClick={() => setCatId(c.id)} aria-pressed={on}>
+                <span className="ci"><Icon name={c.icon || 'kado'} size={20} /></span>
+                {its.length > 0 && r === its.length && <span className="done">✓ lengkap</span>}
+                <b className="ell">{c.name}</b>
+                <span className="sub">{r}/{its.length} siap{!isHariH ? ' · ' + rpShort(tot) : ''}</span>
+                <span className="mt"><i style={{ width: pct(r, its.length) + '%' }} /></span>
               </button>
             );
           })}
-          {canEdit && <button type="button" className="catc add" onClick={() => setCatEdit({ _new: true, list })}>+ Kategori</button>}
+          {canEdit && <button type="button" className="cc add" onClick={() => setCatEdit({ _new: true, list })}>+ Kategori</button>}
         </div>
       </section>
 
@@ -112,7 +125,7 @@ function CategoryPanel({ cat, items, isHariH, onAdd, onEdit, onEditCat, setStatu
     <section className="g col">
       <div className="between">
         <div style={{ minWidth: 0 }}>
-          <div className="row nowrap" style={{ gap: 8 }}><div className="h2">{cat.name}</div>{canEdit && <button type="button" className="ibtn" style={{ width: 28, height: 28 }} onClick={onEditCat} aria-label="Ubah kategori"><Icon name="edit" size={14} /></button>}</div>
+          <div className="row nowrap" style={{ gap: 10 }}><span className={'ico ' + (cat.color || 'k1')} style={{ width: 34, height: 34 }}><Icon name={cat.icon || 'kado'} size={18} /></span><div className="h2">{cat.name}</div>{canEdit && <button type="button" className="ibtn" style={{ width: 28, height: 28 }} onClick={onEditCat} aria-label="Ubah kategori"><Icon name="edit" size={14} /></button>}</div>
           {(cat.pic || cat.note) && <div className="xs muted">{[cat.pic && 'PIC ' + cat.pic, cat.note].filter(Boolean).join(' · ')}</div>}
         </div>
         {!isHariH && <div className="row" style={{ gap: 16 }}><div><div className="k">Budget</div><b>{rpShort(plan)}</b></div><div><div className="k">Realisasi</div><b>{rp(real)}</b></div></div>}
@@ -176,7 +189,7 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
   async function ensureCat() {
     if (newCat !== null) {
       if (!newCat.trim()) throw new Error('Isi nama kategori baru.');
-      const c = await add('gift_categories', { list, name: newCat.trim(), sort: cats.length + 1 });
+      const c = await add('gift_categories', { list, name: newCat.trim(), sort: cats.length + 1, ...guessStyle(newCat.trim(), cats.length + 1) });
       onPickCat && onPickCat(c.id);
       return c.id;
     }
@@ -218,7 +231,7 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
     onClose();
     const catByName = Object.fromEntries(data.gift_categories.filter(c => c.list === list).map(c => [c.name, c.id]));
     for (const cname of Array.from(new Set(chosen.map(t => t.category)))) {
-      if (!catByName[cname]) { const c = await add('gift_categories', { list, name: cname, sort: 900 }); catByName[cname] = c.id; }
+      if (!catByName[cname]) { const c = await add('gift_categories', { list, name: cname, sort: 900, ...guessStyle(cname, Object.keys(catByName).length) }); catByName[cname] = c.id; }
     }
     await addMany('gift_items', chosen.map(t => ({ category_id: catByName[t.category], name: t.name, brand: t.brand, qty: t.qty, unit: t.unit, planned: t.planned, count_in_budget: list !== 'hari_h', sort: t.sort })));
   }
@@ -331,24 +344,49 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
 function CategoryModal({ cat, onClose, onCreated }) {
   const { data, add, save, del, people } = useW();
   const isNew = !!cat._new;
-  const [f, setF] = useState({ name: cat.name || '', pic: cat.pic || '', note: cat.note || '' });
+  const nextSort = data.gift_categories.filter(c => c.list === cat.list).length + 1;
+  const init = isNew ? guessStyle('', nextSort) : { icon: cat.icon || 'kado', color: cat.color || 'k1' };
+  const [f, setF] = useState({ name: cat.name || '', pic: cat.pic || '', note: cat.note || '', ...init });
+  const [touched, setTouched] = useState(!isNew);
   const [err, setErr] = useState('');
   const n = data.gift_items.filter(i => i.category_id === cat.id).length;
+  const set = (k) => (v) => setF(x => ({ ...x, [k]: v }));
+  function onName(v) {
+    setF(x => ({ ...x, name: v, ...(touched ? {} : guessStyle(v, nextSort)) }));
+  }
+  const pickStyle = (k, v) => { setTouched(true); setF(x => ({ ...x, [k]: v })); };
   async function submit() {
     if (!f.name.trim()) { setErr('Isi nama kategori.'); return; }
     onClose();
-    if (isNew) { const c = await add('gift_categories', { list: cat.list, name: f.name.trim(), pic: f.pic, note: f.note, sort: data.gift_categories.length + 1 }); if (c) onCreated(c.id); }
-    else await save('gift_categories', cat.id, { name: f.name.trim(), pic: f.pic, note: f.note });
+    const row = { name: f.name.trim(), pic: f.pic, note: f.note, icon: f.icon, color: f.color };
+    if (isNew) { const c = await add('gift_categories', { list: cat.list, ...row, sort: nextSort }); if (c) onCreated(c.id); }
+    else await save('gift_categories', cat.id, row);
   }
   async function remove() {
     if (await confirm({ title: 'Hapus kategori?', text: '“' + cat.name + '” dan ' + n + ' barang di dalamnya akan dihapus.', ok: 'Hapus', danger: true })) { onClose(); del('gift_categories', cat.id, { silent: true }); }
   }
   return (
     <Modal open onClose={onClose} title={isNew ? 'Kategori baru' : 'Ubah kategori'}
-      footer={<>{!isNew && <button type="button" className="btn2" style={{ marginRight: 'auto' }} onClick={remove}><Icon name="trash" size={15} /></button>}<button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" onClick={submit}>Simpan</button></>}>
-      <Field label="Nama kategori" error={err}><Text value={f.name} onChange={(v) => setF(x => ({ ...x, name: v }))} placeholder="mis. Skincare & makeup" /></Field>
-      <Field label="PIC"><PersonPick value={f.pic} onChange={(v) => setF(x => ({ ...x, pic: v }))} people={people} /></Field>
-      <Field label="Catatan"><Text value={f.note} onChange={(v) => setF(x => ({ ...x, note: v }))} placeholder="mis. beli bundling biar hemat ongkir" /></Field>
+      footer={<>{!isNew && <button type="button" className="btn2" style={{ marginRight: 'auto' }} onClick={remove} aria-label="Hapus kategori"><Icon name="trash" size={15} /></button>}<button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" onClick={submit}>Simpan</button></>}>
+      <div className={'cc ' + f.color} style={{ cursor: 'default', flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <span className="ci" style={{ width: 46, height: 46 }}><Icon name={f.icon} size={24} /></span>
+        <div style={{ minWidth: 0 }}><b className="ell" style={{ display: 'block', fontSize: 15 }}>{f.name || 'Nama kategori'}</b><span className="sub">{isNew ? '0/0 siap · Rp 0' : n + ' barang'}</span></div>
+      </div>
+      <Field label="Nama kategori" error={err}><Text value={f.name} onChange={onName} placeholder="mis. Skincare & makeup" /></Field>
+      <Field label="Ikon" hint="ikon & warna otomatis dari nama, bisa diganti">
+        <div className="ipick" role="radiogroup" aria-label="Ikon">
+          {CAT_ICONS.map(ic => <button type="button" key={ic} role="radio" aria-checked={f.icon === ic} aria-label={ic} title={ic} className={f.icon === ic ? 'on' : ''} onClick={() => pickStyle('icon', ic)}><Icon name={ic} size={20} /></button>)}
+        </div>
+      </Field>
+      <Field label="Warna kartu">
+        <div className="cpick" role="radiogroup" aria-label="Warna">
+          {CAT_COLORS.map(k => <button type="button" key={k} role="radio" aria-checked={f.color === k} aria-label={'Warna ' + k.slice(1)} className={k + (f.color === k ? ' on' : '')} onClick={() => pickStyle('color', k)} />)}
+        </div>
+      </Field>
+      <div className="g2">
+        <Field label="PIC"><PersonPick value={f.pic} onChange={set('pic')} people={people} /></Field>
+        <Field label="Catatan"><Text value={f.note} onChange={set('note')} placeholder="mis. beli bundling" /></Field>
+      </div>
     </Modal>
   );
 }

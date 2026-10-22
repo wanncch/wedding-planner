@@ -48,10 +48,10 @@ export default function Dokumen() {
       </div>
 
       <section className="tiles">
-        <Tile w="w3" k="Lengkap" v={done + ' / ' + docs.length}><Bar value={pct(done, docs.length)} cls="fs" style={{ marginTop: 6 }} /></Tile>
-        <Tile w="w2" k="Sedang diurus" v={proses} sub="tandai Lengkap saat sudah di tangan" />
-        <Tile w="w4" k="Segera habis masa berlaku" v={soon.length} sub={soon[0] ? soon[0].name + ' · ' + expLabel(soon[0]) : 'Isi tanggal berlaku bila ada'} subStyle={soon.length ? { fontWeight: 700, color: '#6B4560' } : null} />
-        <Tile w="w1" k="Tersimpan" v={files + ' file'} sub="scan & foto dokumen" />
+        <Tile w="w3" icon="check" k="Lengkap" v={done + ' / ' + docs.length}><Bar value={pct(done, docs.length)} cls="fs" style={{ marginTop: 6 }} /></Tile>
+        <Tile w="w2" icon="clock" k="Sedang diurus" v={proses} sub="tandai Lengkap saat sudah di tangan" />
+        <Tile w="w4" icon="calendar" k="Segera habis masa berlaku" v={soon.length} sub={soon[0] ? soon[0].name + ' · ' + expLabel(soon[0]) : 'Isi tanggal berlaku bila ada'} subStyle={soon.length ? { fontWeight: 700, color: '#6B4560' } : null} />
+        <Tile w="w1" icon="file" k="Tersimpan" v={files + ' file'} sub="scan & foto dokumen" />
       </section>
 
       <section className="grid2">

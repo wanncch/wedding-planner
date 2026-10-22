@@ -101,10 +101,10 @@ export default function Beranda() {
       </section>
 
       <section className="tiles">
-        <Tile w="w1" k="Anggaran" v={rpShort(b.budget)} sub={'Rencana ' + rpShort(b.planned) + (b.planned > b.budget ? ' · lebih ' + rpShort(b.planned - b.budget) : ' · aman')} subStyle={b.planned > b.budget ? { color: '#8E3A30', fontWeight: 700 } : null} onClick={() => { location.hash = L('anggaran'); }} />
-        <Tile w="w2" k="Sudah dibayar" v={rpShort(b.paid)} sub={'dari kontrak ' + rpShort(b.deal)} onClick={() => { location.hash = L('anggaran'); }} />
-        <Tile w="w3" k="Seserahan siap" v={b.gift.ready + ' / ' + b.gift.total} sub={rpShort(b.gift.bought) + ' dari ' + rpShort(b.gift.plan)} onClick={() => { location.hash = L('seserahan'); }} />
-        <Tile w="w4" k="Tamu konfirmasi hadir" v={gs.hadirPax + ' orang'} sub={'dari ' + gs.people + ' · ' + gs.belum + ' belum jawab'} onClick={() => { location.hash = L('tamu'); }} />
+        <Tile w="w1" icon="wallet" k="Anggaran" v={rpShort(b.budget)} sub={'Rencana ' + rpShort(b.planned) + (b.planned > b.budget ? ' · lebih ' + rpShort(b.planned - b.budget) : ' · aman')} subStyle={b.planned > b.budget ? { color: '#8E3A30', fontWeight: 700 } : null} onClick={() => { location.hash = L('anggaran'); }} />
+        <Tile w="w2" icon="card" k="Sudah dibayar" v={rpShort(b.paid)} sub={'dari kontrak ' + rpShort(b.deal)} onClick={() => { location.hash = L('anggaran'); }} />
+        <Tile w="w3" icon="gift" k="Seserahan siap" v={b.gift.ready + ' / ' + b.gift.total} sub={rpShort(b.gift.bought) + ' dari ' + rpShort(b.gift.plan)} onClick={() => { location.hash = L('seserahan'); }} />
+        <Tile w="w4" icon="users" k="Tamu konfirmasi hadir" v={gs.hadirPax + ' orang'} sub={'dari ' + gs.people + ' · ' + gs.belum + ' belum jawab'} onClick={() => { location.hash = L('tamu'); }} />
       </section>
 
       <section className="split">

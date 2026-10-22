@@ -46,6 +46,7 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(undefined);
   const [profile, setProfile] = useState(null);
   const [recovery, setRecovery] = useState(false);
+  const [account, setAccount] = useState(null);
 
   useEffect(() => {
     let alive = true;
@@ -63,7 +64,17 @@ export function AuthProvider({ children }) {
       .then(({ data }) => setProfile(data || { id: session.user.id, display_name: session.user.email, email: session.user.email }));
   }, [session && session.user.id]);
 
-  const value = useMemo(() => ({ session, user: session && session.user, profile, setProfile, recovery, setRecovery }), [session, profile, recovery]);
+  const reloadAccount = useCallback(async () => {
+    if (!session) { setAccount(null); return null; }
+    const { data, error } = await supabase.rpc('my_account');
+    const a = error ? { active: true, unknown: true } : (data || { active: true, unknown: true });
+    setAccount(a);
+    return a;
+  }, [session && session.user.id]);
+  useEffect(() => { reloadAccount(); }, [reloadAccount]);
+
+  const value = useMemo(() => ({ session, user: session && session.user, profile, setProfile, recovery, setRecovery, account, reloadAccount }),
+    [session, profile, recovery, account, reloadAccount]);
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }
 export const useAuth = () => useContext(AuthCtx);
@@ -88,10 +99,12 @@ export async function fetchAll(wid) {
     supabase.from('profiles').select('id,display_name,email'),
     supabase.from('wedding_invites').select('*').eq('wedding_id', wid).order('created_at'),
     ...TABLES.map(t => supabase.from(t).select('*').eq('wedding_id', wid).order(ORDER[t], { ascending: true, nullsFirst: false })),
+    supabase.rpc('wedding_active', { w: wid }),
   ];
   const res = await Promise.all(reqs.map(q => withRetry(() => q)));
   const out = { wedding: res[0].data, members: res[1].data || [], profiles: res[2].data || [], invites: res[3].data || [] };
   TABLES.forEach((t, i) => { out[t] = res[4 + i].data || []; });
+  out.active = res[4 + TABLES.length].data !== false;
   return out;
 }
 
@@ -260,7 +273,8 @@ export function WeddingProvider({ wid, children }) {
       const p = data.profiles.find(x => x.id === m.user_id) || {};
       return { ...m, name: m.label || p.display_name || p.email || 'Anggota', email: p.email };
     });
-    return { loading, error, reload, data, wid, role, canEdit: role !== 'viewer', isOwner: role === 'owner', me, people,
+    const active = data.active !== false;
+    return { loading, error, reload, data, wid, role, active, canEdit: role !== 'viewer' && active, isOwner: role === 'owner', me, people,
       add, addMany, save, del, rpc, commit, pending, syncedAt };
   }, [data, loading, error, reload, user, wid, add, addMany, save, del, rpc, commit, pending, syncedAt]);
 

@@ -38,7 +38,44 @@ const P = {
   rings: <><circle cx="9" cy="13" r="5.5" /><circle cx="15" cy="13" r="5.5" /></>,
   grip: <path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" />,
   sparkle: <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6" />,
+  shield: <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" />,
+  lock: <><rect x="5" y="10" width="14" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
+  crown: <path d="M4 18h16l1-11-5 4-4-6-4 6-5-4z" />,
+  chart: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
+  card: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 10h18M7 15h4" /></>,
+  ban: <><circle cx="12" cy="12" r="9" /><path d="M6 6l12 12" /></>,
+  mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>,
+  qr: <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2M14 18h2v2M18 18h2v2h-2z" />,
+  calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></>,
+  /* ikon kategori seserahan */
+  cincin: <><circle cx="12" cy="15" r="6" /><path d="M9 3h6l-3 5z" /></>,
+  ibadah: <><path d="M4 20h16M6 20v-7a6 6 0 0 1 12 0v7M12 4v3M10 20v-4a2 2 0 0 1 4 0v4" /></>,
+  baju: <><path d="M9 3h6l-1 5 4 13H6l4-13z" /></>,
+  bulan: <><path d="M20 14A8 8 0 1 1 10 4a7 7 0 0 0 10 10z" /></>,
+  botol: <><path d="M10 3h4v3h-4zM8 6h8l1 4v10a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V10zM7 13h10" /></>,
+  tetes: <><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" /></>,
+  tas: <><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2" /></>,
+  rumah: <><path d="M4 11l8-7 8 7v9H4zM10 20v-5h4v5" /></>,
+  kue: <><path d="M4 20h16v-7H4zM4 16c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 4 0M12 9v4M12 5v1" /></>,
+  kado: <><rect x="3" y="8" width="18" height="5" rx="1" /><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1" /></>,
+  hati: <><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" /></>,
+  bintang: <><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z" /></>,
+  buku: <><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M8 7h7" /></>,
+  bunga: <><circle cx="12" cy="10" r="2.5" /><path d="M12 7.5a3 3 0 1 1 3 3M12 7.5a3 3 0 1 0-3 3M14.5 11.5a3 3 0 1 1-2.5 3M9.5 11.5a3 3 0 1 0 2.5 3M12 15v6" /></>,
+  kamera: <><rect x="3" y="7" width="18" height="13" rx="3" /><circle cx="12" cy="13.5" r="3.5" /><path d="M9 7l1.5-3h3L15 7" /></>,
+  sepatu: <><path d="M3 17h18v-2c0-1-1-2-3-2l-5-1-3-5H5v10z" /><path d="M3 20h18" /></>,
+  jam: <><circle cx="12" cy="12" r="6" /><path d="M12 9v3l2 1M9 3h6M9 21h6" /></>,
+  gelas: <><path d="M6 3h12l-1 9a5 5 0 0 1-10 0zM12 17v4M8 21h8" /></>,
+  mahkota: <><path d="M4 18h16l1-11-5 4-4-6-4 6-5-4z" /></>,
+  daun: <><path d="M5 19c0-9 6-14 15-14 0 9-5 15-14 15zM5 19l8-8" /></>,
+  parfum: <><path d="M9 3h6v3H9zM7 8h10a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a1 1 0 0 1 1-1z" /><circle cx="12" cy="14" r="2.5" /></>,
+  kosmetik: <><path d="M9 11V5l3-2 3 2v6M7 11h10v10H7z" /></>,
+  uang: <><rect x="3" y="6" width="18" height="12" rx="2" /><circle cx="12" cy="12" r="2.5" /><path d="M6 9v.01M18 15v.01" /></>,
+  musik: <><path d="M9 18V5l11-2v13M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3zM20 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3z" /></>,
+
 };
+export const CAT_ICONS = ['cincin','ibadah','baju','bulan','botol','tetes','tas','rumah','kue','kado','hati','bintang','buku','bunga','kamera','sepatu','jam','gelas','mahkota','daun','parfum','kosmetik','uang','musik'];
+export const CAT_COLORS = ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7', 'k8', 'k9', 'k10'];
 
 export function Icon({ name, size = 18, stroke = 1.8, className, style }) {
   return (
@@ -98,13 +135,17 @@ export const Bar = ({ value, cls = 'fr', style }) => (
   <div className="bar" style={style}><i className={cls} style={{ width: Math.max(0, Math.min(100, value || 0)) + '%' }} /></div>
 );
 
-export function Tile({ k, v, sub, w = 'w1', subStyle, children, onClick }) {
+const TILE_ICON = { w1: 'wallet', w2: 'sparkle', w3: 'check', w4: 'star' };
+export function Tile({ k, v, sub, w = 'w1', icon, subStyle, children, onClick }) {
   return (
     <div className={'tile ' + w + (onClick ? ' click' : '')} onClick={onClick}>
-      <div className="k">{k}</div>
-      <div className="v">{v}</div>
-      {sub && <div className="xs muted" style={subStyle}>{sub}</div>}
-      {children}
+      <span className="bdg"><Icon name={icon || TILE_ICON[w]} size={20} stroke={2} /></span>
+      <div className="tb">
+        <div className="k">{k}</div>
+        <div className="v">{v}</div>
+        {sub && <div className="xs ts" style={subStyle}>{sub}</div>}
+        {children}
+      </div>
     </div>
   );
 }

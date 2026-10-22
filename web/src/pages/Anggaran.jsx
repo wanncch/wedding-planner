@@ -56,12 +56,12 @@ export default function Anggaran({ q }) {
       </div>
 
       <section className="tiles">
-        <Tile w="w1" k="Anggaran" v={rpShort(b.budget)} />
-        <Tile w="w2" k="Rencana" v={rpShort(b.planned)} sub={b.planned > b.budget ? 'Lebih ' + rpShort(b.planned - b.budget) : 'Sisa ' + rpShort(b.budget - b.planned)} subStyle={b.planned > b.budget ? { color: '#8E3A30', fontWeight: 700 } : null} />
-        <Tile w="w3" k="Aktual (deal)" v={rpShort(b.deal)} />
-        <Tile w="w4" k="Sudah dibayar" v={rpShort(b.paid)} sub={pct(b.paid, b.deal) + '% dari deal'} />
-        <Tile w="w1" k="Sisa tagihan" v={<span style={{ color: '#8A5414' }}>{rpShort(b.owed)}</span>} />
-        <Tile w="w2" k="Sisa anggaran" v={<span style={{ color: b.left < 0 ? '#8E3A30' : '#3F7457' }}>{rpShort(b.left)}</span>} sub="anggaran − deal" />
+        <Tile w="w1" icon="wallet" k="Anggaran" v={rpShort(b.budget)} />
+        <Tile w="w2" icon="list" k="Rencana" v={rpShort(b.planned)} sub={b.planned > b.budget ? 'Lebih ' + rpShort(b.planned - b.budget) : 'Sisa ' + rpShort(b.budget - b.planned)} subStyle={b.planned > b.budget ? { color: '#8E3A30', fontWeight: 700 } : null} />
+        <Tile w="w3" icon="check" k="Aktual (deal)" v={rpShort(b.deal)} />
+        <Tile w="w4" icon="card" k="Sudah dibayar" v={rpShort(b.paid)} sub={pct(b.paid, b.deal) + '% dari deal'} />
+        <Tile w="w1" icon="clock" k="Sisa tagihan" v={<span style={{ color: '#8A5414' }}>{rpShort(b.owed)}</span>} />
+        <Tile w="w2" icon="chart" k="Sisa anggaran" v={<span style={{ color: b.left < 0 ? '#8E3A30' : '#3F7457' }}>{rpShort(b.left)}</span>} sub="anggaran − deal" />
       </section>
 
       {tab === 'simulasi' ? <Simulasi rows={rows} /> : (

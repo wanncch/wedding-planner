@@ -3,12 +3,14 @@ import { supabase, friendlyError } from '../lib/supabase.js';
 import { useAuth, useToast } from '../lib/store.jsx';
 import { go, signOut } from '../lib/nav.js';
 import { dLong, daysBetween, today, dMed } from '../lib/format.js';
+import { AccountBanner, PlanBadge } from '../components/Account.jsx';
 import { Icon, Field, Text, DateIn, TimeIn, Money, NumIn, Seg, Spinner, Avatar, Pill } from '../components/ui.jsx';
 
 const ROLE = { owner: 'Pemilik', editor: 'Bisa edit', viewer: 'Lihat saja' };
 
 export default function Workspaces({ create }) {
-  const { user, profile } = useAuth();
+  const { user, profile, account } = useAuth();
+  const locked = account && !account.active && !account.is_admin;
   const [list, setList] = useState(null);
   const [err, setErr] = useState('');
   const [showForm, setShowForm] = useState(!!create);
@@ -28,7 +30,7 @@ export default function Workspaces({ create }) {
 
   return (
     <div className="auth" style={{ alignItems: 'start', paddingTop: 40 }}>
-      <div style={{ width: 640, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ width: '100%', maxWidth: 640, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="between">
           <div className="brand" style={{ padding: 0 }}>
             <span className="logo"><Icon name="rings" size={22} /></span>
@@ -36,10 +38,12 @@ export default function Workspaces({ create }) {
           </div>
           <div className="row">
             <span className="sm muted">Halo, <b>{profile ? profile.display_name : ''}</b></span>
+            {account && !account.unknown && (account.is_admin ? <a className="btn2 sm" href="#/admin"><Icon name="shield" size={15} />Pusat Kontrol</a> : <a href="#/upgrade" style={{ textDecoration: 'none' }}><PlanBadge a={account} /></a>)}
             <button type="button" className="btn2 sm" onClick={signOut}><Icon name="logout" size={15} />Keluar</button>
           </div>
         </div>
 
+        <AccountBanner />
         {!showForm && (
           <div className="g col">
             <div className="between"><div className="h2">Pilih pernikahan</div><button type="button" className="btn sm" onClick={() => setShowForm(true)}><Icon name="plus" size={15} />Pernikahan baru</button></div>
@@ -63,7 +67,14 @@ export default function Workspaces({ create }) {
             <div className="xs muted">Diundang pasangan? Buka link undangan yang dikirim lewat WA/email. Pernikahan akan muncul di sini.</div>
           </div>
         )}
-        {showForm && <CreateWedding onCancel={list && list.length ? () => setShowForm(false) : null} />}
+        {showForm && (locked ? (
+          <div className="g col" style={{ alignItems: 'flex-start' }}>
+            <span className="ico"><Icon name="lock" /></span>
+            <div className="h2">Upgrade dulu untuk membuat pernikahan baru</div>
+            <div className="muted">Masa trial atau langgananmu sudah habis. Pernikahan yang sudah ada tetap bisa dibuka (hanya lihat).</div>
+            <div className="row"><a className="btn" href="#/upgrade"><Icon name="crown" size={15} />Lihat paket</a>{list && list.length > 0 && <button type="button" className="btn2" onClick={() => setShowForm(false)}>Kembali</button>}</div>
+          </div>
+        ) : <CreateWedding onCancel={list && list.length ? () => setShowForm(false) : null} />)}
       </div>
     </div>
   );

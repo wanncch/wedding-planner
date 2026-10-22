@@ -48,11 +48,11 @@ export default function Tamu() {
       </div>
 
       <section className="tiles">
-        <Tile w="w1" k="Undangan" v={s.invites} sub={s.cetak + ' cetak · ' + s.digital + ' digital'} />
-        <Tile w="w2" k="Orang diundang" v={s.people} sub={'≈ ' + Math.round(s.people * 1.5) + ' porsi (×1,5)'} />
-        <Tile w="w3" k="Konfirmasi hadir" v={s.hadirPax} sub={s.hadir + ' undangan'} subStyle={{ fontWeight: 700, color: '#3F7457' }} />
-        <Tile w="w4" k="Belum jawab" v={s.belum} sub="undangan · ingatkan via WA" subStyle={{ fontWeight: 700, color: '#6B4560' }} />
-        <Tile w="w1" k="Sudah dikirim" v={s.sent + ' / ' + s.invites}><Bar value={pct(s.sent, s.invites)} style={{ marginTop: 6 }} /></Tile>
+        <Tile w="w1" icon="mail" k="Undangan" v={s.invites} sub={s.cetak + ' cetak · ' + s.digital + ' digital'} />
+        <Tile w="w2" icon="users" k="Orang diundang" v={s.people} sub={'≈ ' + Math.round(s.people * 1.5) + ' porsi (×1,5)'} />
+        <Tile w="w3" icon="check" k="Konfirmasi hadir" v={s.hadirPax} sub={s.hadir + ' undangan'} subStyle={{ fontWeight: 700, color: '#3F7457' }} />
+        <Tile w="w4" icon="clock" k="Belum jawab" v={s.belum} sub="undangan · ingatkan via WA" subStyle={{ fontWeight: 700, color: '#6B4560' }} />
+        <Tile w="w1" icon="wa" k="Sudah dikirim" v={s.sent + ' / ' + s.invites}><Bar value={pct(s.sent, s.invites)} style={{ marginTop: 6 }} /></Tile>
       </section>
 
       <section className="split">

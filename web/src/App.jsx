@@ -7,6 +7,7 @@ import { taskState } from './lib/calc.js';
 import { go } from './lib/nav.js';
 import AuthPage, { ResetPassword } from './pages/Auth.jsx';
 import Workspaces, { InviteAccept } from './pages/Workspaces.jsx';
+import { AccountBanner } from './components/Account.jsx';
 
 const Beranda = lazy(() => import('./pages/Beranda.jsx'));
 const Persiapan = lazy(() => import('./pages/Persiapan.jsx'));
@@ -20,6 +21,8 @@ const Checkin = lazy(() => import('./pages/Checkin.jsx'));
 const Dokumen = lazy(() => import('./pages/Dokumen.jsx'));
 const Catatan = lazy(() => import('./pages/Catatan.jsx'));
 const Pengaturan = lazy(() => import('./pages/Pengaturan.jsx'));
+const Admin = lazy(() => import('./pages/Admin.jsx'));
+const Upgrade = lazy(() => import('./pages/Upgrade.jsx'));
 
 export const MENUS = [
   { key: 'beranda', label: 'Beranda', icon: 'home', comp: Beranda },
@@ -70,6 +73,9 @@ export default function App() {
   }
   if (!session) return <Bg><AuthPage mode={['daftar', 'lupa'].includes(parts[0]) ? parts[0] : 'masuk'} /></Bg>;
 
+  if (parts[0] === 'admin') return <Bg><Suspense fallback={<Spinner label="Memuat…" />}><Admin tab={parts[1]} /></Suspense></Bg>;
+  if (parts[0] === 'upgrade') return <Bg><Suspense fallback={<Spinner label="Memuat…" />}><Upgrade /></Suspense></Bg>;
+
   if (parts[0] === 'w' && parts[1]) {
     const menu = parts[2] || 'beranda';
     try { localStorage.setItem('wp-current', parts[1]); } catch (e) { /* abaikan */ }
@@ -85,7 +91,7 @@ export default function App() {
 export function Bg({ children }) {
   return (
     <>
-      <div className="bgfx" aria-hidden="true"><div className="orb o1" /><div className="orb o2" /><div className="orb o3" /></div>
+      <div className="bgfx" aria-hidden="true"><div className="orb o1" /><div className="orb o2" /><div className="orb o3" /><div className="orb o4" /></div>
       {children}
     </>
   );
@@ -94,7 +100,7 @@ export function Bg({ children }) {
 function Shell({ menu, q }) {
   const w = useW();
   const [more, setMore] = useState(false);
-  const { profile } = useAuth();
+  const { profile, account } = useAuth();
 
   useEffect(() => { setMore(false); }, [menu]);
 
@@ -138,6 +144,7 @@ function Shell({ menu, q }) {
               </a>
             ))}
           </nav>
+          {account && account.is_admin && <a className="btn2 sm" href="#/admin" style={{ margin: '0 8px' }}><Icon name="shield" size={15} />Pusat Kontrol</a>}
           <a className="couple" href="#/pilih" style={{ textDecoration: 'none', color: 'inherit' }}>
             <span className="avs"><Avatar name={wed.bride_name} /><Avatar name={wed.groom_name} /></span>
             <span style={{ minWidth: 0 }}><b className="ell" style={{ display: 'block' }}>{wed.bride_name} &amp; {wed.groom_name}</b><span className="muted">Ganti pernikahan</span></span>
@@ -152,6 +159,7 @@ function Shell({ menu, q }) {
             </a>
             <SaveBadge />
           </div>
+          <AccountBanner weddingActive={w.active} isOwner={w.isOwner} />
           <Suspense fallback={<div className="skel" style={{ height: 400 }} />}>
             <Page q={q} />
           </Suspense>
@@ -177,6 +185,7 @@ function Shell({ menu, q }) {
             <a href={base + 'live'}><Icon name="live" />Mode hari H · rundown</a>
             <a href={base + 'checkin'}><Icon name="check" />Mode check-in tamu</a>
             <a href="#/pilih"><Icon name="users" />Ganti pernikahan</a>
+            {account && account.is_admin ? <a href="#/admin"><Icon name="shield" />Pusat Kontrol</a> : <a href="#/upgrade"><Icon name="crown" />Paket & upgrade</a>}
           </nav>
           <div className="xs muted">Masuk sebagai {profile ? profile.display_name : ''}</div>
         </Modal>
