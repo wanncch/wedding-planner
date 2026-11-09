@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Anggaran</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#A44E62}a:hover{color:#33262E}
+.app{position:relative;min-height:1200px;background:#FBF3F1;color:#33262E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;display:flex;flex-wrap:wrap;overflow:hidden}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.o1{left:-140px;top:-160px;width:560px;height:560px;background:radial-gradient(circle,rgba(227,154,165,.6),transparent 70%)}
+.o2{right:-180px;top:140px;width:620px;height:620px;background:radial-gradient(circle,rgba(246,196,166,.55),transparent 70%)}
+.o3{left:28%;bottom:-240px;width:680px;height:680px;background:radial-gradient(circle,rgba(143,176,155,.42),transparent 70%)}
+.side{position:relative;flex:1 1 232px;max-width:100%;margin:16px 0 16px 16px;border-radius:28px;background:rgba(255,255,255,.5);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(176,86,107,.08);padding:22px 12px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;gap:10px;align-items:center;padding:0 8px}
+.logo{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#B0566B,#E9A493);display:grid;place-items:center;box-shadow:0 6px 16px rgba(176,86,107,.35);flex:none}
+.bn{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px;line-height:1.05}
+.by{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#A44E62;font-weight:700;margin-top:3px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;text-decoration:none;color:#5E4A55;border-radius:14px;padding:9px 12px;font-size:13.5px}
+.nav a.on{color:#fff;font-weight:700;background:linear-gradient(135deg,#B0566B,#D27A86);box-shadow:0 8px 18px rgba(176,86,107,.3)}
+.nb{margin-left:auto;font-size:10.5px;font-weight:800;background:#A8463A;color:#fff;border-radius:999px;padding:1px 7px}
+.nw{margin-left:auto;font-size:9.5px;font-weight:800;letter-spacing:.06em;background:#E1EFE6;color:#2F5A43;border-radius:999px;padding:2px 7px}
+.couple{margin-top:auto;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);border-radius:18px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:12px}
+.av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;color:#fff;border:2px solid #fff;flex:none}
+.ar{background:linear-gradient(135deg,#B0566B,#E39AA5)}.ab{background:linear-gradient(135deg,#4E7A62,#8FB09B)}.ai{background:linear-gradient(135deg,#C9873E,#F0C27B)}.aw{background:linear-gradient(135deg,#6B4560,#B88AA8)}
+.main{position:relative;flex:999 1 560px;min-width:0;padding:24px 28px 44px;display:flex;flex-direction:column;gap:16px}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.eyb{font-size:12.5px;color:#7B6A72;font-weight:600}
+.h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:32px;letter-spacing:-.01em;line-height:1.1}
+.h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px}
+.ser{font-family:Fraunces,Georgia,serif;font-weight:700}
+.g{background:rgba(255,255,255,.6);backdrop-filter:blur(18px) saturate(160%);border:1px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:0 10px 28px rgba(176,86,107,.08),inset 0 1px 0 rgba(255,255,255,.9);padding:18px;min-width:0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{border-radius:20px;padding:14px;border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 26px rgba(176,86,107,.1),inset 0 1px 0 #fff;display:flex;flex-direction:column;gap:2px;min-width:0}
+.w1{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(248,215,220,.64))}.w2{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(252,224,203,.68))}.w3{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(210,232,218,.68))}.w4{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(233,214,229,.7))}
+.k{font-size:11.5px;font-weight:600;color:#7B6A72}
+.v{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:23px;line-height:1.15}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.p-ok{background:linear-gradient(135deg,#D7EADF,#C2DDCB);color:#2F5A43}.p-wait{background:linear-gradient(135deg,#FBE3C6,#F6D3A5);color:#6B430F}.p-no{background:#F1E7E8;color:#6F5E66}.p-bad{background:#A8463A;color:#fff}.p-rose{background:linear-gradient(135deg,#F8DDE1,#F3C8CF);color:#8E3B50}.p-wish{background:#fff;color:#8E3B50;border:1.5px dashed #E39AA5}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:14px;padding:10px 16px;font:inherit;font-weight:700;font-size:13px;color:#fff;background:linear-gradient(135deg,#B0566B,#D27A86);box-shadow:0 8px 18px rgba(176,86,107,.28);white-space:nowrap}
+.btn2{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.9);border-radius:14px;padding:9px 14px;font:inherit;font-weight:700;font-size:13px;color:#33262E;background:rgba(255,255,255,.65);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);border-radius:16px;padding:4px;width:fit-content;max-width:100%;overflow-x:auto}
+.tab{padding:8px 14px;border-radius:12px;font-weight:600;font-size:13px;color:#7B6A72;white-space:nowrap}
+.tab.on{background:#fff;color:#33262E;font-weight:700;box-shadow:0 2px 8px rgba(176,86,107,.14)}
+.chip{padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);color:#5E4A55;white-space:nowrap}
+.chip.on{background:linear-gradient(135deg,#B0566B,#D27A86);color:#fff;border-color:transparent;box-shadow:0 6px 14px rgba(176,86,107,.25)}
+.bar{height:8px;border-radius:999px;background:rgba(176,86,107,.1);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.fr{background:linear-gradient(90deg,#B0566B,#E39AA5)}.fs{background:linear-gradient(90deg,#4E7A62,#8FB09B)}.fd{background:linear-gradient(90deg,#6B2E40,#A44E62)}
+.muted{color:#7B6A72}.xs{font-size:11.5px}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#7B6A72;font-weight:800;padding:8px 10px;border-bottom:1px solid rgba(176,86,107,.15);white-space:nowrap}
+table.t td{padding:10px;border-bottom:1px solid rgba(176,86,107,.08);vertical-align:middle}
+table.t tr.cat td{background:rgba(255,255,255,.55);font-weight:700;border-bottom:1px solid rgba(176,86,107,.14)}
+table.t tr.sel td{background:rgba(248,215,220,.45)}
+table.t tr.wish td{color:#8A7980}
+.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.step{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;padding:10px 0;border-bottom:1px dashed rgba(176,86,107,.18)}
+.dotc{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:2px solid #E3B4BD;background:#fff}
+.dotc.on{background:linear-gradient(135deg,#3F7457,#8FB09B);border-color:transparent}
+</style>
+</helmet>
+<div class="app">
+  <div class="orb o1" aria-hidden="true"></div><div class="orb o2" aria-hidden="true"></div><div class="orb o3" aria-hidden="true"></div>
+  <aside class="side">
+    <div class="brand"><span class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="13" r="5.5"></circle><circle cx="15" cy="13" r="5.5"></circle></svg></span><div><div class="bn">Wedding Planner</div><div class="by">by Wanncch</div></div></div>
+    <nav class="nav">
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg>Beranda</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"></path></svg>Persiapan<span class="nb">1</span></a>
+      <a href="#" class="on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M3 10h18"></path></svg>Anggaran</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4z"></path></svg>Vendor</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="8" width="18" height="5" rx="1"></rect><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1"></path></svg>Seserahan<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 5a3 3 0 0 1 0 6"></path></svg>Tamu</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Rundown<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Dokumen</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h14v12l-4 4H5z"></path><path d="M15 20v-4h4M8 9h8M8 13h5"></path></svg>Catatan<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg>Pengaturan</a>
+    </nav>
+    <div class="couple"><span style="display: flex"><span class="av ar">RL</span><span class="av ab" style="margin-left: -9px">BP</span></span><span><b>Rina &amp; Bagas</b><span style="display: block" class="muted">Ganti pernikahan</span></span></div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div><div class="eyb">Satu baris = rencana, harga deal, pembayaran, dan sisa</div><div class="h1">Anggaran</div></div>
+      <div class="row"><div class="tabs"><span class="tab on">Rincian</span><span class="tab">Simulasi</span></div><button type="button" class="btn2">Tambah dari katalog</button><button type="button" class="btn">+ Item</button></div>
+    </div>
+
+    <section class="tiles">
+      <div class="tile w1"><div class="k">Anggaran</div><div class="v">Rp175 jt</div></div>
+      <div class="tile w2"><div class="k">Rencana</div><div class="v">Rp168,4 jt</div></div>
+      <div class="tile w3"><div class="k">Aktual (deal)</div><div class="v">Rp98,5 jt</div></div>
+      <div class="tile w4"><div class="k">Sudah dibayar</div><div class="v">Rp41,8 jt</div></div>
+      <div class="tile w1"><div class="k">Sisa tagihan</div><div class="v" style="color: #8A5414">Rp56,7 jt</div></div>
+      <div class="tile w2"><div class="k">Sisa anggaran</div><div class="v" style="color: #3F7457">Rp76,5 jt</div></div>
+    </section>
+
+    <div class="between">
+      <div class="row" style="gap: 8px"><span class="chip on">Semua acara</span><span class="chip">Lamaran</span><span class="chip">Akad</span><span class="chip">Resepsi</span></div>
+      <div class="row" style="gap: 8px"><span class="chip">Belum bayar</span><span class="chip">DP</span><span class="chip">Lunas</span><span class="chip">Wishlist</span></div>
+    </div>
+
+    <section style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <div class="g" style="flex: 3 1 620px; padding: 8px 10px; overflow-x: auto">
+        <table class="t">
+          <thead><tr><th>Item</th><th>PIC</th><th class="n">Rencana</th><th class="n">Deal</th><th class="n">Dibayar</th><th class="n">Sisa</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr class="cat"><td colspan="2">Tempat &amp; dekorasi</td><td class="n">Rp29,5 jt</td><td class="n">Rp25,5 jt</td><td class="n">Rp5 jt</td><td class="n">Rp20,5 jt</td><td></td></tr>
+            <tr><td><b>Sewa gedung</b><div class="xs muted">Gedung Serbaguna Melati</div></td><td><span class="av ab">BP</span></td><td class="n">15.000.000</td><td class="n">14.500.000</td><td class="n">5.000.000</td><td class="n">9.500.000</td><td><span class="pill p-wait">DP</span></td></tr>
+            <tr><td><b>Dekorasi pelaminan</b><div class="xs muted">Dekor Anggun · tema rustic garden</div></td><td><span class="av ar">RL</span></td><td class="n">12.000.000</td><td class="n">11.000.000</td><td class="n">–</td><td class="n">11.000.000</td><td><span class="pill p-no">Belum bayar</span></td></tr>
+            <tr class="wish"><td><b>Photobooth</b><div class="xs">kalau ada sisa budget</div></td><td class="muted">–</td><td class="n">2.500.000</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td><span class="pill p-wish">☆ Wishlist</span></td></tr>
+            <tr class="cat"><td colspan="2">Konsumsi</td><td class="n">Rp35,6 jt</td><td class="n">Rp30 jt</td><td class="n">Rp7,5 jt</td><td class="n">Rp22,5 jt</td><td></td></tr>
+            <tr class="sel"><td><b>Catering 600 porsi</b><div class="xs muted">Dapur Ibu Ratna · 🔗 inspirasi menu</div></td><td><span style="display: flex"><span class="av ar">RL</span><span class="av ai" style="margin-left: -8px">IB</span></span></td><td class="n">32.000.000</td><td class="n">30.000.000</td><td class="n">7.500.000</td><td class="n">22.500.000</td><td><span class="pill p-wait">DP</span></td></tr>
+            <tr><td><b>Snack bingkisan &amp; air mineral</b><div class="xs muted">300 pcs · spunbound bag</div></td><td><span class="av ai">IB</span></td><td class="n">3.600.000</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td><span class="pill p-no">Belum deal</span></td></tr>
+            <tr class="cat"><td colspan="2">MUA &amp; busana</td><td class="n">Rp11,9 jt</td><td class="n">Rp5 jt</td><td class="n">–</td><td class="n">Rp5 jt</td><td></td></tr>
+            <tr><td><b>Rias akad &amp; resepsi</b><div class="xs muted">Sanggar Rias Ayu · termasuk hijab do</div></td><td><span class="av ar">RL</span></td><td class="n">5.000.000</td><td class="n">5.000.000</td><td class="n">–</td><td class="n">5.000.000</td><td><span class="pill p-bad">DP 28 Okt</span></td></tr>
+            <tr><td><b>Nail art &amp; hena</b></td><td><span class="av ar">RL</span></td><td class="n">450.000</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td><span class="pill p-no">Belum deal</span></td></tr>
+            <tr><td><b>Seragam keluarga kedua pihak</b><div class="xs muted">batik + bros orang tua</div></td><td><span class="av aw">IW</span></td><td class="n">6.450.000</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td><span class="pill p-no">Belum deal</span></td></tr>
+            <tr class="cat"><td colspan="2">Dokumentasi</td><td class="n">Rp14,5 jt</td><td class="n">Rp13,5 jt</td><td class="n">Rp12 jt</td><td class="n">Rp1,5 jt</td><td></td></tr>
+            <tr><td><b>Foto + video</b><div class="xs muted">Lens &amp; Bloom · paket Silver</div></td><td><span class="av ar">RL</span></td><td class="n">13.000.000</td><td class="n">12.000.000</td><td class="n">12.000.000</td><td class="n">0</td><td><span class="pill p-ok">Lunas</span></td></tr>
+            <tr><td><b>WCC (wedding content creator)</b></td><td><span class="av ab">BP</span></td><td class="n">1.500.000</td><td class="n">1.500.000</td><td class="n">–</td><td class="n">1.500.000</td><td><span class="pill p-no">Belum bayar</span></td></tr>
+            <tr class="cat"><td colspan="2">Mahar &amp; seserahan</td><td class="n">Rp25 jt</td><td class="n">Rp15,3 jt</td><td class="n">Rp15,3 jt</td><td class="n">–</td><td><span class="pill p-rose">16/34 siap</span></td></tr>
+          </tbody>
+        </table>
+        <div class="xs muted" style="padding: 10px">+ 5 kategori lain · Mahar &amp; seserahan dihitung otomatis dari menu Seserahan</div>
+      </div>
+
+      <aside class="g" style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px">
+        <div class="between"><span class="pill p-wait">DP terbayar</span><span class="xs muted">Konsumsi · Resepsi</span></div>
+        <div><div class="h2">Catering 600 porsi</div><div class="xs muted">Dapur Ibu Ratna · 0812-3450-0222</div></div>
+        <div class="between"><span class="k">Dibayar Rp7,5 jt dari Rp30 jt</span><b>25%</b></div>
+        <div class="bar" style="height: 12px"><i class="fd" style="width: 25%"></i></div>
+        <div>
+          <div class="step"><span class="dotc on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span><span><b>DP</b><span class="xs muted" style="display: block">Dibayar 8 Okt · transfer · bukti ✓</span></span><b>Rp7,5 jt</b></div>
+          <div class="step"><span class="dotc"></span><span><b>Termin 2</b><span class="xs muted" style="display: block">Jatuh tempo 15 Jan 2027</span></span><b>Rp10 jt</b></div>
+          <div class="step" style="border-bottom: 0"><span class="dotc"></span><span><b>Pelunasan</b><span class="xs muted" style="display: block">Jatuh tempo 5 Jun 2027</span></span><b>Rp12,5 jt</b></div>
+        </div>
+        <button type="button" class="btn" style="justify-content: center">Catat pembayaran</button>
+        <div style="background: rgba(255,255,255,.65); border-radius: 16px; padding: 12px; font-size: 13px; line-height: 1.5"><b>Catatan</b><br>Jumlah porsi ikut daftar tamu: 412 orang × 1,5. Food tasting kedua Sabtu 24 Okt.</div>
+        <div class="row xs" style="gap: 8px"><span class="pill p-rose">🔗 Inspirasi menu</span><span class="pill p-no">📎 Kontrak.pdf</span></div>
+      </aside>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

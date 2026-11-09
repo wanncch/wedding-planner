@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Dashboard glass HP</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#A44E62}a:hover{color:#33262E}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fill{from{width:0}}
+.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.06s}.d2{animation-delay:.14s}.d3{animation-delay:.22s}.d4{animation-delay:.3s}
+.fillbar{animation:fill 1.1s cubic-bezier(.2,.7,.2,1) both .3s}
+@media (prefers-reduced-motion:reduce){.rise,.fillbar{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; background: #FBF3F1; color: #33262E; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; overflow: hidden">
+  <div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none">
+    <div style="position: absolute; left: -140px; top: -120px; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(227,154,165,.65), rgba(227,154,165,0) 70%)"></div>
+    <div style="position: absolute; right: -150px; top: 260px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(246,196,166,.6), rgba(246,196,166,0) 70%)"></div>
+    <div style="position: absolute; left: -80px; bottom: -60px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(143,176,155,.5), rgba(143,176,155,0) 70%)"></div>
+  </div>
+
+  <div style="position: relative; padding: 20px 18px 110px; display: flex; flex-direction: column; gap: 14px">
+    <div class="rise" style="display: flex; justify-content: space-between; align-items: center">
+      <div><div style="font-size: 12px; color: #7B6A72; font-weight: 600">Selamat pagi, Rina</div><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 26px">Beranda</div></div>
+      <button type="button" aria-label="Refresh data" style="width: 44px; height: 44px; border-radius: 16px; border: 1px solid rgba(255,255,255,.85); background: rgba(255,255,255,.6); backdrop-filter: blur(12px); display: grid; place-items: center; box-shadow: 0 6px 16px rgba(176,86,107,.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33262E" stroke-width="2" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"></path></svg></button>
+    </div>
+
+    <section class="rise d1" style="position: relative; overflow: hidden; border-radius: 28px; padding: 20px; background: linear-gradient(130deg, #A44E62 0%, #C96B7E 45%, #E9A493 100%); color: #FFFFFF; box-shadow: 0 18px 36px rgba(176,86,107,.35)">
+      <div aria-hidden="true" style="position: absolute; right: -60px; top: -60px; width: 190px; height: 190px; border-radius: 50%; border: 26px solid rgba(255,255,255,.13)"></div>
+      <div style="position: relative; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,.9)">Sabtu, 19 Juni 2027</div>
+      <div style="position: relative; font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 38px; line-height: 1.05; margin-top: 6px">Rina <span style="font-style: italic; font-weight: 500; color: #FFE1D3">&amp;</span> Bagas</div>
+      <div style="position: relative; display: flex; gap: 10px; margin-top: 16px">
+        <div style="flex: 1; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4); border-radius: 18px; padding: 10px 12px"><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 30px; line-height: 1">242</div><div style="font-size: 11px; font-weight: 600; margin-top: 4px">hari lagi</div></div>
+        <div style="flex: 1; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4); border-radius: 18px; padding: 10px 12px"><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 30px; line-height: 1">17</div><div style="font-size: 11px; font-weight: 600; margin-top: 4px">skor kesiapan</div></div>
+        <div style="flex: 1; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4); border-radius: 18px; padding: 10px 12px"><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 30px; line-height: 1">18%</div><div style="font-size: 11px; font-weight: 600; margin-top: 4px">checklist</div></div>
+      </div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div class="rise d2" style="border-radius: 22px; padding: 14px; background: linear-gradient(150deg, rgba(255,255,255,.8), rgba(248,215,220,.62)); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 8px 22px rgba(176,86,107,.1); display: flex; flex-direction: column; gap: 8px">
+        <div style="width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, #B0566B, #E39AA5); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M3 10h18"></path></svg></div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #7B6A72">Total anggaran</div><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 24px; line-height: 1">Rp85 jt</div>
+      </div>
+      <div class="rise d2" style="border-radius: 22px; padding: 14px; background: linear-gradient(150deg, rgba(255,255,255,.8), rgba(252,224,203,.66)); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 8px 22px rgba(217,166,90,.12); display: flex; flex-direction: column; gap: 8px">
+        <div style="width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, #C9873E, #F0C27B); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path></svg></div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #7B6A72">Biaya aktual</div><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 24px; line-height: 1">Rp44,5 jt</div>
+      </div>
+      <div class="rise d3" style="border-radius: 22px; padding: 14px; background: linear-gradient(150deg, rgba(255,255,255,.8), rgba(210,232,218,.66)); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 8px 22px rgba(78,122,98,.12); display: flex; flex-direction: column; gap: 8px">
+        <div style="width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, #3F7457, #8FB09B); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #7B6A72">Sudah dibayar</div><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 24px; line-height: 1">Rp12,5 jt</div>
+      </div>
+      <div class="rise d3" style="border-radius: 22px; padding: 14px; background: linear-gradient(150deg, rgba(255,255,255,.8), rgba(233,214,229,.68)); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 8px 22px rgba(107,69,96,.12); display: flex; flex-direction: column; gap: 8px">
+        <div style="width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(135deg, #6B4560, #B88AA8); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" aria-hidden="true"><path d="M12 3v18"></path></svg></div>
+        <div style="font-size: 11.5px; font-weight: 600; color: #7B6A72">Sisa anggaran</div><div style="font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 24px; line-height: 1">Rp40,5 jt</div>
+      </div>
+    </section>
+
+    <section class="rise d4" style="border-radius: 24px; padding: 16px; background: rgba(255,255,255,.6); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 8px 22px rgba(176,86,107,.08); display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><div style="font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 18px">Perlu perhatian</div><span style="font-size: 11px; font-weight: 700; background: #A8463A; color: #FFFFFF; padding: 2px 8px; border-radius: 999px">2 terlambat</span></div>
+      <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.75); border-radius: 14px; padding: 10px"><input type="checkbox" aria-label="Selesai" style="width: 20px; height: 20px; accent-color: #B0566B"><span style="flex: 1; min-width: 0; font-size: 13.5px; font-weight: 600">Booking wedding organizer</span><span style="font-size: 11px; font-weight: 700; color: #8E3A30">Telat 28 hr</span></div>
+      <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.75); border-radius: 14px; padding: 10px"><input type="checkbox" aria-label="Selesai" style="width: 20px; height: 20px; accent-color: #B0566B"><span style="flex: 1; min-width: 0; font-size: 13.5px; font-weight: 600">Booking dekorasi</span><span style="font-size: 11px; font-weight: 700; color: #8A5414">2 hari lagi</span></div>
+      <div style="height: 10px; background: rgba(176,86,107,.1); border-radius: 999px; overflow: hidden; display: flex; margin-top: 4px"><div class="fillbar" style="width: 14.7%; background: linear-gradient(90deg, #6B2E40, #A44E62)"></div><div class="fillbar" style="width: 37.6%; background: linear-gradient(90deg, #E39AA5, #F4C3A6)"></div></div>
+      <div style="font-size: 12px; color: #7B6A72">Anggaran terpakai <strong style="color: #33262E">52%</strong> · sisa tagihan Rp32 jt</div>
+    </section>
+  </div>
+
+  <nav style="position: absolute; left: 14px; right: 14px; bottom: 14px; height: 66px; border-radius: 24px; background: rgba(255,255,255,.7); backdrop-filter: blur(20px) saturate(160%); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 12px 30px rgba(176,86,107,.18); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center">
+    <a href="#" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; font-weight: 800; color: #A44E62"><span style="width: 40px; height: 28px; border-radius: 12px; background: linear-gradient(135deg, #B0566B, #E39AA5); display: grid; place-items: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg></span>Beranda</a>
+    <a href="#" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: #7B6A72"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"></path></svg>Checklist</a>
+    <a href="#" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: #7B6A72"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M3 10h18"></path></svg>Anggaran</a>
+    <a href="#" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: #7B6A72"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3 3-5 6-5s6 2 6 5"></path></svg>Tamu</a>
+    <a href="#" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: #7B6A72"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg>Lainnya</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

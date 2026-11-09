@@ -1,0 +1,26 @@
+const { chromium } = require(process.env.PW_PATH || 'playwright');
+const fs = require('fs'); const D = __dirname;
+const TPL = fs.readFileSync(D + '/tpl.json', 'utf8'); const MOCK = fs.readFileSync(D + '/mock.js', 'utf8');
+const ok = (c, m) => console.log((c ? 'LULUS ' : 'GAGAL ') + m);
+(async () => {
+  const b = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 } });
+  await ctx.addInitScript(`window.__TPL__ = ${TPL};\n${MOCK}`);
+  const p = await ctx.newPage(); const errs = [];
+  p.on('pageerror', e => errs.push(e.message));
+  await p.goto('http://localhost:4173/#/admin/pengumuman'); await p.waitForTimeout(900);
+  ok(await p.getByText('Promo akhir tahun').count() > 0, 'daftar pengumuman admin');
+  await p.getByRole('button', { name: 'Pengumuman' }).click(); await p.waitForTimeout(200);
+  await p.getByPlaceholder('mis. Promo akhir tahun: Premium Rp99.000').fill('Perbaikan sistem Minggu 02.00');
+  await p.getByRole('radio', { name: 'Penting', exact: true }).click();
+  await p.screenshot({ path: D + '/out/v3-ann-modal.png' });
+  await p.getByRole('button', { name: 'Simpan' }).click(); await p.waitForTimeout(400);
+  ok(await p.evaluate(() => window.__DB__.announcements.some(a => a.title === 'Perbaikan sistem Minggu 02.00' && a.level === 'penting')), 'pengumuman baru tersimpan');
+  await p.screenshot({ path: D + '/out/v3-ann-admin.png' });
+  await p.goto('http://localhost:4173/#/w/w-demo/beranda'); await p.reload(); await p.waitForTimeout(900);
+  ok(await p.getByText('Perbaikan sistem Minggu 02.00').count() > 0 && await p.getByText('Promo akhir tahun').count() > 0, 'pita pengumuman tampil di aplikasi');
+  await p.screenshot({ path: D + '/out/v3-ann-beranda.png' });
+  await p.getByRole('button', { name: 'Tutup pengumuman' }).first().click(); await p.waitForTimeout(200);
+  ok(await p.getByRole('button', { name: 'Tutup pengumuman' }).count() === 1, 'pengumuman bisa ditutup');
+  console.log('ERR', JSON.stringify(errs)); await b.close();
+})();

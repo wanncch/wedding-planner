@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Beranda</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#A44E62}a:hover{color:#33262E}
+.app{position:relative;min-height:1200px;background:#FBF3F1;color:#33262E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;display:flex;flex-wrap:wrap;overflow:hidden}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.o1{left:-140px;top:-160px;width:560px;height:560px;background:radial-gradient(circle,rgba(227,154,165,.6),transparent 70%)}
+.o2{right:-180px;top:140px;width:620px;height:620px;background:radial-gradient(circle,rgba(246,196,166,.55),transparent 70%)}
+.o3{left:28%;bottom:-240px;width:680px;height:680px;background:radial-gradient(circle,rgba(143,176,155,.42),transparent 70%)}
+.side{position:relative;flex:1 1 232px;max-width:100%;margin:16px 0 16px 16px;border-radius:28px;background:rgba(255,255,255,.5);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(176,86,107,.08);padding:22px 12px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;gap:10px;align-items:center;padding:0 8px}
+.logo{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#B0566B,#E9A493);display:grid;place-items:center;box-shadow:0 6px 16px rgba(176,86,107,.35);flex:none}
+.bn{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px;line-height:1.05}
+.by{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#A44E62;font-weight:700;margin-top:3px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;text-decoration:none;color:#5E4A55;border-radius:14px;padding:9px 12px;font-size:13.5px}
+.nav a.on{color:#fff;font-weight:700;background:linear-gradient(135deg,#B0566B,#D27A86);box-shadow:0 8px 18px rgba(176,86,107,.3)}
+.nb{margin-left:auto;font-size:10.5px;font-weight:800;background:#A8463A;color:#fff;border-radius:999px;padding:1px 7px}
+.nw{margin-left:auto;font-size:9.5px;font-weight:800;letter-spacing:.06em;background:#E1EFE6;color:#2F5A43;border-radius:999px;padding:2px 7px}
+.couple{margin-top:auto;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);border-radius:18px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:12px}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:800;color:#fff;border:2px solid #fff;flex:none}
+.ar{background:linear-gradient(135deg,#B0566B,#E39AA5)}.ab{background:linear-gradient(135deg,#4E7A62,#8FB09B)}.ai{background:linear-gradient(135deg,#C9873E,#F0C27B)}.aw{background:linear-gradient(135deg,#6B4560,#B88AA8)}
+.main{position:relative;flex:999 1 560px;min-width:0;padding:24px 28px 44px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.eyb{font-size:12.5px;color:#7B6A72;font-weight:600}
+.h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:32px;letter-spacing:-.01em;line-height:1.1}
+.h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px}
+.ser{font-family:Fraunces,Georgia,serif;font-weight:700}
+.g{background:rgba(255,255,255,.6);backdrop-filter:blur(18px) saturate(160%);border:1px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:0 10px 28px rgba(176,86,107,.08),inset 0 1px 0 rgba(255,255,255,.9);padding:18px;min-width:0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.tile{border-radius:22px;padding:16px;border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 26px rgba(176,86,107,.1),inset 0 1px 0 #fff;display:flex;flex-direction:column;gap:3px;min-width:0}
+.w1{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(248,215,220,.64))}.w2{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(252,224,203,.68))}.w3{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(210,232,218,.68))}.w4{background:linear-gradient(150deg,rgba(255,255,255,.82),rgba(233,214,229,.7))}
+.ic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;margin-bottom:8px}
+.i1{background:linear-gradient(135deg,#B0566B,#E39AA5);box-shadow:0 6px 14px rgba(176,86,107,.28)}.i2{background:linear-gradient(135deg,#C9873E,#F0C27B);box-shadow:0 6px 14px rgba(201,135,62,.28)}.i3{background:linear-gradient(135deg,#3F7457,#8FB09B);box-shadow:0 6px 14px rgba(63,116,87,.28)}.i4{background:linear-gradient(135deg,#6B4560,#B88AA8);box-shadow:0 6px 14px rgba(107,69,96,.28)}
+.k{font-size:12px;font-weight:600;color:#7B6A72}
+.v{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:27px;line-height:1.1}
+.s{font-size:11.5px;font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.p-ok{background:linear-gradient(135deg,#D7EADF,#C2DDCB);color:#2F5A43}.p-wait{background:linear-gradient(135deg,#FBE3C6,#F6D3A5);color:#6B430F}.p-no{background:#F1E7E8;color:#6F5E66}.p-bad{background:#A8463A;color:#fff}.p-rose{background:linear-gradient(135deg,#F8DDE1,#F3C8CF);color:#8E3B50}.p-mauve{background:#EDE0EA;color:#5A3A51}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:14px;padding:10px 16px;font:inherit;font-weight:700;font-size:13px;color:#fff;background:linear-gradient(135deg,#B0566B,#D27A86);box-shadow:0 8px 18px rgba(176,86,107,.28);white-space:nowrap}
+.btn2{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.9);border-radius:14px;padding:9px 14px;font:inherit;font-weight:700;font-size:13px;color:#33262E;background:rgba(255,255,255,.65);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);border-radius:16px;padding:4px;width:fit-content;max-width:100%;overflow-x:auto}
+.tab{padding:8px 14px;border-radius:12px;font-weight:600;font-size:13px;color:#7B6A72;white-space:nowrap}
+.tab.on{background:#fff;color:#33262E;font-weight:700;box-shadow:0 2px 8px rgba(176,86,107,.14)}
+.bar{height:8px;border-radius:999px;background:rgba(176,86,107,.1);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.fr{background:linear-gradient(90deg,#B0566B,#E39AA5)}.fs{background:linear-gradient(90deg,#4E7A62,#8FB09B)}.fp{background:linear-gradient(90deg,#C9873E,#F0C27B)}.fd{background:linear-gradient(90deg,#6B2E40,#A44E62)}.fm{background:linear-gradient(90deg,#6B4560,#B88AA8)}
+.muted{color:#7B6A72}.xs{font-size:11.5px}
+.it{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.72);border-radius:16px;padding:10px 12px}
+.sync{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#3F7457;background:rgba(229,240,232,.8);border:1px solid rgba(255,255,255,.85);padding:8px 12px;border-radius:999px}
+.sync i{width:8px;height:8px;border-radius:50%;background:#5E9C78;box-shadow:0 0 0 4px rgba(94,156,120,.2)}
+</style>
+</helmet>
+<div class="app">
+  <div class="orb o1" aria-hidden="true"></div><div class="orb o2" aria-hidden="true"></div><div class="orb o3" aria-hidden="true"></div>
+  <aside class="side">
+    <div class="brand"><span class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="13" r="5.5"></circle><circle cx="15" cy="13" r="5.5"></circle></svg></span><div><div class="bn">Wedding Planner</div><div class="by">by Wanncch</div></div></div>
+    <nav class="nav">
+      <a href="#" class="on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg>Beranda</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"></path></svg>Persiapan<span class="nb">1</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M3 10h18"></path></svg>Anggaran</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4z"></path></svg>Vendor</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="8" width="18" height="5" rx="1"></rect><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1"></path></svg>Seserahan<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 5a3 3 0 0 1 0 6"></path></svg>Tamu</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Rundown<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Dokumen</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h14v12l-4 4H5z"></path><path d="M15 20v-4h4M8 9h8M8 13h5"></path></svg>Catatan<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg>Pengaturan</a>
+    </nav>
+    <div class="couple"><span style="display: flex"><span class="av ar">RL</span><span class="av ab" style="margin-left: -9px">BP</span></span><span><b>Rina &amp; Bagas</b><span style="display: block" class="muted">Ganti pernikahan</span></span></div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div><div class="eyb">Rabu, 21 Oktober 2026 · Selamat malam, Rina</div><div class="h1">Beranda</div></div>
+      <div class="row"><span class="sync"><i></i>Tersinkron 21:58</span><button type="button" class="btn2">Refresh Data</button></div>
+    </div>
+
+    <section style="position: relative; overflow: hidden; border-radius: 32px; padding: 28px 30px; background: linear-gradient(130deg, #A44E62 0%, #C96B7E 42%, #E9A493 100%); color: #fff; box-shadow: 0 22px 50px rgba(176,86,107,.32); display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: space-between">
+      <div aria-hidden="true" style="position: absolute; right: -70px; top: -90px; width: 300px; height: 300px; border-radius: 50%; border: 36px solid rgba(255,255,255,.12)"></div>
+      <div style="position: relative; min-width: 0">
+        <div style="display: inline-flex; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); padding: 6px 12px; border-radius: 999px">Sabtu, 19 Juni 2027</div>
+        <div class="ser" style="font-weight: 600; font-size: 52px; line-height: 1.02; margin-top: 10px">Rina <span style="font-style: italic; font-weight: 500; color: #FFE1D3">&amp;</span> Bagas</div>
+        <div class="row" style="margin-top: 14px; gap: 8px">
+          <span style="font-size: 12.5px; font-weight: 600; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.35); padding: 6px 12px; border-radius: 12px">Lamaran · 16 Jan 2027 · 87 hari</span>
+          <span style="font-size: 12.5px; font-weight: 600; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.35); padding: 6px 12px; border-radius: 12px">Akad 08.00 · Masjid Al-Ikhlas</span>
+          <span style="font-size: 12.5px; font-weight: 600; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.35); padding: 6px 12px; border-radius: 12px">Resepsi 11.00 · Gedung Melati</span>
+        </div>
+      </div>
+      <div style="position: relative; display: flex; gap: 12px">
+        <div style="background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4); border-radius: 24px; padding: 14px 20px; text-align: center; min-width: 118px"><div class="ser" style="font-size: 52px; line-height: 1">241</div><div style="font-size: 12px; font-weight: 600; margin-top: 6px">hari lagi</div></div>
+        <div style="background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4); border-radius: 24px; padding: 12px 16px; display: flex; gap: 12px; align-items: center">
+          <div style="position: relative; width: 84px; height: 84px"><svg width="84" height="84" viewBox="0 0 88 88" role="img" aria-label="Skor kesiapan 32"><circle cx="44" cy="44" r="36" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="9"></circle><circle cx="44" cy="44" r="36" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="72.4 226.2" transform="rotate(-90 44 44)"></circle></svg><div class="ser" style="position: absolute; inset: 0; display: grid; place-items: center; font-size: 26px">32</div></div>
+          <div style="font-size: 12px; line-height: 1.55"><b style="font-size: 13px">Skor kesiapan</b><br>Persiapan 28%<br>Dokumen 23%<br>Seserahan 47%</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tiles">
+      <div class="tile w1"><span class="ic i1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M3 10h18"></path></svg></span><div class="k">Anggaran</div><div class="v">Rp175 jt</div><div class="s" style="color: #A44E62">Rencana Rp168,4 jt · aman</div></div>
+      <div class="tile w2"><span class="ic i2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span><div class="k">Sudah dibayar</div><div class="v">Rp41,8 jt</div><div class="s" style="color: #8A5414">dari kontrak Rp98,5 jt</div></div>
+      <div class="tile w3"><span class="ic i3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="5" rx="1"></rect><path d="M5 13v8h14v-8M12 8v13"></path></svg></span><div class="k">Seserahan siap</div><div class="v">16 / 34</div><div class="s" style="color: #3F7457">Rp15,3 jt dari Rp25 jt</div></div>
+      <div class="tile w4"><span class="ic i4"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3 3-5 6-5s6 2 6 5"></path></svg></span><div class="k">Tamu konfirmasi hadir</div><div class="v">96 orang</div><div class="s" style="color: #6B4560">dari 412 · 52 belum jawab</div></div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px">
+      <div class="g" style="display: flex; flex-direction: column; gap: 10px">
+        <div class="between"><div class="h2">Minggu ini</div><span class="xs muted">21–27 Okt</span></div>
+        <div class="it"><span class="pill p-bad">Telat 28 hr</span><span style="flex: 1; min-width: 0"><b>Booking wedding organizer</b><span class="xs muted" style="display: block">Persiapan · PIC Bagas</span></span><span class="av ab">BP</span></div>
+        <div class="it"><span class="pill p-wait">Bayar</span><span style="flex: 1; min-width: 0"><b>DP Sanggar Rias Ayu</b><span class="xs muted" style="display: block">Rp1.500.000 · jatuh tempo Rab, 28 Okt</span></span><span class="ser" style="font-size: 17px">Rp1,5 jt</span></div>
+        <div class="it"><span class="pill p-rose">Persiapan</span><span style="flex: 1; min-width: 0"><b>Fitting kebaya akad</b><span class="xs muted" style="display: block">Min, 25 Okt · Butik Kartini</span></span><span class="av ar">RL</span></div>
+        <div class="it"><span class="pill p-mauve">Reminder</span><span style="flex: 1; min-width: 0"><b>Food tasting Catering Ibu Ratna</b><span class="xs muted" style="display: block">Sab, 24 Okt · 10.00 · ajak Ibu</span></span><span class="av ai">IB</span></div>
+        <div class="it"><span class="pill p-ok">Seserahan</span><span style="flex: 1; min-width: 0"><b>4 barang skincare masih dipesan</b><span class="xs muted" style="display: block">Cek resi pengiriman</span></span><span class="av ar">RL</span></div>
+      </div>
+
+      <div class="g" style="display: flex; flex-direction: column; gap: 12px">
+        <div class="between"><div class="h2">Progres per periode</div><span class="pill p-rose">21 / 74 · 28%</span></div>
+        <div style="display: grid; grid-template-columns: 110px 1fr 46px; gap: 10px 12px; align-items: center; font-size: 13px">
+          <span>12+ bulan</span><div class="bar"><i class="fs" style="width: 100%"></i></div><span class="muted" style="text-align: right">8/8</span>
+          <span>11–9 bulan</span><div class="bar"><i class="fs" style="width: 90%"></i></div><span class="muted" style="text-align: right">9/10</span>
+          <span><b>8–7 bulan</b></span><div class="bar" style="height: 10px"><i class="fr" style="width: 33%"></i></div><span style="text-align: right; font-weight: 700">4/12</span>
+          <span>6–5 bulan</span><div class="bar"><i class="fr" style="width: 0%"></i></div><span class="muted" style="text-align: right">0/10</span>
+          <span>4–3 bulan</span><div class="bar"><i class="fr" style="width: 0%"></i></div><span class="muted" style="text-align: right">0/9</span>
+          <span>2–1 bulan</span><div class="bar"><i class="fr" style="width: 0%"></i></div><span class="muted" style="text-align: right">0/11</span>
+          <span>H-7 s.d. hari H</span><div class="bar"><i class="fr" style="width: 0%"></i></div><span class="muted" style="text-align: right">0/14</span>
+        </div>
+        <div class="xs muted">Periode berjalan ditandai tebal. Yang belum selesai dari periode lalu ikut muncul di "Minggu ini".</div>
+      </div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
+      <div class="g" style="display: flex; flex-direction: column; gap: 12px">
+        <div class="h2">Vendor</div>
+        <div class="bar" style="height: 14px"><i class="fd" style="width: 9%"></i><i class="fs" style="width: 46%"></i><i class="fp" style="width: 18%"></i><i style="width: 27%; background: #E8D7DC"></i></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; font-size: 13px">
+          <span><b class="ser" style="font-size: 18px">1</b> lunas</span><span><b class="ser" style="font-size: 18px">5</b> deal</span><span><b class="ser" style="font-size: 18px">2</b> negosiasi</span><span><b class="ser" style="font-size: 18px">3</b> belum order</span>
+        </div>
+      </div>
+      <div class="g" style="display: flex; flex-direction: column; gap: 10px">
+        <div class="h2">Pengeluaran terbesar</div>
+        <div style="display: grid; grid-template-columns: 96px 1fr auto; gap: 8px 10px; align-items: center; font-size: 13px">
+          <span>Catering</span><div class="bar"><i class="fr" style="width: 100%"></i></div><b>Rp30 jt</b>
+          <span>Venue</span><div class="bar"><i class="fr" style="width: 48%"></i></div><b>Rp14,5 jt</b>
+          <span>Dokumentasi</span><div class="bar"><i class="fr" style="width: 40%"></i></div><b>Rp12 jt</b>
+          <span>Dekorasi</span><div class="bar"><i class="fr" style="width: 37%"></i></div><b>Rp11 jt</b>
+        </div>
+      </div>
+      <div class="g" style="display: flex; flex-direction: column; gap: 10px; background: linear-gradient(150deg, rgba(255,255,255,.75), rgba(210,232,218,.6))">
+        <div class="h2">Persiapan diri</div>
+        <div style="font-size: 13.5px; line-height: 1.6"><span style="color: #3F7457; font-weight: 700">✓</span> Belajar fiqh nikah<br><span style="color: #3F7457; font-weight: 700">✓</span> Sholat hajat bersama<br><span class="muted">○</span> Sedekah atas nama berdua</div>
+        <div class="xs" style="font-weight: 700; color: #3F7457">12 dari 40 pertanyaan premarital sudah dibahas</div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

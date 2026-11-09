@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Peta aplikasi</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#A44E62}a:hover{color:#33262E}
+</style>
+</helmet>
+<div style="width: 1440px; height: 844px; box-sizing: border-box; background: #FCF9F7; color: #33262E; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; padding: 48px 56px; display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end">
+    <div>
+      <div style="font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #A44E62">Tahap 3 · Arsitektur aplikasi</div>
+      <div style="font-family: Fraunces, Georgia, serif; font-size: 40px; margin-top: 6px">Peta aplikasi Wedding Planner by Wanncch</div>
+    </div>
+    <div style="font-size: 13px; color: #7B6A72; max-width: 380px; text-align: right; line-height: 1.5">Satu web app Apps Script. Setiap layar memanggil satu fungsi server yang mengembalikan semua data layar itu sekaligus.</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; flex: 1">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: #7B6A72">A · AKSES</div>
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+        <div><strong>Masuk</strong><div style="color: #7B6A72; font-size: 13px">Email + kata sandi, opsi tetap masuk 7 hari</div></div>
+        <div><strong>Daftar</strong><div style="color: #7B6A72; font-size: 13px">Nama, email, sandi minimal 8 karakter</div></div>
+        <div><strong>Verifikasi email</strong><div style="color: #7B6A72; font-size: 13px">Kode 6 digit, berlaku 15 menit</div></div>
+        <div><strong>Lupa sandi</strong><div style="color: #7B6A72; font-size: 13px">Kode reset lewat email</div></div>
+        <div><strong>Terima undangan</strong><div style="color: #7B6A72; font-size: 13px">Link dari pasangan, terhubung ke akun</div></div>
+      </div>
+      <div style="font-size: 12px; color: #7B6A72; line-height: 1.5">Gagal masuk 5 kali → akun dikunci 15 menit.</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: #7B6A72">B · RUANG KERJA</div>
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+        <div><strong>Pilih pernikahan</strong><div style="color: #7B6A72; font-size: 13px">Daftar pernikahan yang dimiliki atau diikuti, plus undangan masuk</div></div>
+        <div><strong>Buat pernikahan baru</strong><div style="color: #7B6A72; font-size: 13px">Wizard 3 langkah:</div>
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 6px; font-size: 13px">
+            <span style="background: #FCF9F7; border-radius: 8px; padding: 6px 10px">1. Nama pasangan &amp; tanggal</span>
+            <span style="background: #FCF9F7; border-radius: 8px; padding: 6px 10px">2. Jalur pencatatan: KUA / Disdukcapil</span>
+            <span style="background: #FCF9F7; border-radius: 8px; padding: 6px 10px">3. Skala, jumlah undangan, anggaran</span>
+          </div>
+          <div style="color: #7B6A72; font-size: 13px; margin-top: 6px">Lalu server menyalin template → spreadsheet tenant siap pakai.</div></div>
+        <div><strong>Akun saya</strong><div style="color: #7B6A72; font-size: 13px">Nama, ganti sandi, keluar dari semua perangkat</div></div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: #7B6A72">C · 10 MENU UTAMA</div>
+      <div style="background: #FFFFFF; border: 1.5px solid #E39AA5; border-radius: 18px; padding: 6px 16px; display: flex; flex-direction: column; font-size: 14px">
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>1 Dashboard</span><span style="font-size: 11px; color: #7B6A72">HP: Beranda</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>2 Wedding Profile</span><span style="font-size: 11px; color: #7B6A72">Lainnya</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>3 Wedding Checklist</span><span style="font-size: 11px; color: #7B6A72">HP: Checklist</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>4 Wedding Timeline</span><span style="font-size: 11px; color: #7B6A72">tab di Checklist</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>5 Budget Planner</span><span style="font-size: 11px; color: #7B6A72">HP: Anggaran</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>6 Vendor Management</span><span style="font-size: 11px; color: #7B6A72">Lainnya</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>7 Guest Management</span><span style="font-size: 11px; color: #7B6A72">HP: Tamu</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>8 Document Management</span><span style="font-size: 11px; color: #7B6A72">Lainnya</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F5ECEC"><span>9 Payment Tracking</span><span style="font-size: 11px; color: #7B6A72">tab di Anggaran</span></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0"><span>10 Settings &amp; Database</span><span style="font-size: 11px; color: #7B6A72">Lainnya</span></div>
+      </div>
+      <div style="font-size: 12px; color: #7B6A72; line-height: 1.5">Settings memuat anggota &amp; undangan, Activity Log, link spreadsheet, dan Refresh Data.</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: #7B6A72">D · FILE PROYEK</div>
+      <div style="background: #33262E; color: #F6EDF0; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 1.45">
+        <div style="color: #E39AA5">Backend (.gs)</div>
+        <div>Code.gs <span style="color: #C7B4BD">doGet, api router</span></div>
+        <div>Auth.gs <span style="color: #C7B4BD">daftar, masuk, sesi</span></div>
+        <div>Registry.gs <span style="color: #C7B4BD">user, wedding, anggota</span></div>
+        <div>Tenant.gs <span style="color: #C7B4BD">salin template, setup</span></div>
+        <div>Database.gs <span style="color: #C7B4BD">CRUD, lock, ID, validasi</span></div>
+        <div>Schema.gs <span style="color: #C7B4BD">struktur sheet</span></div>
+        <div>Dashboard.gs · Checklist.gs</div>
+        <div>Budget.gs · Vendor.gs</div>
+        <div>Guest.gs · Document.gs</div>
+        <div style="color: #E39AA5; margin-top: 8px">Frontend (.html)</div>
+        <div>Index.html <span style="color: #C7B4BD">kerangka &amp; layar</span></div>
+        <div>CSS.html <span style="color: #C7B4BD">tema &amp; komponen</span></div>
+        <div>JavaScript.html <span style="color: #C7B4BD">router, state, api</span></div>
+        <div style="color: #E39AA5; margin-top: 8px">Data &amp; setup</div>
+        <div>Seed.gs <span style="color: #C7B4BD">katalog, checklist, dokumen</span></div>
+        <div>Setup.gs <span style="color: #C7B4BD">siapkan registry sekali</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Persiapan</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#A44E62}a:hover{color:#33262E}
+.app{position:relative;min-height:1200px;background:#FBF3F1;color:#33262E;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;display:flex;flex-wrap:wrap;overflow:hidden}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.o1{left:-140px;top:-160px;width:560px;height:560px;background:radial-gradient(circle,rgba(227,154,165,.6),transparent 70%)}
+.o2{right:-180px;top:140px;width:620px;height:620px;background:radial-gradient(circle,rgba(246,196,166,.55),transparent 70%)}
+.o3{left:28%;bottom:-240px;width:680px;height:680px;background:radial-gradient(circle,rgba(143,176,155,.42),transparent 70%)}
+.side{position:relative;flex:1 1 232px;max-width:100%;margin:16px 0 16px 16px;border-radius:28px;background:rgba(255,255,255,.5);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(176,86,107,.08);padding:22px 12px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;gap:10px;align-items:center;padding:0 8px}
+.logo{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#B0566B,#E9A493);display:grid;place-items:center;box-shadow:0 6px 16px rgba(176,86,107,.35);flex:none}
+.bn{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px;line-height:1.05}
+.by{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#A44E62;font-weight:700;margin-top:3px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;text-decoration:none;color:#5E4A55;border-radius:14px;padding:9px 12px;font-size:13.5px}
+.nav a.on{color:#fff;font-weight:700;background:linear-gradient(135deg,#B0566B,#D27A86);box-shadow:0 8px 18px rgba(176,86,107,.3)}
+.nb{margin-left:auto;font-size:10.5px;font-weight:800;background:#A8463A;color:#fff;border-radius:999px;padding:1px 7px}
+.nav a.on .nb{background:#fff;color:#A8463A}
+.nw{margin-left:auto;font-size:9.5px;font-weight:800;letter-spacing:.06em;background:#E1EFE6;color:#2F5A43;border-radius:999px;padding:2px 7px}
+.couple{margin-top:auto;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);border-radius:18px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:12px}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:800;color:#fff;border:2px solid #fff;flex:none}
+.ar{background:linear-gradient(135deg,#B0566B,#E39AA5)}.ab{background:linear-gradient(135deg,#4E7A62,#8FB09B)}.ai{background:linear-gradient(135deg,#C9873E,#F0C27B)}.aw{background:linear-gradient(135deg,#6B4560,#B88AA8)}
+.main{position:relative;flex:999 1 560px;min-width:0;padding:24px 28px 44px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.eyb{font-size:12.5px;color:#7B6A72;font-weight:600}
+.h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:32px;letter-spacing:-.01em;line-height:1.1}
+.h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px}
+.ser{font-family:Fraunces,Georgia,serif;font-weight:700}
+.g{background:rgba(255,255,255,.6);backdrop-filter:blur(18px) saturate(160%);border:1px solid rgba(255,255,255,.85);border-radius:24px;box-shadow:0 10px 28px rgba(176,86,107,.08),inset 0 1px 0 rgba(255,255,255,.9);padding:18px;min-width:0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.p-ok{background:linear-gradient(135deg,#D7EADF,#C2DDCB);color:#2F5A43}.p-wait{background:linear-gradient(135deg,#FBE3C6,#F6D3A5);color:#6B430F}.p-no{background:#F1E7E8;color:#6F5E66}.p-bad{background:#A8463A;color:#fff}.p-rose{background:linear-gradient(135deg,#F8DDE1,#F3C8CF);color:#8E3B50}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:14px;padding:10px 16px;font:inherit;font-weight:700;font-size:13px;color:#fff;background:linear-gradient(135deg,#B0566B,#D27A86);box-shadow:0 8px 18px rgba(176,86,107,.28);white-space:nowrap}
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);border-radius:16px;padding:4px;width:fit-content;max-width:100%;overflow-x:auto}
+.tab{padding:8px 14px;border-radius:12px;font-weight:600;font-size:13px;color:#7B6A72;white-space:nowrap}
+.tab.on{background:#fff;color:#33262E;font-weight:700;box-shadow:0 2px 8px rgba(176,86,107,.14)}
+.chip{padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);color:#5E4A55;white-space:nowrap}
+.chip.on{background:linear-gradient(135deg,#B0566B,#D27A86);color:#fff;border-color:transparent;box-shadow:0 6px 14px rgba(176,86,107,.25)}
+.bar{height:8px;border-radius:999px;background:rgba(176,86,107,.1);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.fr{background:linear-gradient(90deg,#B0566B,#E39AA5)}.fs{background:linear-gradient(90deg,#4E7A62,#8FB09B)}
+.muted{color:#7B6A72}.xs{font-size:11.5px}
+.per{flex:1 1 120px;border-radius:18px;padding:12px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);display:flex;flex-direction:column;gap:6px;min-width:0}
+.per.done{background:linear-gradient(150deg,rgba(255,255,255,.8),rgba(210,232,218,.66))}
+.per.now{background:linear-gradient(150deg,#B0566B,#E39AA5);color:#fff;box-shadow:0 12px 26px rgba(176,86,107,.32);border-color:transparent}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#7B6A72;font-weight:800;padding:8px 10px;border-bottom:1px solid rgba(176,86,107,.15)}
+table.t td{padding:11px 10px;border-bottom:1px solid rgba(176,86,107,.08);vertical-align:middle}
+.ck{width:22px;height:22px;border-radius:8px;border:2px solid #E3B4BD;display:grid;place-items:center;background:#fff}
+.ck.on{background:linear-gradient(135deg,#3F7457,#8FB09B);border-color:transparent}
+.strike{text-decoration:line-through;color:#9A8790}
+</style>
+</helmet>
+<div class="app">
+  <div class="orb o1" aria-hidden="true"></div><div class="orb o2" aria-hidden="true"></div><div class="orb o3" aria-hidden="true"></div>
+  <aside class="side">
+    <div class="brand"><span class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="13" r="5.5"></circle><circle cx="15" cy="13" r="5.5"></circle></svg></span><div><div class="bn">Wedding Planner</div><div class="by">by Wanncch</div></div></div>
+    <nav class="nav">
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg>Beranda</a>
+      <a href="#" class="on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"></path></svg>Persiapan<span class="nb">1</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"></rect><path d="M3 10h18"></path></svg>Anggaran</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4z"></path></svg>Vendor</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="8" width="18" height="5" rx="1"></rect><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1"></path></svg>Seserahan<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 5a3 3 0 0 1 0 6"></path></svg>Tamu</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Rundown<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Dokumen</a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h14v12l-4 4H5z"></path><path d="M15 20v-4h4M8 9h8M8 13h5"></path></svg>Catatan<span class="nw">BARU</span></a>
+      <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg>Pengaturan</a>
+    </nav>
+    <div class="couple"><span style="display: flex"><span class="av ar">RL</span><span class="av ab" style="margin-left: -9px">BP</span></span><span><b>Rina &amp; Bagas</b><span style="display: block" class="muted">Ganti pernikahan</span></span></div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div><div class="eyb">21 dari 74 tugas selesai · 1 terlambat</div><div class="h1">Persiapan</div></div>
+      <div class="row"><div class="tabs"><span class="tab on">Per periode</span><span class="tab">Per tahap</span><span class="tab">Lamaran</span></div><button type="button" class="btn">+ Tugas</button></div>
+    </div>
+
+    <div class="row" style="gap: 8px">
+      <span class="chip on">Semua</span><span class="chip">Telat · 1</span><span class="chip">Minggu ini · 3</span><span class="chip">Tugas saya</span><span class="chip">Proses · 3</span><span class="chip">Selesai</span>
+    </div>
+
+    <section style="display: flex; gap: 10px; flex-wrap: wrap">
+      <div class="per done"><span class="xs" style="font-weight: 700; color: #3F7457">✓ Selesai</span><b>12+ bulan</b><div class="bar"><i class="fs" style="width: 100%"></i></div><span class="xs muted">8 / 8</span></div>
+      <div class="per done"><span class="xs" style="font-weight: 700; color: #3F7457">90%</span><b>11–9 bulan</b><div class="bar"><i class="fs" style="width: 90%"></i></div><span class="xs muted">9 / 10</span></div>
+      <div class="per now"><span class="xs" style="font-weight: 800; letter-spacing: .08em">SEKARANG</span><b>8–7 bulan</b><div class="bar" style="background: rgba(255,255,255,.3)"><i style="width: 33%; background: #fff"></i></div><span class="xs">4 / 12</span></div>
+      <div class="per"><span class="xs muted" style="font-weight: 700">Mulai 22 Des</span><b>6–5 bulan</b><div class="bar"><i class="fr" style="width: 0%"></i></div><span class="xs muted">0 / 10</span></div>
+      <div class="per"><span class="xs muted" style="font-weight: 700">Mulai 21 Feb</span><b>4–3 bulan</b><div class="bar"></div><span class="xs muted">0 / 9</span></div>
+      <div class="per"><span class="xs muted" style="font-weight: 700">Mulai 20 Apr</span><b>2–1 bulan</b><div class="bar"></div><span class="xs muted">0 / 11</span></div>
+      <div class="per"><span class="xs muted" style="font-weight: 700">Mulai 12 Jun</span><b>H-7 s.d. hari H</b><div class="bar"></div><span class="xs muted">0 / 14</span></div>
+    </section>
+
+    <section class="g" style="padding: 18px 18px 8px">
+      <div class="between" style="margin-bottom: 6px">
+        <div><div class="h2">8–7 bulan sebelum</div><div class="xs muted">22 Sep – 21 Des 2026 · deadline dihitung otomatis dari tanggal nikah</div></div>
+        <span class="pill p-rose">4 dari 12 selesai</span>
+      </div>
+      <div style="overflow-x: auto">
+        <table class="t">
+          <thead><tr><th style="width: 40px"></th><th>Kegiatan</th><th>PIC</th><th>Deadline</th><th>Status</th><th>Hasil / keterangan</th></tr></thead>
+          <tbody>
+            <tr style="background: rgba(168,70,58,.06)"><td><span class="ck"></span></td><td><b>Booking wedding organizer</b><div class="xs muted">Minta portofolio &amp; referensi 3 WO</div></td><td><span class="av ab">BP</span></td><td>23 Sep</td><td><span class="pill p-bad">Telat 28 hari</span></td><td class="muted">–</td></tr>
+            <tr><td><span class="ck"></span></td><td><b>Booking catering &amp; food testing</b><div class="xs muted">Bandingkan harga per pax &amp; menu</div></td><td><span style="display: flex"><span class="av ar">RL</span><span class="av ai" style="margin-left: -8px">IB</span></span></td><td>22 Okt</td><td><span class="pill p-wait">Proses</span></td><td>Shortlist: Dapur Ibu Ratna</td></tr>
+            <tr><td><span class="ck"></span></td><td><b>Fitting kebaya akad</b><div class="xs muted">Fitting pertama, bawa sepatu</div></td><td><span class="av ar">RL</span></td><td>25 Okt</td><td><span class="pill p-wait">Proses</span></td><td>Butik Kartini · fitting 1 dari 3</td></tr>
+            <tr><td><span class="ck"></span></td><td><b>Buat daftar tamu awal</b><div class="xs muted">Kumpulkan dari kedua keluarga</div></td><td><span style="display: flex"><span class="av ar">RL</span><span class="av ab" style="margin-left: -8px">BP</span></span></td><td>31 Okt</td><td><span class="pill p-wait">Proses</span></td><td>148 undangan · lihat <a href="#">Tamu</a></td></tr>
+            <tr><td><span class="ck on"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span></td><td><b class="strike">Booking MUA &amp; trial makeup</b></td><td><span class="av ar">RL</span></td><td class="muted">22 Okt</td><td><span class="pill p-ok">Selesai</span></td><td>Sanggar Rias Ayu</td></tr>
+            <tr><td><span class="ck on"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span></td><td><b class="strike">Booking fotografer &amp; videografer</b></td><td><span class="av ar">RL</span></td><td class="muted">11 Nov</td><td><span class="pill p-ok">Selesai</span></td><td>Lens &amp; Bloom · paket Silver</td></tr>
+            <tr><td><span class="ck on"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span></td><td><b class="strike">Susun list seserahan</b></td><td><span class="av ab">BP</span></td><td class="muted">15 Nov</td><td><span class="pill p-ok">Selesai</span></td><td>34 barang · lihat <a href="#">Seserahan</a></td></tr>
+            <tr><td><span class="ck"></span></td><td><b>Konsultasi penghulu &amp; syarat KUA</b><div class="xs muted">Tanya jadwal Bimwin</div></td><td><span class="av ab">BP</span></td><td>30 Nov</td><td><span class="pill p-no">Belum</span></td><td class="muted">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="xs muted" style="padding: 10px 10px 8px">+ 4 tugas lain di periode ini · ketuk baris untuk ubah detail, PIC, deadline, link lampiran</div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px">
+      <div class="g" style="padding: 14px 16px"><div class="between"><b>6–5 bulan sebelum</b><span class="xs muted">10 tugas</span></div><div class="xs muted" style="margin-top: 4px">Cetak undangan, cincin nikah, seragam keluarga…</div></div>
+      <div class="g" style="padding: 14px 16px"><div class="between"><b>4–3 bulan sebelum</b><span class="xs muted">9 tugas</span></div><div class="xs muted" style="margin-top: 4px">Prewedding, Bimwin, belanja seserahan…</div></div>
+      <div class="g" style="padding: 14px 16px"><div class="between"><b>Setelah menikah</b><span class="xs muted">8 tugas</span></div><div class="xs muted" style="margin-top: 4px">Lunasi vendor, KK baru, ucapan terima kasih…</div></div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

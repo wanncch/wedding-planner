@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Dashboard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#A44E62}a:hover{color:#33262E}
+</style>
+</helmet>
+<div style="min-height: 1120px; box-sizing: border-box; background: #FCF9F7; color: #33262E; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-wrap: wrap">
+  <aside style="flex: 1 1 220px; max-width: 100%; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #F6E6E6; padding: 28px 16px; display: flex; flex-direction: column; gap: 24px">
+    <div style="padding: 0 10px">
+      <div style="font-family: Fraunces, Georgia, serif; font-size: 22px; line-height: 1.1">Wedding Planner</div>
+      <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #A44E62; margin-top: 4px">by Wanncch</div>
+    </div>
+    <a href="PilihPernikahan.dc.html" style="text-decoration: none; color: #33262E; background: #FCF9F7; border-radius: 16px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 14px"><span><strong>Rina &amp; Bagas</strong><span style="display: block; font-size: 12px; color: #7B6A72">Ganti pernikahan</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"></path></svg></a>
+    <nav style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="#" style="text-decoration: none; color: #33262E; font-weight: 600; background: #F6E6E6; border-radius: 14px; padding: 10px 12px">Dashboard</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Wedding Profile</a>
+      <a href="ChecklistMobile.dc.html" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px; display: flex; justify-content: space-between">Checklist <span style="font-size: 11px; font-weight: 700; background: #F6E1DD; color: #8E3A30; padding: 1px 7px; border-radius: 999px">2</span></a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Timeline</a>
+      <a href="Budget.dc.html" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Budget Planner</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Vendor</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Tamu</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Dokumen</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Pembayaran</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Settings &amp; Database</a>
+    </nav>
+  </aside>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 32px 48px; display: flex; flex-direction: column; gap: 22px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+      <div style="font-family: Fraunces, Georgia, serif; font-size: 30px">Dashboard</div>
+      <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: #7B6A72">
+        <span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #5E9C78"></span>Tersinkron 10:58</span>
+        <button type="button" style="height: 40px; padding: 0 14px; border-radius: 14px; border: 1px solid #EAD9DA; background: #FFFFFF; color: #33262E; font: inherit; font-weight: 600; display: flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"></path></svg>Refresh Data</button>
+      </div>
+    </div>
+
+    <section style="background: #F8E7E8; color: #33262E; border-radius: 20px; padding: 28px 30px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between">
+      <div style="min-width: 0">
+        <div style="font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #A44E62">Sabtu, 19 Juni 2027 · Akad 08.00 · Resepsi 11.00</div>
+        <div style="font-family: Fraunces, Georgia, serif; font-size: 44px; line-height: 1.1; margin-top: 8px">Rina &amp; Bagas</div>
+        <div style="font-size: 14px; color: #7B6A72; margin-top: 6px">Masjid Al-Ikhlas · Gedung Serbaguna Melati · 300 undangan</div>
+      </div>
+      <div style="display: flex; gap: 28px; align-items: center">
+        <div style="text-align: center"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 48px; line-height: 1; color: #B0566B">242</div><div style="font-size: 12px; color: #7B6A72; margin-top: 6px">hari lagi</div></div>
+        <div style="position: relative; width: 104px; height: 104px">
+          <svg width="104" height="104" viewBox="0 0 104 104" role="img" aria-label="Skor kesiapan 17 dari 100"><circle cx="52" cy="52" r="44" fill="none" stroke="#F0D3D7" stroke-width="9"></circle><circle cx="52" cy="52" r="44" fill="none" stroke="#B0566B" stroke-width="9" stroke-linecap="round" stroke-dasharray="47 276.5" transform="rotate(-90 52 52)"></circle></svg>
+          <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 24px; font-weight: 700">17</span><span style="font-size: 10px; color: #7B6A72">skor kesiapan</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px">
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px"><div style="font-size: 12px; color: #7B6A72">Total anggaran</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 21px; margin-top: 4px">Rp85,0 jt</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px"><div style="font-size: 12px; color: #7B6A72">Total estimasi</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 21px; margin-top: 4px">Rp82,4 jt</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px"><div style="font-size: 12px; color: #7B6A72">Biaya aktual (kontrak)</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 21px; margin-top: 4px">Rp44,5 jt</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px"><div style="font-size: 12px; color: #7B6A72">Sudah dibayar</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 21px; margin-top: 4px">Rp12,5 jt</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px"><div style="font-size: 12px; color: #7B6A72">Sisa tagihan</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 21px; margin-top: 4px; color: #8A5414">Rp32,0 jt</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px"><div style="font-size: 12px; color: #7B6A72">Sisa anggaran</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 21px; margin-top: 4px; color: #3F7457">Rp40,5 jt</div></div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; justify-content: space-between; font-size: 13px"><span style="font-weight: 600">Pemakaian anggaran</span><span style="font-variant-numeric: tabular-nums; color: #7B6A72">Rp44,5 jt dari Rp85,0 jt · 52%</span></div>
+      <div style="height: 10px; background: #F6E6E6; border-radius: 999px; overflow: hidden; display: flex"><div style="width: 14.7%; background: #33262E"></div><div style="width: 37.6%; background: #E39AA5"></div></div>
+      <div style="display: flex; gap: 16px; font-size: 12px; color: #7B6A72"><span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #33262E"></span>Dibayar</span><span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #E39AA5"></span>Terkontrak, belum dibayar</span></div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px">
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><div style="font-weight: 600">Tugas</div><a href="ChecklistMobile.dc.html" style="font-size: 13px">Buka checklist</a></div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+          <div style="background: #E5F0E8; border-radius: 14px; padding: 10px"><div style="font-size: 11px; color: #3F7457">Selesai</div><div style="font-size: 20px; font-weight: 700">19</div></div>
+          <div style="background: #FCF9F7; border-radius: 14px; padding: 10px"><div style="font-size: 11px; color: #7B6A72">Belum</div><div style="font-size: 20px; font-weight: 700">83</div></div>
+          <div style="background: #F6E1DD; border-radius: 14px; padding: 10px"><div style="font-size: 11px; color: #8E3A30">Terlambat</div><div style="font-size: 20px; font-weight: 700">2</div></div>
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: #7B6A72; letter-spacing: 0.06em">DEADLINE TERDEKAT</div>
+        <div style="display: flex; flex-direction: column; font-size: 14px">
+          <div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid #F5ECEC"><span>Menentukan konsep dan tema</span><span style="font-size: 11px; font-weight: 600; background: #F6E1DD; color: #8E3A30; padding: 2px 8px; border-radius: 999px; white-space: nowrap">Telat 98 hari</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid #F5ECEC"><span>Booking wedding organizer</span><span style="font-size: 11px; font-weight: 600; background: #F6E1DD; color: #8E3A30; padding: 2px 8px; border-radius: 999px; white-space: nowrap">Telat 28 hari</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid #F5ECEC"><span>Booking dekorasi</span><span style="font-size: 11px; font-weight: 600; background: #FBEEDB; color: #8A5414; padding: 2px 8px; border-radius: 999px; white-space: nowrap">22 Okt</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0"><span>Booking makeup artist</span><span style="font-size: 11px; font-weight: 600; background: #FBEEDB; color: #8A5414; padding: 2px 8px; border-radius: 999px; white-space: nowrap">22 Okt</span></div>
+        </div>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><div style="font-weight: 600">Pembayaran mendatang</div><a href="Budget.dc.html" style="font-size: 13px">Lihat semua</a></div>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; gap: 12px; align-items: center; background: #FCF9F7; border-radius: 16px; padding: 12px 14px">
+            <div><div style="font-weight: 600; font-size: 14px">Catering Dapur Ibu Ratna</div><div style="font-size: 12px; color: #7B6A72">Termin 2 · jatuh tempo 15 Jan 2027</div></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; white-space: nowrap">Rp10,0 jt</div>
+          </div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; align-items: center; background: #FCF9F7; border-radius: 16px; padding: 12px 14px">
+            <div><div style="font-weight: 600; font-size: 14px">Gedung Serbaguna Melati</div><div style="font-size: 12px; color: #7B6A72">Pelunasan · jatuh tempo 19 Mei 2027</div></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; white-space: nowrap">Rp9,5 jt</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: flex-start; background: #FBEEDB; border-radius: 16px; padding: 12px 14px; font-size: 13px; color: #6B430F; line-height: 1.45">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex: none; margin-top: 1px"><path d="M12 3l9 16H3z"></path><path d="M12 10v4M12 17h.01"></path></svg>
+          <span><strong>Catering melebihi rencana Rp2,8 jt.</strong> Kategori yang masih bisa dihemat: Dekorasi, Souvenir, Hiburan.</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 20px; padding: 18px; display: flex; flex-wrap: wrap; gap: 28px; align-items: center">
+      <div style="flex: 0 0 auto; position: relative; width: 170px; height: 170px">
+        <svg width="170" height="170" viewBox="0 0 170 170" role="img" aria-label="Alokasi rencana anggaran per kategori">
+          <g transform="rotate(-90 85 85)" fill="none" stroke-width="22"><circle cx="85" cy="85" r="60" stroke="#33262E" stroke-dasharray="120.64 376.99" stroke-dashoffset="0"></circle><circle cx="85" cy="85" r="60" stroke="#B0566B" stroke-dasharray="67.86 376.99" stroke-dashoffset="-120.64"></circle><circle cx="85" cy="85" r="60" stroke="#E8B4BA" stroke-dasharray="37.70 376.99" stroke-dashoffset="-188.50"></circle><circle cx="85" cy="85" r="60" stroke="#8FB09B" stroke-dasharray="37.70 376.99" stroke-dashoffset="-226.20"></circle><circle cx="85" cy="85" r="60" stroke="#4E7A62" stroke-dasharray="26.39 376.99" stroke-dashoffset="-263.90"></circle><circle cx="85" cy="85" r="60" stroke="#D9A65A" stroke-dasharray="22.62 376.99" stroke-dashoffset="-290.29"></circle><circle cx="85" cy="85" r="60" stroke="#EFE3E4" stroke-dasharray="64.08 376.99" stroke-dashoffset="-312.91"></circle></g>
+        </svg>
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 11px; color: #7B6A72">Rencana</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px">Rp85 jt</span></div>
+      </div>
+      <div style="flex: 1 1 320px; min-width: 0">
+        <div style="font-weight: 600; margin-bottom: 10px">Alokasi anggaran per kategori</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 24px; font-size: 13px; font-variant-numeric: tabular-nums">
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #33262E"></span>Catering</span><span>32% · Rp27,2 jt</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #B0566B"></span>Venue</span><span>18% · Rp15,3 jt</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #E8B4BA"></span>Dekorasi</span><span>10% · Rp8,5 jt</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #8FB09B"></span>Busana &amp; Pengantin</span><span>10% · Rp8,5 jt</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #4E7A62"></span>Dokumentasi</span><span>7% · Rp6,0 jt</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #D9A65A"></span>Wedding Organizer</span><span>6% · Rp5,1 jt</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #EFE3E4; border: 1px solid #E0CFD1"></span>8 kategori lain</span><span>17% · Rp14,4 jt</span></div>
+        </div>
+      </div>
+    </section>
+    <div style="font-size: 12px; color: #7B6A72">Contoh data untuk ilustrasi desain.</div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

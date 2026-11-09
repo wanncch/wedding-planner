@@ -1,0 +1,16 @@
+{
+  "name": "wedding-planner-tests",
+  "private": true,
+  "description": "Uji tampilan & alur memakai Supabase tiruan (mock.js). Jalankan `npm run build && npx vite preview --port 4173` di folder web dulu.",
+  "scripts": {
+    "flow": "node flow.js x desk",
+    "v3": "node v3.js",
+    "ann": "node ann.js",
+    "shots": "node shots.js"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0",
+    "@fontsource-variable/fraunces": "^5.1.0",
+    "@fontsource/plus-jakarta-sans": "^5.1.0"
+  }
+}

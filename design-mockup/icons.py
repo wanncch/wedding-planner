@@ -1,0 +1,28 @@
+IC = {
+ 'cincin': '<circle cx="12" cy="15" r="6"/><path d="M9 3h6l-3 5z"/>',
+ 'ibadah': '<path d="M4 20h16M6 20v-7a6 6 0 0 1 12 0v7M12 4v3M10 20v-4a2 2 0 0 1 4 0v4"/>',
+ 'baju': '<path d="M9 3h6l-1 5 4 13H6l4-13z"/>',
+ 'bulan': '<path d="M20 14A8 8 0 1 1 10 4a7 7 0 0 0 10 10z"/>',
+ 'botol': '<path d="M10 3h4v3h-4zM8 6h8l1 4v10a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V10zM7 13h10"/>',
+ 'tetes': '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
+ 'tas': '<path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/>',
+ 'rumah': '<path d="M4 11l8-7 8 7v9H4zM10 20v-5h4v5"/>',
+ 'kue': '<path d="M4 20h16v-7H4zM4 16c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 4 0M12 9v4M12 5v1"/>',
+ 'kado': '<rect x="3" y="8" width="18" height="5" rx="1"/><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1"/>',
+ 'hati': '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+ 'bintang': '<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>',
+ 'buku': '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M8 7h7"/>',
+ 'bunga': '<circle cx="12" cy="10" r="2.5"/><path d="M12 7.5a3 3 0 1 1 3 3M12 7.5a3 3 0 1 0-3 3M14.5 11.5a3 3 0 1 1-2.5 3M9.5 11.5a3 3 0 1 0 2.5 3M12 15v6"/>',
+ 'kamera': '<rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13.5" r="3.5"/><path d="M9 7l1.5-3h3L15 7"/>',
+ 'sepatu': '<path d="M3 17h18v-2c0-1-1-2-3-2l-5-1-3-5H5v10z"/><path d="M3 20h18"/>',
+ 'jam': '<circle cx="12" cy="12" r="6"/><path d="M12 9v3l2 1M9 3h6M9 21h6"/>',
+ 'gelas': '<path d="M6 3h12l-1 9a5 5 0 0 1-10 0zM12 17v4M8 21h8"/>',
+ 'mahkota': '<path d="M4 18h16l1-11-5 4-4-6-4 6-5-4z"/>',
+ 'daun': '<path d="M5 19c0-9 6-14 15-14 0 9-5 15-14 15zM5 19l8-8"/>',
+ 'parfum': '<path d="M9 3h6v3H9zM7 8h10a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="14" r="2.5"/>',
+ 'kosmetik': '<path d="M9 11V5l3-2 3 2v6M7 11h10v10H7z"/>',
+ 'uang': '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/>',
+ 'musik': '<path d="M9 18V5l11-2v13M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3zM20 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3z"/>',
+}
+def svg(name, size=20, sw=1.8):
+    return f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{IC[name]}</svg>'

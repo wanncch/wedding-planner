@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Budget Planner</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#A44E62}a:hover{color:#33262E}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid #F5ECEC;white-space:nowrap}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#7B6A72;font-weight:600;background:#FCF9F7}
+td.n,th.n{text-align:right;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+</style>
+</helmet>
+<div style="min-height: 1120px; box-sizing: border-box; background: #FCF9F7; color: #33262E; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-wrap: wrap">
+  <aside style="flex: 1 1 220px; max-width: 100%; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #F6E6E6; padding: 28px 16px; display: flex; flex-direction: column; gap: 24px">
+    <div style="padding: 0 10px">
+      <div style="font-family: Fraunces, Georgia, serif; font-size: 22px; line-height: 1.1">Wedding Planner</div>
+      <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #A44E62; margin-top: 4px">by Wanncch</div>
+    </div>
+    <nav style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="Dashboard.dc.html" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Dashboard</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Wedding Profile</a>
+      <a href="ChecklistMobile.dc.html" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Checklist</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Timeline</a>
+      <a href="#" style="text-decoration: none; color: #33262E; font-weight: 600; background: #F6E6E6; border-radius: 14px; padding: 10px 12px">Budget Planner</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Vendor</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Tamu</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Dokumen</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Pembayaran</a>
+      <a href="#" style="text-decoration: none; color: #5E4A55; border-radius: 14px; padding: 10px 12px">Settings &amp; Database</a>
+    </nav>
+  </aside>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 32px 48px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+      <div style="font-family: Fraunces, Georgia, serif; font-size: 30px">Budget Planner</div>
+      <button type="button" style="height: 42px; padding: 0 16px; border-radius: 14px; border: 0; background: #B0566B; color: #FFFFFF; font: inherit; font-weight: 600; display: flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Catat pembayaran</button>
+    </div>
+
+    <div style="display: flex; gap: 4px; border-bottom: 1px solid #F6E6E6; font-size: 14px">
+      <a href="#" style="text-decoration: none; color: #33262E; font-weight: 600; padding: 10px 14px; border-bottom: 2px solid #B0566B">Anggaran per kategori</a>
+      <a href="#" style="text-decoration: none; color: #7B6A72; padding: 10px 14px">Pembayaran</a>
+      <a href="#" style="text-decoration: none; color: #7B6A72; padding: 10px 14px">Simulasi</a>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <section style="flex: 3 1 620px; min-width: 0; background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 20px; overflow: hidden">
+        <div style="padding: 16px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: baseline">
+          <div style="font-weight: 600">Rencana vs estimasi vs aktual</div>
+          <div style="font-size: 13px; color: #7B6A72">Variance = rencana − aktual (atau estimasi bila belum ada kontrak)</div>
+        </div>
+        <div style="overflow-x: auto">
+          <table style="border-collapse: collapse; width: 100%; font-size: 14px">
+            <thead><tr><th>Kategori</th><th class="n">Rencana</th><th class="n">Estimasi</th><th class="n">Aktual</th><th class="n">Variance</th><th class="n">% anggaran</th><th style="width: 140px">Terpakai</th></tr></thead>
+            <tbody>
+              <tr style="background: #FDF6F4"><td>Catering</td><td class="n">27,20</td><td class="n">30,00</td><td class="n">30,00</td><td class="n" style="color: #8E3A30; font-weight: 600">−2,80</td><td class="n">32%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px; overflow: hidden"><div style="width: 100%; height: 100%; background: #A8463A"></div></div></td></tr>
+              <tr><td>Venue</td><td class="n">15,30</td><td class="n">14,50</td><td class="n">14,50</td><td class="n" style="color: #3F7457">+0,80</td><td class="n">18%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px; overflow: hidden"><div style="width: 95%; height: 100%; background: #33262E"></div></div></td></tr>
+              <tr><td>Dekorasi</td><td class="n">8,50</td><td class="n">8,00</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+0,50</td><td class="n">10%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Busana &amp; Pengantin</td><td class="n">8,50</td><td class="n">7,50</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+1,00</td><td class="n">10%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Dokumentasi</td><td class="n">5,95</td><td class="n">5,00</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+0,95</td><td class="n">7%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Wedding Organizer</td><td class="n">5,10</td><td class="n">5,00</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+0,10</td><td class="n">6%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Hiburan &amp; Teknis</td><td class="n">3,40</td><td class="n">3,00</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+0,40</td><td class="n">4%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Kebutuhan Keluarga</td><td class="n">2,55</td><td class="n">2,50</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+0,05</td><td class="n">3%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Undangan</td><td class="n">1,70</td><td class="n">2,25</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #8E3A30">−0,55</td><td class="n">2%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Souvenir</td><td class="n">1,70</td><td class="n">2,00</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #8E3A30">−0,30</td><td class="n">2%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Transportasi</td><td class="n">0,85</td><td class="n">1,50</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #8E3A30">−0,65</td><td class="n">1%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Administrasi</td><td class="n">0,85</td><td class="n">0,75</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+0,10</td><td class="n">1%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td>Lain-lain &amp; Cadangan</td><td class="n">3,40</td><td class="n">0,40</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #3F7457">+3,00</td><td class="n">4%</td><td><div style="height: 6px; background: #F6E6E6; border-radius: 999px"></div></td></tr>
+              <tr><td style="color: #9A8790">Bulan Madu</td><td class="n" style="color: #9A8790">0,00</td><td class="n" style="color: #9A8790">0,00</td><td class="n" style="color: #9A8790">–</td><td class="n" style="color: #9A8790">0,00</td><td class="n" style="color: #9A8790">0%</td><td><span style="font-size: 12px; color: #9A8790">nonaktif</span></td></tr>
+              <tr style="font-weight: 700; background: #FCF9F7"><td>Total (Rp juta)</td><td class="n">85,00</td><td class="n">82,40</td><td class="n">44,50</td><td class="n" style="color: #3F7457">+2,60</td><td class="n">100%</td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 14px">
+          <div style="font-weight: 600">Simulasi anggaran</div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+            <button type="button" style="height: 40px; border-radius: 14px; border: 1px solid #EAD9DA; background: #FFFFFF; color: #33262E; font: inherit; font-size: 13px">Rp30 jt</button>
+            <button type="button" style="height: 40px; border-radius: 14px; border: 0; background: #B0566B; color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 600">Rp50 jt</button>
+            <button type="button" style="height: 40px; border-radius: 14px; border: 1px solid #EAD9DA; background: #FFFFFF; color: #33262E; font: inherit; font-size: 13px">Rp75 jt</button>
+            <button type="button" style="height: 40px; border-radius: 14px; border: 1px solid #EAD9DA; background: #FFFFFF; color: #33262E; font: inherit; font-size: 13px">Rp100 jt</button>
+            <button type="button" style="height: 40px; border-radius: 14px; border: 1px solid #EAD9DA; background: #FFFFFF; color: #33262E; font: inherit; font-size: 13px; grid-column: span 2">Custom</button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px">
+            <div style="display: flex; justify-content: space-between"><span style="color: #7B6A72">Anggaran simulasi</span><span style="font-family: 'IBM Plex Mono', monospace">Rp50,0 jt</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #7B6A72">Estimasi item aktif</span><span style="font-family: 'IBM Plex Mono', monospace">Rp82,4 jt</span></div>
+            <div style="display: flex; justify-content: space-between; font-weight: 700; color: #8E3A30"><span>Kelebihan</span><span style="font-family: 'IBM Plex Mono', monospace">Rp32,4 jt</span></div>
+          </div>
+          <div style="background: #F6E1DD; border-radius: 16px; padding: 12px 14px; font-size: 13px; color: #6E2A22; line-height: 1.5">
+            <strong>Estimasi melebihi anggaran.</strong> Rekomendasi penghematan berdasarkan prioritas:
+            <ul style="margin: 6px 0 0; padding-left: 18px">
+              <li>Catering: turun ke paket per porsi lebih rendah atau kurangi undangan</li>
+              <li>Venue: pertimbangkan resepsi di rumah atau gedung desa</li>
+              <li>Dekorasi &amp; Dokumentasi: pilih level minimum</li>
+              <li>Nonaktifkan item opsional: WO, video cinematic, souvenir</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background: #FFFFFF; border: 1px solid #F6E6E6; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 12px">
+          <div style="font-weight: 600">Kontrak &amp; pembayaran</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span><strong>Gedung Serbaguna Melati</strong><span style="display: block; color: #7B6A72">Rp5,0 jt dari Rp14,5 jt</span></span><span style="font-size: 11px; font-weight: 600; background: #F6E6E6; color: #5E4A55; padding: 2px 8px; border-radius: 999px; height: fit-content">DP Paid</span></div>
+            <div style="height: 6px; background: #F6E6E6; border-radius: 999px; overflow: hidden"><div style="width: 34%; height: 100%; background: #33262E"></div></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span><strong>Catering Dapur Ibu Ratna</strong><span style="display: block; color: #7B6A72">Rp7,5 jt dari Rp30,0 jt</span></span><span style="font-size: 11px; font-weight: 600; background: #F6E6E6; color: #5E4A55; padding: 2px 8px; border-radius: 999px; height: fit-content">DP Paid</span></div>
+            <div style="height: 6px; background: #F6E6E6; border-radius: 999px; overflow: hidden"><div style="width: 25%; height: 100%; background: #33262E"></div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; border-top: 1px solid #F5ECEC; padding-top: 10px"><span style="color: #7B6A72">Total sisa tagihan</span><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">Rp32,0 jt</span></div>
+        </div>
+      </section>
+    </div>
+    <div style="font-size: 12px; color: #7B6A72">Contoh data untuk ilustrasi desain. Angka dalam juta rupiah.</div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
