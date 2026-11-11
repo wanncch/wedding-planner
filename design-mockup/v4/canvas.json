@@ -1,0 +1,43 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-11-11T15:40:00Z"},
+  "title": "Wedding Planner v4 · Per Acara",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1440, "h": 1840, "title": "Beranda · resume anggaran", "expand": "fill", "is_interactive": true},
+    "RincianAnggaran.dc.html": {"x": 1520, "y": 0, "w": 600, "h": 1120, "title": "Rincian pengeluaran (klik dari Beranda)", "is_interactive": true},
+    "LamaranPersiapan.dc.html": {"x": 0, "y": 2240, "w": 1440, "h": 1260, "title": "Lamaran · Persiapan", "expand": "fill", "is_interactive": true},
+    "LamaranAnggaran.dc.html": {"x": 1520, "y": 2240, "w": 1440, "h": 1180, "title": "Lamaran · Anggaran", "expand": "fill", "is_interactive": true},
+    "FormAnggaran.dc.html": {"x": 3040, "y": 2240, "w": 1180, "h": 1080, "title": "Form item anggaran (PIC & ditanggung oleh)"},
+    "ResepsiVendor.dc.html": {"x": 0, "y": 3900, "w": 1440, "h": 1100, "title": "Akad & Resepsi · Vendor", "expand": "fill", "is_interactive": true},
+    "ResepsiTamu.dc.html": {"x": 1520, "y": 3900, "w": 1440, "h": 1080, "title": "Akad & Resepsi · Tamu (buku induk)", "expand": "fill", "is_interactive": true},
+    "AturAcara.dc.html": {"x": 0, "y": 5400, "w": 1440, "h": 1240, "title": "Atur acara · tombol pensil & katalog sub menu", "expand": "fill", "is_interactive": true},
+    "Pengaturan.dc.html": {"x": 1520, "y": 5400, "w": 1440, "h": 1100, "title": "Pengaturan · Orang & pihak", "expand": "fill", "is_interactive": true},
+    "BuatPernikahan.dc.html": {"x": 3040, "y": 5400, "w": 1440, "h": 1100, "title": "Buat pernikahan · pilih acara", "expand": "fill"},
+    "HPBeranda.dc.html": {"x": 0, "y": 7040, "w": 390, "h": 844, "title": "HP · Beranda"},
+    "HPAnggaran.dc.html": {"x": 470, "y": 7040, "w": 390, "h": 844, "title": "HP · Anggaran Lamaran"}
+  },
+  "order": [
+    "Main.dc.html",
+    "RincianAnggaran.dc.html",
+    "LamaranPersiapan.dc.html",
+    "LamaranAnggaran.dc.html",
+    "FormAnggaran.dc.html",
+    "ResepsiVendor.dc.html",
+    "ResepsiTamu.dc.html",
+    "AturAcara.dc.html",
+    "Pengaturan.dc.html",
+    "BuatPernikahan.dc.html",
+    "HPBeranda.dc.html",
+    "HPAnggaran.dc.html"
+  ],
+  "notes": {
+    "t-beranda": {"x": 0, "y": -300, "text": "Beranda & resume anggaran", "kind": "title1", "maxW": 2120},
+    "t-lamaran": {"x": 0, "y": 1940, "text": "Grup acara: Lamaran", "kind": "title1", "maxW": 4220},
+    "t-resepsi": {"x": 0, "y": 3600, "text": "Grup acara: Akad & Resepsi", "kind": "title1", "maxW": 2960},
+    "t-atur": {"x": 0, "y": 5100, "text": "Atur acara, pengaturan & pernikahan baru", "kind": "title1", "maxW": 4480},
+    "t-hp": {"x": 0, "y": 6740, "text": "Versi HP", "kind": "title1", "maxW": 860}
+  },
+  "designSystems": []
+}

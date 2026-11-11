@@ -3,42 +3,52 @@ import { useW, useToast } from '../lib/store.jsx';
 import { friendlyError } from '../lib/supabase.js';
 import { wpath } from '../lib/nav.js';
 import { Icon, Pill, Chips, Modal, Field, Text, NumIn } from '../components/ui.jsx';
-import { guestSummary } from '../lib/calc.js';
+import { invitesFor, inviteSummary } from '../lib/calc.js';
+import { eventById, familyIds, mainEvent, rootOf } from '../lib/events.js';
 import { pct } from '../lib/format.js';
 
-export default function Checkin() {
+export default function Checkin({ q }) {
   const { data, wid, rpc, commit, canEdit, add } = useW();
   const toast = useToast();
-  const s = guestSummary(data.guests, data.wedding);
+  const ev = eventById(data, q.e) || mainEvent(data);
+  const root = ev ? rootOf(data, ev.id) : null;
+  const ids = ev ? (ev.parent_id ? [ev.id] : familyIds(data, ev.id)) : [];
+  const inv = invitesFor(data, ids);
+  const s = inviteSummary(inv);
   const [qs, setQs] = useState('');
   const [flt, setFlt] = useState('belum');
   const [walkin, setWalkin] = useState(false);
   const [adj, setAdj] = useState(null);
   const t = qs.trim().toLowerCase();
-  const list = data.guests.filter(g => {
-    if (flt === 'belum' && g.checked_in_at) return false;
-    if (flt === 'sudah' && !g.checked_in_at) return false;
-    if (flt === 'vip' && !g.is_vip) return false;
-    return !t || [g.name, g.source, g.relation, g.table_no].join(' ').toLowerCase().includes(t);
-  }).sort((a, b) => (flt === 'sudah' ? String(b.checked_in_at).localeCompare(String(a.checked_in_at)) : a.name.localeCompare(b.name, 'id'))).slice(0, 60);
+  const list = inv.filter(i => {
+    if (flt === 'belum' && i.checked_in_at) return false;
+    if (flt === 'sudah' && !i.checked_in_at) return false;
+    if (flt === 'vip' && !i.g.is_vip) return false;
+    return !t || [i.g.name, i.g.source, i.g.relation, i.table_no].join(' ').toLowerCase().includes(t);
+  }).map(i => ({ ...i.g, ...i, name: i.g.name, source: i.g.source, pax: i._pax, inviteId: i.id }))
+    .sort((a, b) => (flt === 'sudah' ? String(b.checked_in_at).localeCompare(String(a.checked_in_at)) : a.name.localeCompare(b.name, 'id'))).slice(0, 60);
 
   async function checkin(g, pax, undo) {
-    const before = g;
-    commit(prev => ({ ...prev, guests: prev.guests.map(x => x.id === g.id ? { ...x, checked_in_at: undo ? null : new Date().toISOString(), arrived_pax: undo ? null : pax, rsvp: undo ? x.rsvp : 'hadir' } : x) }));
+    const before = (data.guest_invites || []).find(x => x.id === g.inviteId);
+    commit(prev => ({ ...prev, guest_invites: prev.guest_invites.map(x => x.id === g.inviteId ? { ...x, checked_in_at: undo ? null : new Date().toISOString(), arrived_pax: undo ? null : pax, rsvp: undo ? x.rsvp : 'hadir' } : x) }));
     try {
-      const row = await rpc('check_in_guest', { p_guest: g.id, p_pax: pax, p_undo: !!undo });
-      if (row) commit(prev => ({ ...prev, guests: prev.guests.map(x => x.id === g.id ? row : x) }));
+      const row = await rpc('check_in_invite', { p_invite: g.inviteId, p_pax: pax, p_undo: !!undo });
+      if (row) commit(prev => ({ ...prev, guest_invites: prev.guest_invites.map(x => x.id === g.inviteId ? row : x) }));
       if (!undo) toast(g.name + ' hadir · ' + pax + ' orang', 'ok');
     } catch (e) {
-      commit(prev => ({ ...prev, guests: prev.guests.map(x => x.id === g.id ? before : x) }));
+      commit(prev => ({ ...prev, guest_invites: prev.guest_invites.map(x => x.id === g.inviteId ? before : x) }));
       toast(friendlyError(e), 'error');
     }
+  }
+  async function doWalkin(name, pax) {
+    const gr = await add('guests', { name, pax, source: 'Tidak terdaftar', side: 'bersama' });
+    if (gr) await add('guest_invites', { guest_id: gr.id, event_id: ids.length > 1 ? ids[1] : ids[0], pax, rsvp: 'hadir', checked_in_at: new Date().toISOString(), arrived_pax: pax, sent: false, table_no: '' });
   }
   const time = (iso) => new Date(iso).toTimeString().slice(0, 5).replace(':', '.');
 
   return (
     <div className="full">
-      <div className="between"><a className="btn2 sm" href={wpath(wid, 'tamu')}><Icon name="left" size={15} />Keluar</a><Pill cls="p-ok">Mode check-in</Pill></div>
+      <div className="between"><a className="btn2 sm" href={root ? '#/w/' + wid + '/e/' + root.id + '/tamu' : wpath(wid, 'beranda')}><Icon name="left" size={15} />Keluar</a><Pill cls="p-ok">Check-in · {ev ? ev.name : ''}</Pill></div>
       <div className="livecard sage">
         <div style={{ fontSize: 12, fontWeight: 700, opacity: .9 }}>Sudah datang</div>
         <div className="row nowrap" style={{ alignItems: 'baseline', gap: 8 }}><span style={{ fontFamily: 'var(--serif)', fontWeight: 700, fontSize: 42, lineHeight: 1.05 }}>{s.arrivedPax}</span><span style={{ fontSize: 14, opacity: .9 }}>dari {s.people} orang</span></div>
@@ -60,7 +70,7 @@ export default function Checkin() {
       </div>
       {canEdit && <button type="button" className="btn2" onClick={() => setWalkin(true)}>+ Tamu tidak terdaftar</button>}
       {adj && <AdjustModal g={adj} onClose={() => setAdj(null)} onSave={(pax) => checkin(adj, pax)} onUndo={() => checkin(adj, 0, true)} />}
-      {walkin && <WalkinModal initial={qs} onClose={() => setWalkin(false)} onSave={(name, pax) => add('guests', { name, pax, rsvp: 'hadir', checked_in_at: new Date().toISOString(), arrived_pax: pax, source: 'Tidak terdaftar', sent: false })} />}
+      {walkin && <WalkinModal initial={qs} onClose={() => setWalkin(false)} onSave={doWalkin} />}
     </div>
   );
 }

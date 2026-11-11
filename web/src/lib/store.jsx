@@ -2,14 +2,14 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { supabase, friendlyError, withRetry } from './supabase.js';
 import { uid } from './format.js';
 
-export const TABLES = ['events', 'tasks', 'vendors', 'budget_categories', 'budget_items', 'payments', 'gift_categories',
-  'gift_items', 'guests', 'rundown_items', 'documents', 'reminders', 'notes', 'selfprep'];
-const ORDER = { events: 'sort', tasks: 'sort', vendors: 'sort', budget_categories: 'sort', budget_items: 'sort', payments: 'sort',
+export const TABLES = ['events', 'people', 'tasks', 'vendors', 'budget_categories', 'budget_items', 'payments', 'gift_categories',
+  'gift_items', 'guests', 'guest_invites', 'rundown_items', 'documents', 'reminders', 'notes', 'selfprep'];
+const ORDER = { events: 'sort', people: 'sort', guest_invites: 'created_at', tasks: 'sort', vendors: 'sort', budget_categories: 'sort', budget_items: 'sort', payments: 'sort',
   gift_categories: 'sort', gift_items: 'sort', guests: 'created_at', rundown_items: 'start_time', documents: 'sort',
   reminders: 'due_date', notes: 'sort', selfprep: 'sort' };
-const REALTIME = ['guests', 'rundown_items', 'tasks'];
+const REALTIME = ['guests', 'guest_invites', 'rundown_items', 'tasks'];
 // Baris anak yang ikut terhapus di database (on delete cascade)
-const CASCADE = { gift_categories: ['gift_items', 'category_id'], budget_items: ['payments', 'item_id'], events: ['rundown_items', 'event_id'] };
+const CASCADE = { gift_categories: ['gift_items', 'category_id'], budget_items: ['payments', 'item_id'], guests: ['guest_invites', 'guest_id'] };
 
 /* ------------------------------------------------------------------ */
 /* Toast                                                               */
@@ -83,7 +83,7 @@ export const useAuth = () => useContext(AuthCtx);
 /* Data satu pernikahan                                                */
 /* ------------------------------------------------------------------ */
 const WedCtx = createContext(null);
-const cacheKey = (wid) => 'wp-cache-v2-' + wid;
+const cacheKey = (wid) => 'wp-cache-v4-' + wid;
 
 function readCache(wid) {
   try { const s = localStorage.getItem(cacheKey(wid)); return s ? JSON.parse(s) : null; } catch (e) { return null; }
@@ -239,6 +239,11 @@ export function WeddingProvider({ wid, children }) {
       const next = { ...prev, [table]: prev[table].filter(r => r.id !== id) };
       if (casc) next[casc[0]] = prev[casc[0]].filter(r => r[casc[1]] !== id);
       if (table === 'vendors') next.budget_items = prev.budget_items.map(r => (r.vendor_id === id ? { ...r, vendor_id: null } : r));
+      if (table === 'people') {
+        ['tasks', 'budget_items', 'gift_categories', 'gift_items', 'reminders'].forEach(t => { next[t] = prev[t].map(r => (r.pic_id === id ? { ...r, pic_id: null } : r)); });
+        next.budget_items = next.budget_items.map(r => (r.payer_id === id ? { ...r, payer_id: null } : r));
+        next.events = prev.events.map(r => (r.payer_id === id ? { ...r, payer_id: null } : r));
+      }
       return next;
     });
     try {
@@ -274,7 +279,9 @@ export function WeddingProvider({ wid, children }) {
       return { ...m, name: m.label || p.display_name || p.email || 'Anggota', email: p.email };
     });
     const active = data.active !== false;
-    return { loading, error, reload, data, wid, role, active, canEdit: role !== 'viewer' && active, isOwner: role === 'owner', me, people,
+    const uidMe = user && user.id;
+    const mine = (data.people || []).filter(p => (p.user_ids || []).includes(uidMe)).map(p => p.id);
+    return { loading, error, reload, data, wid, role, active, uidMe, mine, canEdit: role !== 'viewer' && active, isOwner: role === 'owner', me, people,
       add, addMany, save, del, rpc, commit, pending, syncedAt };
   }, [data, loading, error, reload, user, wid, add, addMany, save, del, rpc, commit, pending, syncedAt]);
 

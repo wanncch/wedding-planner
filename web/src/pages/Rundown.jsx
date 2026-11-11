@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useW, useToast } from '../lib/store.jsx';
-import { wpath } from '../lib/nav.js';
+import { wpath, epath } from '../lib/nav.js';
+import { useEv, EventHeader } from '../components/EventKit.jsx';
+import { baseDate } from '../lib/events.js';
 import { Icon, Tabs, Tile, Drawer, Field, Text, Area, TimeIn, NumIn, Select, PersonPick, confirm, Empty, Avatar, Pill } from '../components/ui.jsx';
 import { rundownFor } from '../lib/calc.js';
 import { dLong, hm, timeToMin, minToTime, durLabel, waLink, iso, today } from '../lib/format.js';
@@ -12,96 +14,86 @@ export function rundownText(w, ev, items) {
 
 export default function Rundown() {
   const { data, canEdit, wid } = useW();
+  const E = useEv();
   const toast = useToast();
   const w = data.wedding;
-  const evs = [...data.events].sort((a, b) => String(a.event_date).localeCompare(String(b.event_date)) || a.sort - b.sort);
-  const main = evs.find(e => e.kind === 'akad') || evs[0];
-  const [evId, setEvId] = useState(main ? main.id : null);
   const [edit, setEdit] = useState(null);
-  const ev = evs.find(e => e.id === evId) || main;
-  if (!ev) return <div className="g"><Empty title="Belum ada acara" text="Tambah acara di Pengaturan › Acara." /></div>;
-
-  // Akad & resepsi di hari yang sama digabung jadi satu rundown
-  const groups = [];
-  evs.forEach(e => {
-    const g = groups.find(x => x.date === e.event_date && e.event_date && (x.events.some(y => y.kind === 'akad' || y.kind === 'resepsi') && (e.kind === 'akad' || e.kind === 'resepsi')));
-    if (g) g.events.push(e); else groups.push({ key: e.id, date: e.event_date, events: [e] });
-  });
-  const BLN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-  const label = (g) => g.events.map(x => x.kind === 'akad' ? (w.religion === 'islam' ? 'Akad' : 'Pemberkatan') : x.name).join(' & ') + (g.date ? ' · ' + Number(g.date.slice(8, 10)) + ' ' + BLN[Number(g.date.slice(5, 7)) - 1] : '');
-  const cur = groups.find(g => g.events.some(e => e.id === ev.id)) || groups[0];
-  const group = cur.events;
-  const ids = new Set(group.map(e => e.id));
-  const items = data.rundown_items.filter(r => ids.has(r.event_id)).sort((a, b) => timeToMin(a.start_time) - timeToMin(b.start_time) || a.sort - b.sort);
-  const tabs = groups.map(g => ({ key: g.key, label: label(g) }));
-
+  const { ev, scope } = E;
+  const evs = scope.parts.length ? (scope.part ? [scope.part] : scope.parts) : [ev];
+  const items = data.rundown_items.filter(r => evs.some(e => e.id === r.event_id)).sort((a, b) => String(baseDate(data, a.event_id)).localeCompare(String(baseDate(data, b.event_id))) || timeToMin(a.start_time) - timeToMin(b.start_time) || a.sort - b.sort);
+  const one = evs[0];
   const first = items[0];
   const last = items[items.length - 1];
   const span = first ? timeToMin(last.start_time) + Number(last.duration_min) - timeToMin(first.start_time) : 0;
-  const pics = Array.from(new Set(items.flatMap(r => r.pic.split(/,/).map(s => s.trim())).filter(Boolean)));
-  const needs = Array.from(new Set(items.flatMap(r => r.needs.split(/[,;]/).map(s => s.trim())).filter(Boolean)));
-  const isToday = ev.event_date === iso(today());
+  const pics = Array.from(new Set(items.flatMap(r => r.pic.split(/,/).map(x => x.trim())).filter(Boolean)));
+  const needs = Array.from(new Set(items.flatMap(r => r.needs.split(/[,;]/).map(x => x.trim())).filter(Boolean)));
   const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
   const stateOf = (r) => {
     if (r.state === 'done') return 'done';
     if (r.state === 'live') return 'now';
-    if (isToday) { const s = timeToMin(r.start_time); if (nowMin >= s + Number(r.duration_min)) return 'done'; if (nowMin >= s) return 'now'; }
+    if (baseDate(data, r.event_id) === iso(today())) { const st = timeToMin(r.start_time); if (nowMin >= st + Number(r.duration_min)) return 'done'; if (nowMin >= st) return 'now'; }
     return '';
   };
-  const akad = group.find(e => e.kind === 'akad');
-  const res = group.find(e => e.kind === 'resepsi');
   const contacts = pics.map(p => {
     const v = data.vendors.find(x => (x.contact_name && p.toLowerCase().includes(x.contact_name.toLowerCase())) || p.toLowerCase().includes(x.name.toLowerCase()) || (x.category && p.toLowerCase() === x.category.toLowerCase()));
     return { p, phone: v ? v.phone : '', sub: v ? v.name : '' };
   });
+  const liveTarget = scope.part ? scope.part.id : ev.id;
 
   async function share() {
-    const text = rundownText(w, ev, items);
+    const text = evs.map(e => rundownText(w, { ...e, name: e.id === ev.id ? ev.name : ev.name + ' · ' + e.name, event_date: baseDate(data, e.id) }, items.filter(r => r.event_id === e.id))).join('\n\n');
     if (navigator.share) { try { await navigator.share({ title: 'Rundown ' + ev.name, text }); return; } catch (e) { /* dibatalkan */ } }
     try { await navigator.clipboard.writeText(text); toast('Rundown disalin. Tempel di grup WA keluarga / WO.', 'ok'); }
     catch (e) { window.open(waLink('', text), '_blank'); }
   }
+  const newSession = (eid) => setEdit({ _new: true, event_id: eid || one.id, start_time: last ? minToTime(timeToMin(last.start_time) + Number(last.duration_min)) : (one.start_time ? String(one.start_time).slice(0, 5) : '08:00'), duration_min: 30 });
 
   return (
     <>
-      <div className="top">
-        <div><div className="eyb">{dLong(ev.event_date)}{ev.location ? ' · ' + ev.location : ''}</div><h1 className="h1">Rundown acara</h1></div>
-        <div className="row noprint">
+      <EventHeader title="Rundown"
+        actions={<div className="row noprint">
           <button type="button" className="btn2" onClick={() => window.print()}><Icon name="download" size={15} />Unduh PDF</button>
-          <button type="button" className="btn2" onClick={share}><Icon name="share" size={15} />Bagikan ke WO &amp; keluarga</button>
-          <a className="btn3" href={wpath(wid, 'live', { e: ev.id })}><Icon name="live" size={15} />Mode hari H (live)</a>
-          {canEdit && <button type="button" className="btn" onClick={() => setEdit({ _new: true, event_id: (res && first && timeToMin(first.start_time) >= timeToMin(res.start_time)) ? res.id : ev.id, start_time: last ? minToTime(timeToMin(last.start_time) + Number(last.duration_min)) : '08:00', duration_min: 30 })}><Icon name="plus" size={15} />Sesi</button>}
-        </div>
-      </div>
-      {tabs.length > 1 && <Tabs value={cur.key} onChange={setEvId} items={tabs} />}
+          <button type="button" className="btn2" onClick={share}><Icon name="share" size={15} />Bagikan</button>
+          <a className="btn3" href={wpath(wid, 'live', { e: liveTarget })}><Icon name="live" size={15} />Mode hari H</a>
+          {canEdit && <button type="button" className="btn" onClick={() => newSession()}><Icon name="plus" size={15} />Sesi</button>}
+        </div>}
+        partSub={(xs) => data.rundown_items.filter(r => xs.includes(r.event_id)).length + ' sesi'} />
 
       <section className="tiles">
         <Tile w="w1" icon="clock" k="Mulai" v={first ? hm(first.start_time) : '–'} sub={first ? first.title : 'Belum ada sesi'} />
-        {akad && <Tile w="w2" icon="rings" k={akad.name} v={hm(akad.start_time) || '–'} sub={akad.location || '–'} />}
-        {res ? <Tile w="w3" icon="sparkle" k="Resepsi" v={hm(res.start_time) + (res.end_time ? '–' + hm(res.end_time) : '')} sub={res.location || '–'} /> : !akad && <Tile w="w3" icon="sparkle" k={ev.name} v={hm(ev.start_time) || '–'} sub={ev.location || '–'} />}
+        <Tile w="w2" icon={ev.icon || 'rings'} k={evs.length > 1 ? evs.length + ' bagian' : one.name} v={hm(one.start_time) || '–'} sub={ev.detail || one.location || ev.location || '–'} />
+        <Tile w="w3" icon="pin" k="Lokasi" v={<span style={{ fontSize: 18 }}>{(one.location || ev.location || '–')}</span>} sub={dLong(baseDate(data, one.id))} />
         <Tile w="w4" icon="list" k="Total sesi" v={items.length} sub={durLabel(span) + ' · ' + pics.length + ' PIC'} />
       </section>
 
       <section className="split">
-        <div className="g wide">
-          {items.length ? (
-            <div className="tl">
-              {items.map(r => {
-                const st = stateOf(r);
-                return (
-                  <div className="ti" key={r.id}>
-                    <div><div className="tt">{hm(r.start_time)}</div><div className="td">{r.duration_min} mnt</div></div>
-                    <div className="rail"><span className={'dot' + (st ? ' ' + st : '')} /></div>
-                    <button type="button" className={'ev' + (st === 'now' ? ' cur' : '')} onClick={() => setEdit(r)}>
-                      <div className="between"><b style={{ fontSize: st === 'now' ? 15 : 14 }}>{r.title}</b>{st === 'now' && <Pill cls="p-rose">● Sedang berlangsung</Pill>}</div>
-                      <div className="meta">{r.pic && <span>PIC <b>{r.pic}</b></span>}{r.location && <span>Lokasi <b>{r.location}</b></span>}{r.needs && <span>Perlu <b>{r.needs}</b></span>}</div>
-                      {r.notes && <div className="xs" style={{ marginTop: 6, color: '#8E3B50', fontWeight: 600 }}>Catatan: {r.notes}</div>}
-                    </button>
+        <div className="g wide col">
+          {evs.map(e => {
+            const its = items.filter(r => r.event_id === e.id);
+            return (
+              <div key={e.id}>
+                {evs.length > 1 && <div className="between" style={{ marginBottom: 6 }}><div className="h2">{e.name}</div><span className="xs muted">{dLong(baseDate(data, e.id))}{e.location ? ' · ' + e.location : ''}</span></div>}
+                {its.length ? (
+                  <div className="tl">
+                    {its.map(r => {
+                      const st = stateOf(r);
+                      return (
+                        <div className="ti" key={r.id}>
+                          <div><div className="tt">{hm(r.start_time)}</div><div className="td">{r.duration_min} mnt</div></div>
+                          <div className="rail"><span className={'dot' + (st ? ' ' + st : '')} /></div>
+                          <button type="button" className={'ev' + (st === 'now' ? ' cur' : '')} onClick={() => setEdit(r)}>
+                            <div className="between"><b style={{ fontSize: st === 'now' ? 15 : 14 }}>{r.title}</b>{st === 'now' && <Pill cls="p-rose">● Sedang berlangsung</Pill>}</div>
+                            <div className="meta">{r.pic && <span>PIC <b>{r.pic}</b></span>}{r.location && <span>Lokasi <b>{r.location}</b></span>}{r.needs && <span>Perlu <b>{r.needs}</b></span>}</div>
+                            {r.notes && <div className="xs" style={{ marginTop: 6, color: '#8E3B50', fontWeight: 600 }}>Catatan: {r.notes}</div>}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
-            </div>
-          ) : <Empty icon="clock" title="Rundown masih kosong" text="Tambah sesi pertama, misalnya rias pengantin jam 05.00." action={canEdit && <button type="button" className="btn" onClick={() => setEdit({ _new: true, event_id: ev.id, start_time: '08:00', duration_min: 30 })}>+ Sesi</button>} />}
+                ) : <Empty icon="clock" title="Rundown masih kosong" text="Tambah sesi pertama, misalnya kedatangan rombongan jam 10.00." action={canEdit && <button type="button" className="btn" onClick={() => newSession(e.id)}>+ Sesi</button>} />}
+              </div>
+            );
+          })}
         </div>
         <aside className="narrow">
           <div className="g col" style={{ gap: 4 }}>
@@ -109,17 +101,17 @@ export default function Rundown() {
             {contacts.length ? contacts.map(c => (
               <div className="li" key={c.p}><Avatar name={c.p} /><div className="grow"><b>{c.p}</b>{c.sub && <div className="xs muted">{c.sub}</div>}</div>{c.phone && <a href={waLink(c.phone)} target="_blank" rel="noreferrer" className="pill p-ok" style={{ textDecoration: 'none' }}>WA</a>}</div>
             )) : <div className="xs muted">Isi PIC di setiap sesi.</div>}
-            <div className="xs muted" style={{ marginTop: 6 }}>Nomor WA diambil dari menu Vendor bila nama kontaknya cocok.</div>
+            <div className="xs muted" style={{ marginTop: 6 }}>Nomor WA diambil dari buku kontak vendor bila nama kontaknya cocok.</div>
           </div>
           <div className="g col" style={{ background: 'linear-gradient(150deg, rgba(255,255,255,.8), rgba(252,224,203,.6))', gap: 8 }}>
             <div className="h2">Perlengkapan dibawa</div>
             <div className="xs muted">Ditarik dari kolom “Perlu” setiap sesi</div>
             <div className="row" style={{ gap: 6 }}>{needs.length ? needs.map(n => <span key={n} className="chip">{n}</span>) : <span className="xs muted">–</span>}</div>
-            <a className="xs" href={wpath(wid, 'seserahan', { list: 'hari_h' })} style={{ fontWeight: 700, color: '#6B430F' }}>Daftar lengkap ada di Seserahan › Bawaan hari H</a>
+            <a className="xs" href={epath(wid, ev.id, 'seserahan', { list: 'hari_h' })} style={{ fontWeight: 700, color: '#6B430F' }}>Daftar lengkap ada di Seserahan › Bawaan hari H</a>
           </div>
         </aside>
       </section>
-      {edit && <SessionDrawer r={edit} events={group} onClose={() => setEdit(null)} />}
+      {edit && <SessionDrawer r={edit} events={evs} onClose={() => setEdit(null)} />}
     </>
   );
 }

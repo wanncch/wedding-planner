@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useW } from '../lib/store.jsx';
 import { supabase } from '../lib/supabase.js';
-import { Icon, CAT_ICONS, CAT_COLORS, Tabs, Pill, Tile, Seg, Drawer, Modal, Field, Text, Area, Money, NumIn, DateIn, PersonPick, Toggle, Select, confirm, Empty, Bar, Check, Spinner } from '../components/ui.jsx';
+import { Icon, CAT_ICONS, CAT_COLORS, Tabs, Pill, Tile, Seg, Drawer, Modal, Field, Text, Area, Money, NumIn, DateIn, Toggle, Select, confirm, Empty, Bar, Check, Spinner } from '../components/ui.jsx';
+import { PersonSelect, PersonChip, PayerTag } from '../components/People.jsx';
+import { useEv, EventHeader } from '../components/EventKit.jsx';
+import { defaultPayer, personByKind, eventById } from '../lib/events.js';
 import FileField from '../components/FileField.jsx';
 import { openFile } from '../lib/files.js';
 import { GIFT_LISTS } from '../lib/calc.js';
@@ -19,6 +22,12 @@ export function guessStyle(name, sort = 0) {
   const r = STYLE_RULES.find(([re]) => re.test(name || ''));
   return r ? { icon: r[1], color: r[2] } : { icon: 'kado', color: 'k' + ((Number(sort) || 0) % 10 + 1) };
 }
+/** Penanggung bawaan kategori: seserahan dari pihak pria, hantaran balasan dari pihak wanita */
+export function catPayer(data, list, eventId) {
+  if (list === 'seserahan') return (personByKind(data, 'fam_groom') || {}).id || defaultPayer(data, eventId);
+  if (list === 'balasan') return (personByKind(data, 'fam_bride') || {}).id || defaultPayer(data, eventId);
+  return defaultPayer(data, eventId);
+}
 const UNITS = ['pcs', 'set', 'pasang', 'kotak', 'botol', 'lembar', 'map', 'dus', 'pak', 'kg'];
 
 let tplCache = null;
@@ -31,13 +40,15 @@ function useTpl() {
 export default function Seserahan({ q }) {
   const W = useW();
   const { data, canEdit, save } = W;
-  const w = data.wedding;
-  const [list, setList] = useState(q.list || 'seserahan');
-  const cats = data.gift_categories.filter(c => c.list === list).sort((a, b) => a.sort - b.sort);
-  const [catId, setCatId] = useState(null);
+  const E = useEv();
+  const ids = E.scope.ids;
+  const inScope = (c) => ids.includes(c.event_id);
+  const initCat = q.c ? data.gift_categories.find(c => c.id === q.c) : null;
+  const [list, setList] = useState(initCat ? initCat.list : q.list || (data.gift_categories.some(c => inScope(c) && c.list === 'seserahan') || !data.gift_categories.some(inScope) ? 'seserahan' : (data.gift_categories.find(inScope) || {}).list || 'seserahan'));
+  const cats = data.gift_categories.filter(c => c.list === list && inScope(c)).sort((a, b) => a.sort - b.sort);
+  const [catId, setCatId] = useState(initCat ? initCat.id : null);
   const [drawer, setDrawer] = useState(null);
   const [catEdit, setCatEdit] = useState(null);
-  const [budgetEdit, setBudgetEdit] = useState(false);
 
   const cat = cats.find(c => c.id === catId) || cats[0] || null;
   const itemsOf = (cid) => data.gift_items.filter(i => i.category_id === cid).sort((a, b) => a.sort - b.sort || String(a.created_at).localeCompare(String(b.created_at)));
@@ -47,10 +58,10 @@ export default function Seserahan({ q }) {
   const bought = all.filter(i => i.status !== 'belum').reduce((s, i) => s + Number(i.actual ?? i.planned ?? 0), 0);
   const ready = all.filter(i => i.status === 'siap').length;
   const ordered = all.filter(i => i.status === 'dipesan').length;
-  const budget = list === 'seserahan' ? Number(w.gift_budget || 0) : planned;
-  const counts = Object.fromEntries(GIFT_LISTS.map(l => [l.key, data.gift_items.filter(i => (data.gift_categories.find(c => c.id === i.category_id) || {}).list === l.key).length]));
-
-  useEffect(() => { setCatId(null); }, [list]);
+  const budget = planned;
+  const counts = Object.fromEntries(GIFT_LISTS.map(l => [l.key, data.gift_items.filter(i => { const c = data.gift_categories.find(x => x.id === i.category_id); return c && c.list === l.key && inScope(c); }).length]));
+  const first = React.useRef(true);
+  useEffect(() => { if (first.current) { first.current = false; return; } setCatId(null); }, [list, ids.join()]);
 
   const setStatus = (it, s) => {
     const patch = { status: s };
@@ -60,10 +71,9 @@ export default function Seserahan({ q }) {
 
   return (
     <>
-      <div className="top">
-        <div><div className="eyb">Per barang: merek, harga, status beli, link toko</div><h1 className="h1">Seserahan &amp; Barang</h1></div>
-        {canEdit && <div className="row"><button type="button" className="btn2" onClick={() => setDrawer({ mode: 'template', cat })}>Pakai daftar contoh</button><button type="button" className="btn" onClick={() => setDrawer({ mode: 'satu', cat })}><Icon name="plus" size={15} />Barang</button></div>}
-      </div>
+      <EventHeader title="Seserahan"
+        actions={canEdit && <><button type="button" className="btn2" onClick={() => setDrawer({ mode: 'template', cat })}>Pakai daftar contoh</button><button type="button" className="btn" onClick={() => setDrawer({ mode: 'satu', cat })}><Icon name="plus" size={15} />Barang</button></>}
+        partSub={(xs) => { const cs = new Set(data.gift_categories.filter(c => xs.includes(c.event_id)).map(c => c.id)); const its = data.gift_items.filter(i => cs.has(i.category_id)); return its.filter(i => i.status === 'siap').length + '/' + its.length + ' siap'; }} />
       <Tabs value={list} onChange={setList} items={GIFT_LISTS.map(l => ({ key: l.key, label: l.label + ' · ' + counts[l.key] }))} />
 
       {isHariH ? (
@@ -74,9 +84,9 @@ export default function Seserahan({ q }) {
         </section>
       ) : (
         <section className="tiles">
-          <Tile w="w1" icon="wallet" k={list === 'seserahan' ? 'Budget seserahan & mahar' : 'Rencana hantaran balasan'} v={rpShort(budget)} sub={list === 'seserahan' ? 'Rencana barang ' + rpShort(planned) + (canEdit ? ' · ketuk untuk ubah' : '') : all.length + ' barang'} onClick={list === 'seserahan' && canEdit ? () => setBudgetEdit(true) : undefined} />
+          <Tile w="w1" icon="wallet" k={'Rencana ' + (GIFT_LISTS.find(l => l.key === list) || {}).short.toLowerCase()} v={rpShort(budget)} sub={all.length + ' barang · masuk ke Anggaran ' + E.ev.name} />
           <Tile w="w2" icon="card" k="Realisasi (sudah dibeli)" v={rpShort(bought)} sub="Termasuk barang dipesan" />
-          <Tile w="w3" icon="chart" k="Sisa budget" v={<span style={{ color: budget - bought < 0 ? '#8E3A30' : undefined }}>{rpShort(budget - bought)}</span>} sub="Masuk ke Anggaran otomatis" />
+          <Tile w="w3" icon="chart" k="Belum dibeli" v={rpShort(Math.max(0, all.filter(i => i.status === 'belum').reduce((s, i) => s + Number(i.planned || 0), 0)))} sub="rencana barang berstatus belum" />
           <Tile w="w4" icon="gift" k="Barang siap" v={ready + ' / ' + all.length} sub={ready + ' siap · ' + ordered + ' dipesan · ' + (all.length - ready - ordered) + ' belum'} />
         </section>
       )}
@@ -99,22 +109,22 @@ export default function Seserahan({ q }) {
               </button>
             );
           })}
-          {canEdit && <button type="button" className="cc add" onClick={() => setCatEdit({ _new: true, list })}>+ Kategori</button>}
+          {canEdit && <button type="button" className="cc add" onClick={() => setCatEdit({ _new: true, list, event_id: E.scope.target })}>+ Kategori</button>}
         </div>
       </section>
 
       {cat ? <CategoryPanel cat={cat} items={itemsOf(cat.id)} isHariH={isHariH} onAdd={(name) => setDrawer({ mode: 'satu', cat, name })} onEdit={(it) => setDrawer({ mode: 'satu', cat, item: it })} onEditCat={() => setCatEdit(cat)} setStatus={setStatus} />
-        : <div className="g"><Empty icon="gift" title="Belum ada kategori" text="Buat kategori dulu, misalnya Skincare, Pakaian, atau Kue & buah." action={canEdit && <button type="button" className="btn" onClick={() => setCatEdit({ _new: true, list })}>+ Kategori</button>} /></div>}
+        : <div className="g"><Empty icon="gift" title="Belum ada kategori" text="Buat kategori dulu, misalnya Skincare, Pakaian, atau Kue & buah." action={canEdit && <button type="button" className="btn" onClick={() => setCatEdit({ _new: true, list, event_id: E.scope.target })}>+ Kategori</button>} /></div>}
 
       {drawer && <ItemDrawer {...drawer} list={list} cats={cats} onClose={() => setDrawer(null)} onPickCat={setCatId} />}
       {catEdit && <CategoryModal cat={catEdit} onClose={() => setCatEdit(null)} onCreated={setCatId} />}
-      {budgetEdit && <BudgetModal onClose={() => setBudgetEdit(false)} planned={planned} />}
     </>
   );
 }
 
 function CategoryPanel({ cat, items, isHariH, onAdd, onEdit, onEditCat, setStatus }) {
-  const { canEdit } = useW();
+  const { canEdit, data } = useW();
+  const list = cat.list;
   const tpl = useTpl();
   const plan = items.reduce((s, i) => s + Number(i.planned || 0), 0);
   const real = items.filter(i => i.status !== 'belum').reduce((s, i) => s + Number(i.actual ?? i.planned ?? 0), 0);
@@ -126,7 +136,7 @@ function CategoryPanel({ cat, items, isHariH, onAdd, onEdit, onEditCat, setStatu
       <div className="between">
         <div style={{ minWidth: 0 }}>
           <div className="row nowrap" style={{ gap: 10 }}><span className={'ico ' + (cat.color || 'k1')} style={{ width: 34, height: 34 }}><Icon name={cat.icon || 'kado'} size={18} /></span><div className="h2">{cat.name}</div>{canEdit && <button type="button" className="ibtn" style={{ width: 28, height: 28 }} onClick={onEditCat} aria-label="Ubah kategori"><Icon name="edit" size={14} /></button>}</div>
-          {(cat.pic || cat.note) && <div className="xs muted">{[cat.pic && 'PIC ' + cat.pic, cat.note].filter(Boolean).join(' · ')}</div>}
+          <div className="row xs muted" style={{ gap: 8, marginTop: 4 }}>{cat.pic_id && <span className="row nowrap" style={{ gap: 4 }}>PIC <PersonChip id={cat.pic_id} /></span>}{list !== 'hari_h' && <span className="row nowrap" style={{ gap: 4 }}>Ditanggung <PayerTag id={cat.payer_id || defaultPayer(data, cat.event_id)} /></span>}{cat.note && <span>{cat.note}</span>}</div>
         </div>
         {!isHariH && <div className="row" style={{ gap: 16 }}><div><div className="k">Budget</div><b>{rpShort(plan)}</b></div><div><div className="k">Realisasi</div><b>{rp(real)}</b></div></div>}
       </div>
@@ -162,16 +172,20 @@ function CategoryPanel({ cat, items, isHariH, onAdd, onEdit, onEditCat, setStatu
 }
 
 function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: initialList, cats: _c, onClose, onPickCat }) {
-  const { data, add, addMany, save, del, canEdit, people } = useW();
+  const { data, add, addMany, save, del, canEdit } = useW();
+  const E = useEv();
   const tpl = useTpl();
   const isNew = !item;
   const [mode, setMode] = useState(isNew ? initialMode : 'satu');
   const [list, setList] = useState(initialList);
-  const cats = data.gift_categories.filter(c => c.list === list).sort((a, b) => a.sort - b.sort);
+  const target = item ? (data.gift_categories.find(c => c.id === item.category_id) || {}).event_id : (initialCat && initialCat.event_id) || E.scope.target;
+  const cats = data.gift_categories.filter(c => c.list === list && E.scope.ids.includes(c.event_id)).sort((a, b) => a.sort - b.sort);
+  const tEv = eventById(data, target);
+  const tKind = tEv ? tEv.kind : 'akad';
   const [catId, setCatId] = useState(item ? item.category_id : initialCat && initialCat.list === list ? initialCat.id : (cats[0] && cats[0].id));
   const cat = cats.find(c => c.id === catId) || data.gift_categories.find(c => c.id === catId);
   const isHariH = list === 'hari_h';
-  const blank = { name: name || '', brand: '', qty: 1, unit: 'pcs', planned: null, actual: null, status: 'belum', pic: (cat && cat.pic) || '', target_date: '', shop_url: '', photo_url: '', notes: '', count_in_budget: !isHariH };
+  const blank = { name: name || '', brand: '', qty: 1, unit: 'pcs', planned: null, actual: null, status: 'belum', pic_id: (cat && cat.pic_id) || null, target_date: '', shop_url: '', photo_url: '', notes: '', count_in_budget: !isHariH };
   const [f, setF] = useState(item ? { ...blank, ...item, target_date: item.target_date || '' } : blank);
   const [bulk, setBulk] = useState('');
   const [pick, setPick] = useState({});
@@ -189,7 +203,7 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
   async function ensureCat() {
     if (newCat !== null) {
       if (!newCat.trim()) throw new Error('Isi nama kategori baru.');
-      const c = await add('gift_categories', { list, name: newCat.trim(), sort: cats.length + 1, ...guessStyle(newCat.trim(), cats.length + 1) });
+      const c = await add('gift_categories', { list, event_id: target, name: newCat.trim(), sort: cats.length + 1, payer_id: catPayer(data, list, target), ...guessStyle(newCat.trim(), cats.length + 1) });
       onPickCat && onPickCat(c.id);
       return c.id;
     }
@@ -201,12 +215,12 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
     if (!f.name.trim()) { setErr('Nama barang wajib diisi.'); return; }
     let cid;
     try { cid = await ensureCat(); } catch (e) { setErr(e.message); return; }
-    const row = { name: f.name.trim(), brand: f.brand, qty: f.qty || 1, unit: f.unit, planned: f.planned || 0, actual: f.actual, status: f.status, pic: f.pic, target_date: f.target_date || null, shop_url: f.shop_url, photo_url: f.photo_url, notes: f.notes, count_in_budget: f.count_in_budget, category_id: cid };
+    const row = { name: f.name.trim(), brand: f.brand, qty: f.qty || 1, unit: f.unit, planned: f.planned || 0, actual: f.actual, status: f.status, pic_id: f.pic_id || null, target_date: f.target_date || null, shop_url: f.shop_url, photo_url: f.photo_url, notes: f.notes, count_in_budget: f.count_in_budget, category_id: cid };
     if (row.shop_url && !/^https?:\/\//i.test(row.shop_url)) row.shop_url = 'https://' + row.shop_url;
     if (row.status !== 'belum' && (row.actual === null || row.actual === undefined) && !isHariH) row.actual = row.planned;
     if (isNew) {
       const p = add('gift_items', { ...row, sort: 999 });
-      if (again) { setF({ ...blank, pic: f.pic }); setNewCat(null); setCatId(cid); setErr(''); await p; return; }
+      if (again) { setF({ ...blank, pic_id: f.pic_id }); setNewCat(null); setCatId(cid); setErr(''); await p; return; }
       onClose(); await p;
     } else { onClose(); await save('gift_items', item.id, row); }
   }
@@ -229,9 +243,9 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
     const chosen = (tpl || []).filter(t => pick[t.id]);
     if (!chosen.length) { setErr('Centang barang yang mau ditambahkan.'); return; }
     onClose();
-    const catByName = Object.fromEntries(data.gift_categories.filter(c => c.list === list).map(c => [c.name, c.id]));
+    const catByName = Object.fromEntries(data.gift_categories.filter(c => c.list === list && c.event_id === target).map(c => [c.name, c.id]));
     for (const cname of Array.from(new Set(chosen.map(t => t.category)))) {
-      if (!catByName[cname]) { const c = await add('gift_categories', { list, name: cname, sort: 900, ...guessStyle(cname, Object.keys(catByName).length) }); catByName[cname] = c.id; }
+      if (!catByName[cname]) { const c = await add('gift_categories', { list, event_id: target, name: cname, sort: 900, payer_id: catPayer(data, list, target), ...guessStyle(cname, Object.keys(catByName).length) }); catByName[cname] = c.id; }
     }
     await addMany('gift_items', chosen.map(t => ({ category_id: catByName[t.category], name: t.name, brand: t.brand, qty: t.qty, unit: t.unit, planned: t.planned, count_in_budget: list !== 'hari_h', sort: t.sort })));
   }
@@ -241,8 +255,8 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
   }
 
   const listLabel = (GIFT_LISTS.find(l => l.key === list) || {}).label;
-  const existing = new Set(data.gift_items.filter(i => (data.gift_categories.find(c => c.id === i.category_id) || {}).list === list).map(i => i.name.toLowerCase()));
-  const tplList = (tpl || []).filter(t => t.list === list && (t.religion === 'semua' || t.religion === data.wedding.religion));
+  const existing = new Set(data.gift_items.filter(i => { const c = data.gift_categories.find(x => x.id === i.category_id); return c && c.list === list && c.event_id === target; }).map(i => i.name.toLowerCase()));
+  const tplList = (tpl || []).filter(t => t.list === list && (t.religion === 'semua' || t.religion === data.wedding.religion) && (tKind === 'lainnya' || (t.event_kind || 'akad') === tKind || (!t.event_kind && tKind === 'akad')));
 
   const footer = !canEdit ? null : mode === 'satu' ? (
     <>{isNew ? null : <button type="button" className="btn2" onClick={remove} style={{ marginRight: 'auto' }}><Icon name="trash" size={15} />Hapus</button>}
@@ -292,7 +306,7 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
             )}
             <div className="g2">
               <Field label="Status"><Seg value={f.status} onChange={set('status')} items={STATUS} /></Field>
-              <Field label="PIC beli"><PersonPick value={f.pic} onChange={set('pic')} people={people} /></Field>
+              <Field div label="PIC beli"><PersonSelect value={f.pic_id} onChange={set('pic_id')} /></Field>
             </div>
             <div className="g2">
               <Field label="Target beli"><DateIn value={f.target_date} onChange={set('target_date')} /></Field>
@@ -342,11 +356,11 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
 }
 
 function CategoryModal({ cat, onClose, onCreated }) {
-  const { data, add, save, del, people } = useW();
+  const { data, add, save, del, mine } = useW();
   const isNew = !!cat._new;
   const nextSort = data.gift_categories.filter(c => c.list === cat.list).length + 1;
   const init = isNew ? guessStyle('', nextSort) : { icon: cat.icon || 'kado', color: cat.color || 'k1' };
-  const [f, setF] = useState({ name: cat.name || '', pic: cat.pic || '', note: cat.note || '', ...init });
+  const [f, setF] = useState({ name: cat.name || '', pic_id: cat.pic_id || (isNew ? mine[0] || null : null), payer_id: cat.payer_id || catPayer(data, cat.list, cat.event_id), note: cat.note || '', ...init });
   const [touched, setTouched] = useState(!isNew);
   const [err, setErr] = useState('');
   const n = data.gift_items.filter(i => i.category_id === cat.id).length;
@@ -358,8 +372,8 @@ function CategoryModal({ cat, onClose, onCreated }) {
   async function submit() {
     if (!f.name.trim()) { setErr('Isi nama kategori.'); return; }
     onClose();
-    const row = { name: f.name.trim(), pic: f.pic, note: f.note, icon: f.icon, color: f.color };
-    if (isNew) { const c = await add('gift_categories', { list: cat.list, ...row, sort: nextSort }); if (c) onCreated(c.id); }
+    const row = { name: f.name.trim(), pic_id: f.pic_id, payer_id: f.payer_id, note: f.note, icon: f.icon, color: f.color };
+    if (isNew) { const c = await add('gift_categories', { list: cat.list, event_id: cat.event_id, ...row, sort: nextSort }); if (c) onCreated(c.id); }
     else await save('gift_categories', cat.id, row);
   }
   async function remove() {
@@ -384,21 +398,10 @@ function CategoryModal({ cat, onClose, onCreated }) {
         </div>
       </Field>
       <div className="g2">
-        <Field label="PIC"><PersonPick value={f.pic} onChange={set('pic')} people={people} /></Field>
-        <Field label="Catatan"><Text value={f.note} onChange={set('note')} placeholder="mis. beli bundling" /></Field>
+        <Field div label="PIC"><PersonSelect value={f.pic_id} onChange={set('pic_id')} /></Field>
+        {cat.list !== 'hari_h' && <Field div label="Ditanggung oleh"><PersonSelect mode="pay" value={f.payer_id} onChange={set('payer_id')} /></Field>}
       </div>
-    </Modal>
-  );
-}
-
-function BudgetModal({ onClose, planned }) {
-  const { data, save } = useW();
-  const [v, setV] = useState(Number(data.wedding.gift_budget || 0));
-  return (
-    <Modal open onClose={onClose} title="Budget seserahan & mahar"
-      footer={<><button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" onClick={() => { onClose(); save('weddings', data.wedding.id, { gift_budget: v || 0 }); }}>Simpan</button></>}>
-      <Field label="Budget"><Money value={v} onChange={setV} /></Field>
-      <div className="xs muted">Total rencana barang saat ini {rp(planned)}. <button type="button" className="lnk xs" onClick={() => setV(planned)}>Samakan</button></div>
+      <Field label="Catatan"><Text value={f.note} onChange={set('note')} placeholder="mis. beli bundling" /></Field>
     </Modal>
   );
 }

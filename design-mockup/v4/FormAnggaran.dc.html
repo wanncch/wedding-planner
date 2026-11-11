@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Form item anggaran</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./v4.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#9E4A5E}a:hover{color:#33262E}
+</style>
+</helmet>
+<div style="width: 1180px; height: 1080px; box-sizing: border-box; padding: 18px; background: linear-gradient(160deg, #E9D9DE, #E7DCD6); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #33262E; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; min-height: 0">
+    <div class="lbl" style="color: #5E4A55">Saat memilih PIC</div>
+    <div class="drw" role="dialog" aria-label="Item anggaran baru" style="flex: 1">
+      <div class="drh">
+        <div class="between nowrap" style="align-items: flex-start">
+          <div><span class="pill ta1">Lamaran › Balasan lamaran</span><div class="ser" style="font-weight: 700; font-size: 23px; line-height: 1.15; margin-top: 8px">Item anggaran baru</div></div>
+          <button type="button" class="x" aria-label="Tutup"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+      </div>
+      <div class="drb" style="overflow: visible">
+        <div class="fld"><label class="dlbl" for="a-nama">Nama item <em>Wajib</em></label><input id="a-nama" class="inp" value="Sewa mobil rombongan balasan"></div>
+        <div class="fld"><div class="dlbl">Kelompok</div><div class="catg"><button type="button" class="on">Transport &amp; lainnya</button><button type="button">Konsumsi keluarga</button><button type="button" class="add">+ Kelompok baru</button></div><div class="hint">Kelompok Vendor dan Seserahan terisi otomatis dari menunya.</div></div>
+        <div class="fld"><label class="dlbl" for="a-renc">Rencana biaya</label><input id="a-renc" class="inp" value="Rp 1.500.000"></div>
+        <div class="fld">
+          <div class="dlbl"><span>PIC · yang mengurus</span><em>Wajib</em></div>
+          <button type="button" class="inp focus" aria-expanded="true" aria-haspopup="listbox"><span class="av avw">IR</span><span>Ibu Rina</span><span class="xs muted">pihak wanita</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+          <div class="pop" role="listbox" aria-label="Pilih PIC">
+            <div class="search" style="min-height: 38px; margin: 2px 2px 4px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Cari nama…</div>
+            <div class="og" style="color: #7A2E44">Pihak wanita</div>
+            <button type="button" class="op" role="option" aria-selected="false"><span class="av avw">RL</span><span class="grow">Rina<span class="sub">Pengantin wanita</span></span></button>
+            <button type="button" class="op on" role="option" aria-selected="true"><span class="av avw">IR</span><span class="grow">Ibu Rina<span class="sub">Ibu pengantin wanita</span></span><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #2F5A43"><path d="M5 12l5 5 9-10"/></svg></button>
+            <div class="og" style="color: #24476B">Pihak pria</div>
+            <button type="button" class="op" role="option" aria-selected="false"><span class="av avp">BP</span><span class="grow">Bagas<span class="sub">Pengantin pria</span></span></button>
+            <button type="button" class="op" role="option" aria-selected="false"><span class="av avp">IS</span><span class="grow">Ibu Sri<span class="sub">Ibu pengantin pria</span></span></button>
+            <button type="button" class="op" role="option" aria-selected="false"><span class="av avp">OY</span><span class="grow">Om Yusuf<span class="sub">Paman pengantin pria</span></span></button>
+            <div class="og" style="color: #5E4A55">Lainnya</div>
+            <button type="button" class="op" role="option" aria-selected="false"><span class="av avo">WK</span><span class="grow">WO Kirana<span class="sub">Wedding organizer</span></span></button>
+            <button type="button" class="op" style="color: #8E4256; border-top: 1px dashed rgba(176,86,107,.25); border-radius: 0 0 12px 12px; margin-top: 4px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Tambah orang baru</button>
+          </div>
+        </div>
+        <div class="fld"><div class="dlbl"><span>Ditanggung oleh · yang membayar</span><em>Wajib</em></div><button type="button" class="inp"><span class="pill pw">Keluarga Rina</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+      </div>
+      <div class="drf"><button type="button" class="btn2">Batal</button><button type="button" class="btn2">Simpan &amp; tambah lagi</button><button type="button" class="btn">Simpan</button></div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px; min-height: 0">
+    <div class="lbl" style="color: #5E4A55">Saat biaya dibagi (patungan)</div>
+    <div class="drw" role="dialog" aria-label="Item anggaran baru, patungan" style="flex: 1">
+      <div class="drh">
+        <div class="between nowrap" style="align-items: flex-start">
+          <div><span class="pill ta1">Lamaran › Balasan lamaran</span><div class="ser" style="font-weight: 700; font-size: 23px; line-height: 1.15; margin-top: 8px">Item anggaran baru</div></div>
+          <button type="button" class="x" aria-label="Tutup"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+      </div>
+      <div class="drb">
+        <div class="fld"><label class="dlbl" for="b-nama">Nama item <em>Wajib</em></label><input id="b-nama" class="inp" value="Sewa mobil rombongan balasan"></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <div class="fld"><label class="dlbl" for="b-renc">Rencana biaya</label><input id="b-renc" class="inp" value="Rp 1.500.000"></div>
+          <div class="fld"><div class="dlbl"><span>PIC</span><em>Wajib</em></div><button type="button" class="inp"><span class="av avw">IR</span><span>Ibu Rina</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+        </div>
+        <div class="fld">
+          <div class="dlbl"><span>Ditanggung oleh · yang membayar</span><em>Wajib</em></div>
+          <button type="button" class="inp"><span>Patungan</span><span class="xs muted">2 pihak</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="hint">Penanggung bawaan Balasan lamaran: Keluarga Rina. Bisa diganti per item.</div>
+        </div>
+        <div style="border-radius: 18px; padding: 12px; background: rgba(244,239,252,.7); border: 1px solid rgba(255,255,255,.95); display: flex; flex-direction: column; gap: 8px">
+          <div class="between"><b class="sm">Pembagian biaya</b><span class="pill p-ok">Total 100%</span></div>
+          <div class="split xs b muted"><span>Penanggung</span><span>Persen</span><span style="text-align: right">Bagian</span></div>
+          <div class="split"><button type="button" class="inp" style="min-height: 40px; padding: 6px 10px"><span class="pill pw">Keluarga Rina</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><input class="inp" style="min-height: 40px; text-align: center" value="70%" aria-label="Persen Keluarga Rina"><b class="n">Rp 1.050.000</b></div>
+          <div class="split"><button type="button" class="inp" style="min-height: 40px; padding: 6px 10px"><span class="pill pp">Keluarga Bagas</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><input class="inp" style="min-height: 40px; text-align: center" value="30%" aria-label="Persen Keluarga Bagas"><b class="n">Rp 450.000</b></div>
+          <button type="button" class="lnk" style="border: 0; background: none; padding: 0; text-align: left; cursor: pointer; font-family: inherit">+ Tambah penanggung</button>
+        </div>
+        <div class="fld">
+          <div class="dlbl"><span>Jadwal pembayaran</span><span class="muted" style="font-weight: 600">dibagi 70 : 30</span></div>
+          <div style="border-radius: 16px; background: #fff; border: 1.5px solid rgba(176,86,107,.14); padding: 2px 12px">
+            <div class="li"><span class="grow"><b style="display: block">DP</b><span class="xs muted">Rab, 20 Jan 2027 · belum dibayar</span></span><b class="n">Rp 500.000</b></div>
+            <div class="li"><span class="grow"><b style="display: block">Pelunasan</b><span class="xs muted">Jum, 29 Jan 2027 · belum dibayar</span></span><b class="n">Rp 1.000.000</b></div>
+          </div>
+          <button type="button" class="lnk" style="border: 0; background: none; padding: 0; margin-top: 8px; text-align: left; cursor: pointer; font-family: inherit">+ Pembayaran</button>
+        </div>
+      </div>
+      <div class="drf"><button type="button" class="btn2">Batal</button><button type="button" class="btn2">Simpan &amp; tambah lagi</button><button type="button" class="btn">Simpan</button></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

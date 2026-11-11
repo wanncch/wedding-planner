@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useW, useAuth, useToast, TABLES } from '../lib/store.jsx';
 import { supabase, friendlyError } from '../lib/supabase.js';
-import { go, signOut } from '../lib/nav.js';
+import { go, signOut, epath } from '../lib/nav.js';
+import { PersonSelect, PersonModal } from '../components/People.jsx';
+import { topEvents, partsOf, eventDateLabel, peopleSorted } from '../lib/events.js';
 import { Icon, Tabs, Pill, Avatar, Field, Text, DateIn, TimeIn, Money, NumIn, Seg, Select, Modal, Toggle, confirm, Spinner } from '../components/ui.jsx';
 import { dLong, dMed, hm, waLink, daysBetween } from '../lib/format.js';
 
 const ROLE = { owner: ['Pemilik', 'p-rose'], editor: ['Bisa edit', 'p-ok'], viewer: ['Lihat saja', 'p-no'] };
 const KIND = { lamaran: 'L', akad: 'A', resepsi: 'R', lainnya: '•' };
 
-export default function Pengaturan() {
-  const [tab, setTab] = useState('pernikahan');
+export default function Pengaturan({ q }) {
+  const [tab, setTab] = useState((q && q.tab) || 'pernikahan');
   return (
     <>
-      <div className="top"><div><div className="eyb">Berlaku untuk semua menu</div><h1 className="h1">Pengaturan</h1></div></div>
-      <Tabs value={tab} onChange={setTab} items={[{ key: 'pernikahan', label: 'Pernikahan' }, { key: 'acara', label: 'Acara' }, { key: 'anggota', label: 'Anggota' }, { key: 'data', label: 'Data & akun' }]} />
+      <div className="top"><div><div className="eyb">Berlaku untuk semua acara</div><h1 className="h1">Pengaturan</h1></div></div>
+      <Tabs value={tab} onChange={setTab} items={[{ key: 'pernikahan', label: 'Pernikahan' }, { key: 'acara', label: 'Acara' }, { key: 'orang', label: 'Orang & pihak' }, { key: 'anggota', label: 'Anggota' }, { key: 'data', label: 'Data & akun' }]} />
       {tab === 'pernikahan' && <Profil />}
       {tab === 'acara' && <Acara />}
+      {tab === 'orang' && <Orang />}
       {tab === 'anggota' && <Anggota />}
       {tab === 'data' && <DataTab />}
     </>
@@ -34,7 +37,7 @@ function Profil() {
     const old = w.wedding_date;
     await save('weddings', w.id, { ...f, bride_name: f.bride_name.trim(), groom_name: f.groom_name.trim(), total_budget: f.total_budget || 0, target_invites: f.target_invites || 0, portions_per_invite: f.portions_per_invite || 1 });
     if (f.wedding_date !== old) {
-      const same = data.events.filter(e => e.event_date === old && (e.kind === 'akad' || e.kind === 'resepsi'));
+      const same = data.events.filter(e => !e.parent_id && e.kind === 'akad');
       for (const e of same) await save('events', e.id, { event_date: f.wedding_date });
       toast('Tanggal diubah. Deadline otomatis di Persiapan ikut bergeser.', 'ok');
     } else toast('Tersimpan.', 'ok');
@@ -65,59 +68,99 @@ function Profil() {
       <div className="g col" style={{ gap: 10, alignSelf: 'start' }}>
         <div className="h2">Ringkasan</div>
         <div className="li"><span className="ico"><Icon name="rings" /></span><div className="grow"><b>{w.bride_name} &amp; {w.groom_name}</b><div className="xs muted">{dLong(w.wedding_date)} · {daysBetween(new Date(), w.wedding_date)} hari lagi</div></div></div>
-        <div className="xs muted" style={{ lineHeight: 1.6 }}>Mengubah tanggal nikah otomatis menggeser semua deadline tugas yang tidak dikunci manual, dan tanggal acara akad/resepsi.</div>
+        <div className="xs muted" style={{ lineHeight: 1.6 }}>Mengubah tanggal nikah ikut mengubah tanggal acara Akad & Resepsi dan menggeser deadline tugasnya. Tanggal acara lain diatur lewat tombol pensil di sidebar.</div>
       </div>
     </section>
   );
 }
 
 function Acara() {
-  const { data, canEdit } = useW();
-  const [edit, setEdit] = useState(null);
-  const evs = [...data.events].sort((a, b) => String(a.event_date).localeCompare(String(b.event_date)) || a.sort - b.sort);
+  const { data, canEdit, save, wid } = useW();
+  const evs = topEvents(data, true);
+  const [drag, setDrag] = useState(null);
+  async function reorder(from, to) {
+    if (from === null || from === to) return;
+    const a = [...evs]; const [x] = a.splice(from, 1); a.splice(to, 0, x);
+    for (const [i, e] of a.entries()) if (e.sort !== i + 1) await save('events', e.id, { sort: i + 1 });
+  }
   return (
-    <div className="g col" style={{ gap: 6 }}>
-      <div className="between"><div className="h2">Acara</div>{canEdit && <button type="button" className="btn2" onClick={() => setEdit({ _new: true, kind: 'lainnya' })}>+ Acara</button>}</div>
-      {evs.map(e => (
-        <div className="li click" key={e.id} onClick={() => setEdit(e)}>
-          <span className="ico">{KIND[e.kind]}</span>
-          <div className="grow"><b>{e.name}</b><div className="xs muted">{e.event_date ? dLong(e.event_date) : 'Tanggal belum diisi'}{e.start_time ? ' · ' + hm(e.start_time) + (e.end_time ? '–' + hm(e.end_time) : '') : ''}{e.location ? ' · ' + e.location : ''}</div></div>
-          <Pill cls={e.is_main ? 'p-rose' : 'p-mauve'}>{e.is_main ? 'Utama' : 'Pendukung'}</Pill>
+    <section className="grid2">
+      <div className="g col" style={{ gap: 4 }}>
+        <div className="between"><div className="h2">Urutan acara</div><span className="xs muted">Seret untuk mengubah urutan</span></div>
+        {evs.map((e, i) => {
+          const ps = partsOf(data, e.id);
+          return (
+            <div key={e.id} className={'ed' + (e.hidden ? ' off' : '') + (drag === i ? ' drag' : '')} draggable={canEdit} onDragStart={() => setDrag(i)} onDragOver={(x) => x.preventDefault()} onDrop={() => { reorder(drag, i); setDrag(null); }}>
+              <span className="grip" aria-hidden="true"><Icon name="grip2" size={16} /></span>
+              <span className={'acd ' + e.color}><Icon name={e.icon} size={15} /></span>
+              <span className="grow"><b>{e.name}</b><span className="xs muted" style={{ display: 'block' }}>{(ps.length ? ps.length + ' bagian · ' : '') + eventDateLabel(data, e) + (e.location ? ' · ' + e.location : '') + (e.hidden ? ' · disembunyikan' : '')}</span></span>
+              {canEdit && i > 0 && <button type="button" className="ibtn" style={{ width: 28, height: 28 }} onClick={() => reorder(i, i - 1)} aria-label={'Naikkan ' + e.name}>↑</button>}
+              {canEdit && e.hidden && <button type="button" className="btn2 sm" onClick={() => save('events', e.id, { hidden: false })}>Tampilkan</button>}
+              {canEdit && <a className="pen" href={epath(wid, e.id, 'atur')} aria-label={'Atur ' + e.name}><Icon name="edit" size={15} /></a>}
+            </div>
+          );
+        })}
+        <div className="xs muted" style={{ marginTop: 6 }}>Urutan ini dipakai di sidebar dan Beranda. Tambah acara lewat tombol “+ Tambah acara” di sidebar.</div>
+      </div>
+      <PayerDefaults />
+    </section>
+  );
+}
+
+function PayerDefaults() {
+  const { data, canEdit, save } = useW();
+  const rows = [];
+  topEvents(data).forEach(e => {
+    const ps = partsOf(data, e.id);
+    if (ps.length) ps.forEach(p => rows.push({ e: p, label: e.name + ' › ' + p.name, color: e.color }));
+    else rows.push({ e, label: e.name, color: e.color });
+  });
+  return (
+    <div className="g col" style={{ gap: 8, alignSelf: 'start' }}>
+      <div className="h2">Penanggung bawaan per acara</div>
+      {rows.map(r => (
+        <div key={r.e.id} className="between pdrow">
+          <span className={'pill ta' + (r.color || 'c0').slice(1)} style={{ maxWidth: '48%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.label}</span>
+          <div style={{ flex: '1 1 150px', maxWidth: 230, minWidth: 0 }}><PersonSelect mode="pay" value={r.e.payer_id} disabled={!canEdit} onChange={(v) => save('events', r.e.id, { payer_id: v })} /></div>
         </div>
       ))}
-      <div className="xs muted" style={{ marginTop: 6 }}>Setiap acara bisa punya rundown, item anggaran, dan tugas sendiri (mis. Lamaran, Pengajian, Ngunduh mantu).</div>
-      {edit && <EventModal e={edit} onClose={() => setEdit(null)} />}
+      <div className="xs muted">Terisi otomatis saat menambah item anggaran. Tetap bisa diganti per item, termasuk dibagi patungan.</div>
     </div>
   );
 }
 
-function EventModal({ e, onClose }) {
-  const { data, add, save, del, canEdit } = useW();
-  const isNew = !!e._new;
-  const [f, setF] = useState({ name: e.name || '', kind: e.kind || 'lainnya', event_date: e.event_date || '', start_time: e.start_time ? String(e.start_time).slice(0, 5) : '', end_time: e.end_time ? String(e.end_time).slice(0, 5) : '', location: e.location || '', is_main: !!e.is_main });
-  const set = (k) => (v) => setF(x => ({ ...x, [k]: v }));
-  async function submit() {
-    if (!f.name.trim()) return;
-    const row = { ...f, name: f.name.trim(), event_date: f.event_date || null, start_time: f.start_time || null, end_time: f.end_time || null };
-    onClose();
-    if (isNew) await add('events', { ...row, sort: data.events.length + 1 }); else await save('events', e.id, row);
-  }
-  async function remove() {
-    const n = data.rundown_items.filter(r => r.event_id === e.id).length;
-    if (await confirm({ title: 'Hapus acara?', text: '“' + e.name + '”' + (n ? ' dan ' + n + ' sesi rundown-nya' : '') + ' akan dihapus. Item anggaran tetap ada.', ok: 'Hapus', danger: true })) { onClose(); del('events', e.id, { silent: true }); }
-  }
+function Orang() {
+  const { data, canEdit, save } = useW();
+  const [edit, setEdit] = useState(null);
+  const ppl = peopleSorted(data);
+  const card = (sd, title, cls) => {
+    const list = ppl.filter(p => p.side === sd);
+    return (
+      <div className="g col" style={{ gap: 4, background: sd === 'pria' ? 'linear-gradient(150deg,rgba(236,243,251,.9),rgba(214,228,243,.7))' : sd === 'wanita' ? 'linear-gradient(150deg,rgba(255,240,243,.9),rgba(248,221,227,.7))' : undefined }}>
+        <div className="between"><span className={'pill ' + cls}>{title}</span><span className="xs muted">{list.length} orang</span></div>
+        {list.map(p => (
+          <div key={p.id} className="li">
+            <Avatar name={p.name} side={p.side} />
+            <button type="button" className="grow" style={{ textAlign: 'left', background: 'none', border: 0, padding: 0 }} onClick={() => canEdit && setEdit(p)}><b>{p.name}</b><span className="xs muted" style={{ display: 'block' }}>{[p.role_label, p.user_ids && p.user_ids.length ? 'terhubung ke akun' : null].filter(Boolean).join(' · ')}</span></button>
+            <button type="button" className={'pill ' + (p.can_pic ? 'p-ok' : 'p-no')} style={{ border: 0 }} disabled={!canEdit} onClick={() => save('people', p.id, { can_pic: !p.can_pic })} aria-pressed={p.can_pic}>PIC {p.can_pic ? '✓' : ''}</button>
+            <button type="button" className={'pill ' + (p.can_pay ? 'p-ok' : 'p-no')} style={{ border: 0 }} disabled={!canEdit} onClick={() => save('people', p.id, { can_pay: !p.can_pay })} aria-pressed={p.can_pay}>Penanggung {p.can_pay ? '✓' : ''}</button>
+          </div>
+        ))}
+        {!list.length && <div className="xs muted">Belum ada.</div>}
+      </div>
+    );
+  };
   return (
-    <Modal open onClose={onClose} title={isNew ? 'Acara baru' : e.name}
-      footer={canEdit ? <>{!isNew && <button type="button" className="btn2" style={{ marginRight: 'auto' }} onClick={remove}><Icon name="trash" size={15} /></button>}<button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" disabled={!f.name.trim()} onClick={submit}>Simpan</button></> : null}>
-      <fieldset disabled={!canEdit} style={{ border: 0, padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <Field label="Nama acara"><Text value={f.name} onChange={set('name')} placeholder="mis. Pengajian" /></Field>
-        <Field label="Jenis"><Seg small value={f.kind} onChange={set('kind')} items={[{ key: 'lamaran', label: 'Lamaran' }, { key: 'akad', label: 'Akad' }, { key: 'resepsi', label: 'Resepsi' }, { key: 'lainnya', label: 'Lainnya' }]} /></Field>
-        <Field label="Tanggal"><DateIn value={f.event_date} onChange={set('event_date')} /></Field>
-        <div className="g2"><Field label="Mulai"><TimeIn value={f.start_time} onChange={set('start_time')} /></Field><Field label="Selesai"><TimeIn value={f.end_time} onChange={set('end_time')} /></Field></div>
-        <Field label="Lokasi"><Text value={f.location} onChange={set('location')} /></Field>
-        <label className="row nowrap" style={{ gap: 10 }}><Toggle on={f.is_main} onChange={set('is_main')} /><b className="sm">Acara utama</b></label>
-      </fieldset>
-    </Modal>
+    <section className="split">
+      <div className="g wide col" style={{ gap: 12 }}>
+        <div className="between"><div className="h2">Orang &amp; pihak</div>{canEdit && <button type="button" className="btn2" onClick={() => setEdit({ _new: true })}><Icon name="plus" size={15} />Tambah orang</button>}</div>
+        <div className="sm muted">Daftar ini muncul sebagai pilihan <b>PIC</b> dan <b>Ditanggung oleh</b> di semua acara. Pihak menentukan hitungannya masuk ke pria atau wanita di Beranda.</div>
+        <div className="grid2">{card('wanita', 'Pihak wanita', 'pw')}{card('pria', 'Pihak pria', 'pp')}</div>
+        {card('lainnya', 'Lainnya · tidak masuk hitungan pria atau wanita', 'po')}
+      </div>
+      <aside className="narrow"><PayerDefaults /></aside>
+      {edit && <PersonModal person={edit} onClose={() => setEdit(null)} />}
+    </section>
   );
 }
 
@@ -223,7 +266,7 @@ function DataTab() {
     const wb = XLSX.utils.book_new();
     const add = (name, rows) => { if (rows.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows.map(({ wedding_id, ...r }) => r)), name.slice(0, 31)); };
     add('Pernikahan', [data.wedding]);
-    const label = { events: 'Acara', tasks: 'Persiapan', vendors: 'Vendor', budget_categories: 'Kategori anggaran', budget_items: 'Anggaran', payments: 'Pembayaran', gift_categories: 'Kategori seserahan', gift_items: 'Seserahan', guests: 'Tamu', rundown_items: 'Rundown', documents: 'Dokumen', reminders: 'Reminder', notes: 'Catatan', selfprep: 'Persiapan diri' };
+    const label = { events: 'Acara', people: 'Orang & pihak', guest_invites: 'Undangan per acara', tasks: 'Persiapan', vendors: 'Vendor', budget_categories: 'Kategori anggaran', budget_items: 'Anggaran', payments: 'Pembayaran', gift_categories: 'Kategori seserahan', gift_items: 'Seserahan', guests: 'Tamu', rundown_items: 'Rundown', documents: 'Dokumen', reminders: 'Reminder', notes: 'Catatan', selfprep: 'Persiapan diri' };
     TABLES.forEach(t => add(label[t] || t, data[t]));
     XLSX.writeFile(wb, 'wedding-' + data.wedding.bride_name + '-' + data.wedding.groom_name + '.xlsx');
   }
@@ -240,7 +283,7 @@ function DataTab() {
     const { error } = await supabase.from('wedding_members').delete().eq('wedding_id', wid).eq('user_id', user.id);
     if (error) toast(friendlyError(error), 'error'); else go('pilih');
   }
-  const ENT = { tasks: 'tugas', vendors: 'vendor', budget_items: 'anggaran', payments: 'pembayaran', gift_items: 'seserahan', guests: 'tamu', rundown_items: 'rundown', documents: 'dokumen', reminders: 'reminder', notes: 'catatan', selfprep: 'persiapan diri', events: 'acara', weddings: 'profil' };
+  const ENT = { people: 'orang', guest_invites: 'undangan', tasks: 'tugas', vendors: 'vendor', budget_items: 'anggaran', payments: 'pembayaran', gift_items: 'seserahan', guests: 'tamu', rundown_items: 'rundown', documents: 'dokumen', reminders: 'reminder', notes: 'catatan', selfprep: 'persiapan diri', events: 'acara', weddings: 'profil' };
   const ago = (t) => { const m = Math.round((Date.now() - new Date(t)) / 60000); return m < 1 ? 'baru saja' : m < 60 ? m + ' mnt lalu' : m < 1440 ? Math.round(m / 60) + ' jam lalu' : dMed(t); };
 
   return (

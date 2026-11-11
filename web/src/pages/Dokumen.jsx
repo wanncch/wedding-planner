@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useW } from '../lib/store.jsx';
-import { wpath } from '../lib/nav.js';
+import { epath } from '../lib/nav.js';
+import { useEv, EventHeader } from '../components/EventKit.jsx';
 import { Icon, Pill, Tile, Bar, Check, Drawer, Field, Text, Seg, DateIn, confirm } from '../components/ui.jsx';
 import FileField from '../components/FileField.jsx';
 import { openFile } from '../lib/files.js';
@@ -12,6 +13,7 @@ const ST = { belum: ['Belum', 'p-no'], proses: ['Diurus', 'p-wait'], lengkap: ['
 
 export default function Dokumen() {
   const { data, canEdit, save, wid } = useW();
+  const E = useEv();
   const w = data.wedding;
   const [edit, setEdit] = useState(null);
   const steps = KUA_STEPS[w.religion] || KUA_STEPS.islam;
@@ -25,10 +27,8 @@ export default function Dokumen() {
 
   return (
     <>
-      <div className="top">
-        <div><div className="eyb">{w.religion === 'islam' ? 'Pendaftaran nikah paling lambat 10 hari kerja sebelum akad' : 'Cek syarat pencatatan di Disdukcapil setempat'}</div><h1 className="h1">Dokumen &amp; {w.religion === 'islam' ? 'KUA' : 'Pencatatan'}</h1></div>
-        {canEdit && <button type="button" className="btn" onClick={() => setEdit({ _new: true, party: 'lainnya', status: 'belum' })}><Icon name="plus" size={15} />Dokumen</button>}
-      </div>
+      <EventHeader noParts title={'Dokumen & ' + (w.religion === 'islam' ? 'KUA' : 'Pencatatan')} eyebrow={E.ev.name + ' · ' + (w.religion === 'islam' ? 'pendaftaran nikah paling lambat 10 hari kerja sebelum akad' : 'cek syarat pencatatan di Disdukcapil setempat')}
+        actions={canEdit && <button type="button" className="btn" onClick={() => setEdit({ _new: true, party: 'lainnya', status: 'belum' })}><Icon name="plus" size={15} />Dokumen</button>} />
 
       <div className="g">
         <div className="between" style={{ marginBottom: 14 }}><div className="h2">{w.religion === 'islam' ? 'Alur nikah di KUA' : 'Alur pemberkatan & catatan sipil'}</div><Pill cls="p-wait">Langkah {w.kua_step} dari {steps.length}</Pill></div>
@@ -76,7 +76,7 @@ export default function Dokumen() {
                 );
               })}
               {p.key === 'lainnya' && contracts.length > 0 && (
-                <a className="li click" href={wpath(wid, 'anggaran')} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <a className="li click" href={epath(wid, E.ev.id, 'anggaran')} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <span className="ck on"><Icon name="check" size={12} stroke={3} /></span>
                   <div className="grow"><b>Kontrak vendor ({contracts.length})</b><div className="xs muted">Tertaut dari menu Anggaran</div></div>
                   <Pill cls="p-rose">Lihat</Pill>

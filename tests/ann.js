@@ -17,7 +17,7 @@ const ok = (c, m) => console.log((c ? 'LULUS ' : 'GAGAL ') + m);
   await p.getByRole('button', { name: 'Simpan' }).click(); await p.waitForTimeout(400);
   ok(await p.evaluate(() => window.__DB__.announcements.some(a => a.title === 'Perbaikan sistem Minggu 02.00' && a.level === 'penting')), 'pengumuman baru tersimpan');
   await p.screenshot({ path: D + '/out/v3-ann-admin.png' });
-  await p.goto('http://localhost:4173/#/w/w-demo/beranda'); await p.reload(); await p.waitForTimeout(900);
+  await p.evaluate(() => { location.hash = '#/w/w-demo/beranda'; }); await p.waitForTimeout(900);
   ok(await p.getByText('Perbaikan sistem Minggu 02.00').count() > 0 && await p.getByText('Promo akhir tahun').count() > 0, 'pita pengumuman tampil di aplikasi');
   await p.screenshot({ path: D + '/out/v3-ann-beranda.png' });
   await p.getByRole('button', { name: 'Tutup pengumuman' }).first().click(); await p.waitForTimeout(200);

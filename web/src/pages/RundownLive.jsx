@@ -3,18 +3,25 @@ import { useW } from '../lib/store.jsx';
 import { wpath } from '../lib/nav.js';
 import { Icon, Pill, Empty } from '../components/ui.jsx';
 import { hm, timeToMin, iso, today, dLong } from '../lib/format.js';
+import { eventById, familyIds, mainEvent, rootOf, baseDate } from '../lib/events.js';
 
 export default function RundownLive({ q }) {
   const { data, wid, save, canEdit } = useW();
   const [now, setNow] = useState(new Date());
   useEffect(() => { const t = setInterval(() => setNow(new Date()), 20000); return () => clearInterval(t); }, []);
 
-  const evs = data.events;
-  const ev = evs.find(e => e.id === q.e) || evs.find(e => e.kind === 'akad') || evs[0];
-  const group = ev ? evs.filter(e => e.event_date === ev.event_date && (e.id === ev.id || ((ev.kind === 'akad' || ev.kind === 'resepsi') && (e.kind === 'akad' || e.kind === 'resepsi')))) : [];
-  const ids = new Set(group.map(e => e.id));
+  const ev0 = eventById(data, q.e) || mainEvent(data);
+  // acara berbagian: pilih bagian yang paling dekat hari ini
+  let ev = ev0;
+  if (ev0 && !ev0.parent_id) {
+    const fam = familyIds(data, ev0.id).slice(1).map(id => eventById(data, id));
+    if (fam.length) ev = fam.find(p => p.event_date && p.event_date >= iso(today())) || fam[fam.length - 1];
+  }
+  const root = ev ? rootOf(data, ev.id) : null;
+  const ids = new Set(ev ? [ev.id] : []);
   const items = data.rundown_items.filter(r => ids.has(r.event_id)).sort((a, b) => timeToMin(a.start_time) - timeToMin(b.start_time) || a.sort - b.sort);
-  const isToday = ev && ev.event_date === iso(today());
+  const evDate = ev ? baseDate(data, ev.id) : null;
+  const isToday = ev && evDate === iso(today());
   const nowMin = now.getHours() * 60 + now.getMinutes();
 
   let idx = items.findIndex(r => r.state === 'live');
@@ -38,10 +45,10 @@ export default function RundownLive({ q }) {
 
   return (
     <div className="full">
-      <div className="between"><a className="btn2 sm" href={wpath(wid, 'rundown')}><Icon name="left" size={15} />Keluar</a><Pill cls="p-rose">● LIVE · Hari H</Pill></div>
+      <div className="between"><a className="btn2 sm" href={root ? '#/w/' + wid + '/e/' + root.id + '/rundown' : wpath(wid, 'beranda')}><Icon name="left" size={15} />Keluar</a><Pill cls="p-rose">● LIVE · {ev ? ev.name : 'Hari H'}</Pill></div>
       {!ev || !items.length ? <div className="g"><Empty icon="clock" title="Rundown belum ada" text="Isi rundown dulu di menu Rundown." /></div> : (
         <>
-          <div className="xs muted" style={{ textAlign: 'center' }}>{dLong(ev.event_date)}{!isToday ? ' · pratinjau (bukan hari ini)' : ''}</div>
+          <div className="xs muted" style={{ textAlign: 'center' }}>{root && root.id !== ev.id ? root.name + ' · ' : ''}{dLong(evDate)}{!isToday ? ' · pratinjau (bukan hari ini)' : ''}</div>
           {cur ? (
             <div className="livecard">
               <div style={{ fontSize: 12, fontWeight: 700, opacity: .85, letterSpacing: '.08em', textTransform: 'uppercase' }}>Sekarang · {hm(cur.start_time)}–{hm(minTo(timeToMin(cur.start_time) + Number(cur.duration_min)))}</div>
@@ -68,7 +75,7 @@ export default function RundownLive({ q }) {
             </div>
           ))}
           <div className="g2" style={{ marginTop: 4 }}>
-            {wo ? <a className="btn2" href={'tel:' + wo.phone}><Icon name="phone" size={15} />Telepon WO</a> : <a className="btn2" href={wpath(wid, 'rundown')}>Lihat semua</a>}
+            {wo ? <a className="btn2" href={'tel:' + wo.phone}><Icon name="phone" size={15} />Telepon WO</a> : <a className="btn2" href={root ? '#/w/' + wid + '/e/' + root.id + '/rundown' : wpath(wid, 'beranda')}>Lihat semua</a>}
             {canEdit && cur && <button type="button" className="btn3" onClick={advance}>Selesai, lanjut ›</button>}
           </div>
           {canEdit && items.some(r => r.state !== 'todo') && <button type="button" className="lnk" style={{ alignSelf: 'center' }} onClick={reset}>Ulang dari awal</button>}
