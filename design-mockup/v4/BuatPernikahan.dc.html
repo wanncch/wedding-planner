@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Buat pernikahan · pilih acara</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./v4.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#9E4A5E}a:hover{color:#33262E}
+</style>
+</helmet>
+<div class="app" style="justify-content: center; min-height: 1100px">
+<div class="orb o1" aria-hidden="true"></div><div class="orb o2" aria-hidden="true"></div><div class="orb o3" aria-hidden="true"></div><div class="orb o4" aria-hidden="true"></div>
+
+<main style="position: relative; width: 100%; max-width: 860px; padding: 28px 20px 48px; display: flex; flex-direction: column; gap: 16px">
+  <div class="brand" style="padding: 0"><span class="logo"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="13" r="5.5"/><circle cx="15" cy="13" r="5.5"/></svg></span><div><div class="bn">Wedding Planner</div><div class="by">by Wanncch</div></div></div>
+
+  <section class="g col" style="gap: 16px; padding: 22px">
+    <div class="row" style="gap: 8px">
+      <span class="pill p-ok">1 · Pasangan ✓</span>
+      <span class="pill" style="background: linear-gradient(135deg, #9E4A5E, #B25A6E); color: #fff">2 · Acara</span>
+      <span class="pill p-no">3 · Anggaran &amp; tamu</span>
+    </div>
+    <div>
+      <h1 class="h1" style="font-size: 28px">Acara apa saja yang akan kalian adakan?</h1>
+      <p class="sm muted" style="margin: 6px 0 0; max-width: 64ch; line-height: 1.55">Centang acara yang dipakai. Untuk tiap acara, contoh tugas, anggaran, dan seserahan langsung terisi. Semuanya bisa diubah nanti lewat tombol pensil.</p>
+    </div>
+
+    <div class="col" style="gap: 10px; border-radius: 20px; padding: 14px; background: linear-gradient(140deg, rgba(244,239,252,.9), rgba(226,214,245,.7)); border: 1px solid rgba(255,255,255,.95)">
+      <div class="row nowrap"><button type="button" class="ck on1" aria-pressed="true" aria-label="Pakai acara Lamaran"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3.5"><path d="M5 12l5 5 9-10"/></svg></button><span class="acd c1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></span><span class="grow"><b style="display: block">Lamaran</b><span class="xs muted">Keluarga pria datang melamar ke rumah pengantin wanita</span></span></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+        <div class="fld"><label class="dlbl" for="l-tgl">Tanggal</label><input id="l-tgl" class="inp" value="Sab, 16 Jan 2027"></div>
+        <div class="fld"><label class="dlbl" for="l-lok">Lokasi</label><input id="l-lok" class="inp" value="Rumah Rina, Bandung"></div>
+        <div class="fld"><div class="dlbl">Penanggung bawaan</div><button type="button" class="inp"><span class="pill pp">Keluarga Bagas</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+      </div>
+      <div class="col" style="gap: 10px; border-radius: 16px; padding: 12px; background: rgba(255,255,255,.6); border: 1px dashed rgba(107,78,160,.35); margin-left: 30px">
+        <div class="row nowrap"><button type="button" class="ck on1" aria-pressed="true" aria-label="Ada balasan lamaran"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3.5"><path d="M5 12l5 5 9-10"/></svg></button><span class="grow"><b style="display: block">Ada balasan lamaran</b><span class="xs muted">Jadi bagian kedua di acara Lamaran, dengan tab sendiri di tiap sub menu</span></span></div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <div class="fld"><label class="dlbl" for="b-tgl">Tanggal</label><input id="b-tgl" class="inp" value="Sab, 30 Jan 2027"></div>
+          <div class="fld"><label class="dlbl" for="b-lok">Lokasi</label><input id="b-lok" class="inp" value="Rumah Bagas, Garut"></div>
+          <div class="fld"><div class="dlbl">Penanggung bawaan</div><button type="button" class="inp"><span class="pill pw">Keluarga Rina</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" style="gap: 10px; border-radius: 20px; padding: 14px; background: linear-gradient(140deg, rgba(255,243,232,.9), rgba(250,220,194,.7)); border: 1px solid rgba(255,255,255,.95)">
+      <div class="row nowrap"><button type="button" class="ck on2" aria-pressed="true" aria-label="Akad dan Resepsi, wajib" disabled><svg class="i s" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3.5"><path d="M5 12l5 5 9-10"/></svg></button><span class="acd c2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="13" r="5.5"/><circle cx="15" cy="13" r="5.5"/></svg></span><span class="grow"><b style="display: block">Akad &amp; Resepsi</b><span class="xs muted">Biaya akad ikut masuk anggaran acara ini · berisi juga sub menu Dokumen</span></span><span class="pill p-no">Wajib</span></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+        <div class="fld"><label class="dlbl" for="r-tgl">Tanggal</label><input id="r-tgl" class="inp" value="Sab, 19 Jun 2027"></div>
+        <div class="fld"><label class="dlbl" for="r-lok">Lokasi</label><input id="r-lok" class="inp" value="Graha Asri, Bandung"></div>
+        <div class="fld"><div class="dlbl">Penanggung bawaan</div><button type="button" class="inp"><span class="pill pw">Keluarga Rina</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+      </div>
+    </div>
+
+    <div class="col" style="gap: 10px; border-radius: 20px; padding: 14px; background: linear-gradient(140deg, rgba(237,248,241,.9), rgba(198,228,210,.7)); border: 1px solid rgba(255,255,255,.95)">
+      <div class="row nowrap"><button type="button" class="ck on3" aria-pressed="true" aria-label="Pakai acara Unduh mantu"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 3.5"><path d="M5 12l5 5 9-10"/></svg></button><span class="acd c3"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/></svg></span><span class="grow"><b style="display: block">Unduh mantu</b><span class="xs muted">Acara di keluarga pengantin pria</span></span></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+        <div class="fld"><label class="dlbl" for="u-tgl">Tanggal</label><input id="u-tgl" class="inp" value="Sab, 26 Jun 2027"></div>
+        <div class="fld"><label class="dlbl" for="u-lok">Lokasi</label><input id="u-lok" class="inp" value="Rumah Bagas, Garut"></div>
+        <div class="fld"><div class="dlbl">Penanggung bawaan</div><button type="button" class="inp"><span class="pill pp">Keluarga Bagas</span><svg class="i caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+      </div>
+    </div>
+
+    <div class="col" style="gap: 8px; border-radius: 20px; padding: 14px; border: 1.5px dashed rgba(176,86,107,.3); background: rgba(255,255,255,.4)">
+      <b class="sm">+ Tambah acara lain</b>
+      <div class="row" style="gap: 6px"><button type="button" class="chip">Pengajian &amp; siraman</button><button type="button" class="chip">Midodareni</button><button type="button" class="chip">Akad terpisah dari resepsi</button><button type="button" class="chip">Acara lain…</button></div>
+    </div>
+
+    <div class="note"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="margin-top: 2px"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Nama pihak diambil dari langkah 1: <b>Keluarga Rina</b> (pihak wanita) dan <b>Keluarga Bagas</b> (pihak pria). Orang lain bisa ditambah nanti di Pengaturan.</span></div>
+
+    <div class="between"><button type="button" class="btn2">Kembali</button><button type="button" class="btn">Lanjut ke anggaran &amp; tamu</button></div>
+  </section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

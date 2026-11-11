@@ -47,6 +47,9 @@ const P = {
   mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>,
   qr: <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2M14 18h2v2M18 18h2v2h-2z" />,
   megaphone: <path d="M3 10v4a1 1 0 0 0 1 1h3l6 4V5L7 9H4a1 1 0 0 0-1 1zM17 8a5 5 0 0 1 0 8M7 15l1.5 5h2.5L10 15" />,
+  grip2: <path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01" />,
+  pin: <path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z" />,
+  layers: <path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5" />,
   calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></>,
   /* ikon kategori seserahan */
   cincin: <><circle cx="12" cy="15" r="6" /><path d="M9 3h6l-3 5z" /></>,
@@ -86,10 +89,11 @@ export function Icon({ name, size = 18, stroke = 1.8, className, style }) {
 }
 
 const AV_COLORS = ['ar', 'ab', 'ai', 'aw', 'am'];
-export function Avatar({ name, size }) {
+const SIDE_AV = { pria: 'am', wanita: 'ar', lainnya: 'aw' };
+export function Avatar({ name, size, side }) {
   const n = String(name || '?');
   let h = 0; for (const c of n) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  const cls = 'av ' + AV_COLORS[h % AV_COLORS.length];
+  const cls = 'av ' + (SIDE_AV[side] || AV_COLORS[h % AV_COLORS.length]);
   return <span className={cls} title={n} style={size ? { width: size, height: size, fontSize: size * 0.38 } : null}>{initials(n)}</span>;
 }
 export function Avatars({ names }) {
@@ -234,13 +238,14 @@ export function ConfirmHost() {
 export const confirm = (opts) => (confirmFn ? confirmFn(opts) : Promise.resolve(window.confirm(opts.text)));
 
 /* ---------------- Form fields ---------------- */
-export function Field({ label, hint, error, children, className }) {
+export function Field({ label, hint, error, children, className, div }) {
+  const T = div ? 'div' : 'label';
   return (
-    <label className={'fld ' + (className || '')}>
-      {label && <span className="dlbl">{label}{hint && <em>{hint}</em>}</span>}
+    <T className={'fld ' + (className || '')}>
+      {label && <span className="dlbl">{label}{hint && <em className={hint === 'Wajib' ? 'req' : ''}>{hint}</em>}</span>}
       {children}
       {error && <span className="ferr">{error}</span>}
-    </label>
+    </T>
   );
 }
 

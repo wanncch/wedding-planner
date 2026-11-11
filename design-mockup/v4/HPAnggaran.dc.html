@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>HP · Anggaran Lamaran</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./v4.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#9E4A5E}a:hover{color:#33262E}
+</style>
+</helmet>
+<div class="ph">
+  <div class="orb o1" aria-hidden="true"></div><div class="orb o2" aria-hidden="true"></div><div class="orb o3" aria-hidden="true"></div>
+  <div class="pscr" style="gap: 10px">
+    <div class="between nowrap">
+      <button type="button" class="acpill" aria-haspopup="listbox"><span class="acd c1"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></span>Lamaran<svg class="i s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <span class="h2" style="font-size: 20px">Anggaran</span>
+    </div>
+    <div class="seg" role="group" aria-label="Bagian acara" style="display: flex">
+      <button type="button" class="on" style="flex: 1; color: #4A3275">Lamaran</button><button type="button" style="flex: 1">Balasan</button><button type="button" style="flex: 1">Gabungan</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <div class="tile w4" style="padding: 10px 12px; border-radius: 18px"><div><div class="k">Rencana</div><div class="v" style="font-size: 19px">Rp 12,0 jt</div></div></div>
+      <div class="tile w3" style="padding: 10px 12px; border-radius: 18px"><div><div class="k">Sudah dibayar</div><div class="v" style="font-size: 19px">Rp 3,2 jt</div></div></div>
+      <a class="tile w5" href="RincianAnggaran.dc.html" style="padding: 10px 12px; border-radius: 18px"><div><div class="k">Pihak pria</div><div class="v" style="font-size: 19px">Rp 7,5 jt</div></div></a>
+      <a class="tile w1" href="RincianAnggaran.dc.html" style="padding: 10px 12px; border-radius: 18px"><div><div class="k">Pihak wanita</div><div class="v" style="font-size: 19px">Rp 4,5 jt</div></div></a>
+    </div>
+
+    <section class="g" style="padding: 6px 12px 8px; display: flex; flex-direction: column">
+      <div class="between" style="padding: 8px 2px 4px"><span class="row nowrap" style="gap: 6px"><b class="sm">Vendor</b><span class="auto">otomatis</span></span><b class="sm">Rp 8,5 jt</b></div>
+      <div class="li" style="padding: 8px 2px"><span class="grow"><b class="sm" style="display: block">Cincin lamaran</b><span class="xs muted">Toko Emas Sinar · <span style="color: #24476B; font-weight: 700">Kel. Bagas</span></span></span><span style="text-align: right"><b class="sm" style="display: block">Rp 4,0 jt</b><span class="pill p-wait">DP</span></span></div>
+      <div class="li" style="padding: 8px 2px"><span class="grow"><b class="sm" style="display: block">Konsumsi 60 pax</b><span class="xs muted">Belum dipilih · <span style="color: #7A2E44; font-weight: 700">Kel. Rina</span></span></span><span style="text-align: right"><b class="sm" style="display: block">Rp 3,0 jt</b><span class="pill p-sel">Belum dipilih</span></span></div>
+      <div class="li" style="padding: 8px 2px"><span class="grow"><b class="sm" style="display: block">Dekor sederhana</b><span class="xs muted">Dekor Mawar · <span style="color: #7A2E44; font-weight: 700">Kel. Rina</span></span></span><span style="text-align: right"><b class="sm" style="display: block">Rp 1,5 jt</b><span class="pill p-no">Belum bayar</span></span></div>
+      <div class="between" style="padding: 10px 2px 4px; border-top: 1px solid rgba(176,86,107,.12)"><span class="row nowrap" style="gap: 6px"><b class="sm">Seserahan</b><span class="auto">otomatis</span></span><b class="sm">Rp 2,5 jt</b></div>
+      <div class="li" style="padding: 8px 2px"><span class="grow"><b class="sm" style="display: block">Bawaan lamaran</b><span class="xs muted">4/9 siap · <span style="color: #24476B; font-weight: 700">Kel. Bagas</span></span></span><span style="text-align: right"><b class="sm" style="display: block">Rp 2,5 jt</b><span class="pill p-wait">4/9 siap</span></span></div>
+      <div class="between" style="padding: 10px 2px 4px; border-top: 1px solid rgba(176,86,107,.12)"><b class="sm">Transport &amp; lainnya</b><b class="sm">Rp 1,0 jt</b></div>
+      <div class="li" style="padding: 8px 2px"><span class="grow"><b class="sm" style="display: block">Sewa 2 mobil rombongan</b><span class="xs muted">PIC Om Yusuf · <span style="color: #24476B; font-weight: 700">Kel. Bagas</span></span></span><span style="text-align: right"><b class="sm" style="display: block">Rp 1,0 jt</b><span class="pill p-no">Belum bayar</span></span></div>
+    </section>
+  </div>
+
+  <button type="button" class="fab" aria-label="Tambah item anggaran"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.4"><path d="M12 5v14M5 12h14"/></svg></button>
+
+  <nav class="bnav" aria-label="Menu HP">
+    <a class="bi" href="HPBeranda.dc.html"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/></svg>Beranda</a>
+    <a class="bi" href="#"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>Persiapan</a>
+    <a class="bi on" href="HPAnggaran.dc.html"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/></svg>Anggaran</a>
+    <a class="bi" href="#"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9h16v11H4z"/></svg>Vendor</a>
+    <a class="bi" href="#"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>Lainnya</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

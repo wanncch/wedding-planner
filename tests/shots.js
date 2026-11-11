@@ -6,7 +6,7 @@ const MOCK = fs.readFileSync(D + '/mock.js', 'utf8');
 const BASE = 'http://localhost:4173';
 (async () => {
   const browser = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {}).catch(() => chromium.launch());
-  const menus = (process.argv[2] || 'beranda,persiapan,anggaran,vendor,seserahan,tamu,rundown,dokumen,catatan,pengaturan').split(',');
+  const menus = (process.argv[2] || 'beranda,lam/persiapan,lam/anggaran,akad/vendor,akad/tamu,akad/seserahan,akad/rundown,akad/dokumen,akad/catatan,unduh/atur,pengaturan').split(',');
   const mode = process.argv[3] || 'desk';
   const ctx = await browser.newContext(mode === 'hp' ? { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true } : { viewport: { width: 1440, height: 1000 } });
   await ctx.addInitScript(`window.__TPL__ = ${TPL};\n${MOCK}`);
@@ -30,7 +30,13 @@ const BASE = 'http://localhost:4173';
   await page.goto(BASE + '/#/w/w-demo/beranda');
   await page.waitForTimeout(800);
   for (const m of menus) {
-    await page.evaluate((m) => { location.hash = '#/w/w-demo/' + m; }, m);
+    await page.evaluate((m) => {
+      const [ev, menu] = m.split('/');
+      if (!menu) { location.hash = '#/w/w-demo/' + m; return; }
+      const name = { lam: 'Lamaran', akad: 'Akad & Resepsi', unduh: 'Unduh mantu' }[ev];
+      const e = window.__DB__.events.find(x => x.wedding_id === 'w-demo' && !x.parent_id && x.name === name);
+      location.hash = '#/w/w-demo/e/' + e.id + '/' + menu;
+    }, m);
     await page.waitForTimeout(700);
     await page.screenshot({ path: D + '/out/' + mode + '-' + m.replace(/[^a-z]/g, '') + '.png', fullPage: mode !== 'hp' });
   }

@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { useW } from '../lib/store.jsx';
-import { Icon, Tabs, Chips, Pill, Check, Avatar, Drawer, Modal, Field, Text, Area, DateIn, Seg, Toggle, NumIn, PersonPick, confirm, Empty, Bar } from '../components/ui.jsx';
+import { Icon, Tabs, Chips, Pill, Check, Avatar, Drawer, Modal, Field, Text, Area, DateIn, Seg, Toggle, NumIn, confirm, Empty, Bar } from '../components/ui.jsx';
+import { PersonSelect, PersonChip } from '../components/People.jsx';
+import { useEv, EventHeader } from '../components/EventKit.jsx';
+import { personById } from '../lib/events.js';
 import { dShort, daysBetween, today, pct } from '../lib/format.js';
 
 const PRIO = { tinggi: ['Tinggi', 'p-bad'], sedang: ['Sedang', 'p-rose'], biasa: ['Biasa', 'p-no'] };
 const TONES = ['w1', 'w2', 'w3', 'w4'];
 
 export default function Catatan({ q }) {
-  const { data, canEdit } = useW();
+  const { data: all, canEdit } = useW();
+  const E = useEv();
+  const ids = E.scope.ids;
+  const data = { ...all, reminders: all.reminders.filter(r => ids.includes(r.event_id)), notes: all.notes.filter(n => ids.includes(n.event_id)) };
   const [tab, setTab] = useState(q.tab || 'reminder');
   const [rem, setRem] = useState(null);
   const [note, setNote] = useState(null);
@@ -17,23 +23,21 @@ export default function Catatan({ q }) {
 
   return (
     <>
-      <div className="top">
-        <div><div className="eyb">Pengingat, info penting, dan persiapan berdua</div><h1 className="h1">Catatan</h1></div>
-        {canEdit && <div className="row"><button type="button" className="btn2" onClick={() => setNote({ _new: true })}>+ Catatan</button><button type="button" className="btn" onClick={() => setRem({ _new: true })}><Icon name="plus" size={15} />Reminder</button></div>}
-      </div>
+      <EventHeader title="Catatan" partSub={(xs) => all.reminders.filter(r => xs.includes(r.event_id) && !r.done).length + ' reminder aktif'}
+        actions={canEdit && <><button type="button" className="btn2" onClick={() => setNote({ _new: true })}>+ Catatan</button><button type="button" className="btn" onClick={() => setRem({ _new: true })}><Icon name="plus" size={15} />Reminder</button></>} />
       <Tabs value={tab} onChange={setTab} items={[{ key: 'reminder', label: 'Reminder · ' + active }, { key: 'penting', label: 'Catatan penting · ' + data.notes.length }, { key: 'diri', label: 'Persiapan diri · ' + spDone + '%' }]} />
 
       {tab === 'reminder' && (
         <section className="split">
-          <div className="wide"><ReminderList onOpen={setRem} /></div>
-          <aside className="narrow"><NotesCard onOpen={setNote} compact onAll={() => setTab('penting')} /><SelfCard onOpen={setSp} compact /></aside>
+          <div className="wide"><ReminderList onOpen={setRem} data={data} /></div>
+          <aside className="narrow"><NotesCard onOpen={setNote} compact onAll={() => setTab('penting')} data={data} /><SelfCard onOpen={setSp} compact /></aside>
         </section>
       )}
-      {tab === 'penting' && <NotesCard onOpen={setNote} />}
+      {tab === 'penting' && <NotesCard onOpen={setNote} data={data} />}
       {tab === 'diri' && <SelfCard onOpen={setSp} />}
 
-      {rem && <ReminderDrawer r={rem} onClose={() => setRem(null)} />}
-      {note && <NoteModal n={note} onClose={() => setNote(null)} />}
+      {rem && <ReminderDrawer r={rem} target={E.scope.target} onClose={() => setRem(null)} />}
+      {note && <NoteModal n={note} target={E.scope.target} onClose={() => setNote(null)} />}
       {sp && <SelfModal s={sp} onClose={() => setSp(null)} />}
     </>
   );
@@ -45,19 +49,19 @@ function selfPct(list) {
   return Math.round((v / list.length) * 100);
 }
 
-function ReminderList({ onOpen }) {
-  const { data, canEdit, save, people } = useW();
+function ReminderList({ onOpen, data }) {
+  const { canEdit, save } = useW();
   const [flt, setFlt] = useState('aktif');
   const [pic, setPic] = useState('');
-  const list = data.reminders.filter(r => (flt === 'aktif' ? !r.done : flt === 'selesai' ? r.done : true) && (!pic || r.pic === pic))
+  const list = data.reminders.filter(r => (flt === 'aktif' ? !r.done : flt === 'selesai' ? r.done : true) && (!pic || r.pic_id === pic))
     .sort((a, b) => String(a.due_date || '9999').localeCompare(String(b.due_date || '9999')));
-  const pics = Array.from(new Set(data.reminders.map(r => r.pic).filter(Boolean)));
+  const pics = Array.from(new Set(data.reminders.map(r => r.pic_id).filter(Boolean)));
   return (
     <div className="g">
       <div className="between" style={{ marginBottom: 6 }}>
         <div className="h2">Reminder</div>
         <div className="row"><Chips value={flt} onChange={setFlt} items={[{ key: 'aktif', label: 'Aktif' }, { key: 'selesai', label: 'Selesai' }]} />
-          {pics.length > 0 && <select className="inp" style={{ width: 'auto', minHeight: 36, padding: '6px 30px 6px 12px' }} value={pic} onChange={(e) => setPic(e.target.value)}><option value="">Semua PIC</option>{pics.map(p => <option key={p}>{p}</option>)}</select>}</div>
+          {pics.length > 0 && <select className="inp" style={{ width: 'auto', minHeight: 36, padding: '6px 30px 6px 12px' }} value={pic} onChange={(e) => setPic(e.target.value)}><option value="">Semua PIC</option>{pics.map(p => <option key={p} value={p}>{(personById(data, p) || {}).name}</option>)}</select>}</div>
       </div>
       {list.map(r => {
         const late = r.due_date && !r.done ? daysBetween(r.due_date, today()) : -1;
@@ -65,7 +69,7 @@ function ReminderList({ onOpen }) {
           <div className="li click" key={r.id} onClick={() => onOpen(r)}>
             <Check on={r.done} disabled={!canEdit} onChange={(v) => save('reminders', r.id, { done: v })} />
             <div className="grow"><b className={r.done ? 'strike' : ''}>{r.title}</b>{r.detail && <div className="xs muted ell">{r.detail}</div>}</div>
-            {r.pic && <Avatar name={r.pic} />}
+            {r.pic_id && <PersonChip id={r.pic_id} />}
             <span className="hide-m"><Pill cls={PRIO[r.priority][1]}>{PRIO[r.priority][0]}</Pill></span>
             <Pill cls={late > 0 ? 'p-bad' : late >= -3 && r.due_date ? 'p-wait' : 'p-no'}>{r.due_date ? dShort(r.due_date) : 'Tanpa tanggal'}</Pill>
           </div>
@@ -77,8 +81,8 @@ function ReminderList({ onOpen }) {
   );
 }
 
-function NotesCard({ onOpen, compact, onAll }) {
-  const { data, canEdit } = useW();
+function NotesCard({ onOpen, compact, onAll, data }) {
+  const { canEdit } = useW();
   const [show, setShow] = useState({});
   const notes = [...data.notes].sort((a, b) => a.sort - b.sort);
   const plain = notes.filter(n => !n.secret);
@@ -133,17 +137,17 @@ function SelfCard({ onOpen, compact }) {
   );
 }
 
-function ReminderDrawer({ r, onClose }) {
-  const { add, save, del, canEdit, people } = useW();
+function ReminderDrawer({ r, target, onClose }) {
+  const { add, save, del, canEdit, mine } = useW();
   const isNew = !!r._new;
-  const [f, setF] = useState({ title: r.title || '', detail: r.detail || '', due_date: r.due_date || '', pic: r.pic || '', priority: r.priority || 'sedang', done: !!r.done });
+  const [f, setF] = useState({ title: r.title || '', detail: r.detail || '', due_date: r.due_date || '', pic_id: r.pic_id || (isNew ? mine[0] || null : null), priority: r.priority || 'sedang', done: !!r.done });
   const [err, setErr] = useState('');
   const set = (k) => (v) => setF(x => ({ ...x, [k]: v }));
   async function submit() {
     if (!f.title.trim()) { setErr('Isi judul reminder.'); return; }
     const row = { ...f, title: f.title.trim(), due_date: f.due_date || null };
     onClose();
-    if (isNew) await add('reminders', row); else await save('reminders', r.id, row);
+    if (isNew) await add('reminders', { ...row, event_id: target }); else await save('reminders', r.id, row);
   }
   async function remove() { if (await confirm({ title: 'Hapus reminder?', text: '“' + r.title + '” akan dihapus.', ok: 'Hapus', danger: true })) { onClose(); del('reminders', r.id); } }
   return (
@@ -152,7 +156,7 @@ function ReminderDrawer({ r, onClose }) {
       <fieldset disabled={!canEdit} style={{ border: 0, padding: 0, margin: 0, display: 'contents' }}>
         <Field label="Judul" error={err}><Text value={f.title} onChange={set('title')} placeholder="mis. Transfer termin 2 catering" /></Field>
         <Field label="Detail"><Area value={f.detail} onChange={set('detail')} rows={2} placeholder="mis. Rp10.000.000 · Catering Sari Rasa" /></Field>
-        <div className="g2"><Field label="Tanggal"><DateIn value={f.due_date} onChange={set('due_date')} /></Field><Field label="PIC"><PersonPick value={f.pic} onChange={set('pic')} people={people} /></Field></div>
+        <div className="g2"><Field label="Tanggal"><DateIn value={f.due_date} onChange={set('due_date')} /></Field><Field div label="PIC"><PersonSelect value={f.pic_id} onChange={set('pic_id')} /></Field></div>
         <Field label="Prioritas"><Seg value={f.priority} onChange={set('priority')} items={[{ key: 'tinggi', label: 'Tinggi' }, { key: 'sedang', label: 'Sedang' }, { key: 'biasa', label: 'Biasa' }]} /></Field>
         <label className="row nowrap" style={{ gap: 10 }}><Toggle on={f.done} onChange={set('done')} /><b className="sm">Sudah selesai</b></label>
       </fieldset>
@@ -160,7 +164,7 @@ function ReminderDrawer({ r, onClose }) {
   );
 }
 
-function NoteModal({ n, onClose }) {
+function NoteModal({ n, target, onClose }) {
   const { data, add, save, del, canEdit } = useW();
   const isNew = !!n._new;
   const [f, setF] = useState({ label: n.label || '', value: n.value || '', secret: !!n.secret });
@@ -168,7 +172,7 @@ function NoteModal({ n, onClose }) {
   async function submit() {
     if (!f.label.trim()) return;
     onClose();
-    if (isNew) await add('notes', { ...f, label: f.label.trim(), sort: data.notes.length + 1 }); else await save('notes', n.id, { ...f, label: f.label.trim() });
+    if (isNew) await add('notes', { ...f, label: f.label.trim(), event_id: target, sort: data.notes.length + 1 }); else await save('notes', n.id, { ...f, label: f.label.trim() });
   }
   async function remove() { if (await confirm({ title: 'Hapus catatan?', text: '“' + n.label + '” akan dihapus.', ok: 'Hapus', danger: true })) { onClose(); del('notes', n.id); } }
   return (
