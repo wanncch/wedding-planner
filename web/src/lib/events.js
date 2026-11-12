@@ -123,3 +123,20 @@ export function defaultPayer(data, eventId) {
   const fb = personByKind(data, 'fam_bride');
   return fb ? fb.id : null;
 }
+
+/* ---------------- tahap persiapan per acara ---------------- */
+export const STAGE_DEFAULTS = {
+  akad: ['Perencanaan awal', 'Booking vendor', 'Busana & rias', 'Administrasi & dokumen', 'Undangan & tamu', 'Seserahan & lamaran', 'Keluarga & acara', 'Persiapan akhir', 'H-7 s.d. hari H', 'Setelah menikah', 'Lainnya'],
+  lamaran: ['Persiapan keluarga', 'Konsumsi & dekorasi', 'Hantaran & cincin', 'Undangan keluarga', 'Hari H lamaran'],
+  lainnya: ['Persiapan keluarga', 'Vendor & konsumsi', 'Undangan & tamu', 'Hari H'],
+};
+export const stageDefaults = (ev) => STAGE_DEFAULTS[ev.kind] || STAGE_DEFAULTS.lainnya;
+/** Daftar tahap acara: yang diatur pengguna (atau bawaan), ditambah tahap yang sudah dipakai tugas. */
+export function stagesOf(data, ev) {
+  const base = Array.isArray(ev.stages) && ev.stages.length ? ev.stages : stageDefaults(ev);
+  const ids = familyIds(data, ev.id);
+  const used = Array.from(new Set(data.tasks.filter(t => ids.includes(t.event_id)).map(t => t.stage || 'Lainnya')));
+  const out = [...base];
+  used.forEach(s => { if (!out.includes(s)) out.push(s); });
+  return out;
+}

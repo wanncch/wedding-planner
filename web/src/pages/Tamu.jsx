@@ -8,6 +8,7 @@ import { topEvents, partsOf, rootOf } from '../lib/events.js';
 import { pct, waLink, dLong, hm } from '../lib/format.js';
 
 const RSVP = { belum: ['Belum jawab', 'p-wait'], hadir: ['Hadir', 'p-ok'], tidak: ['Tidak hadir', 'p-bad'], ragu: ['Ragu', 'p-wait'] };
+export const INV_TYPES = [{ key: 'digital', label: 'Digital' }, { key: 'cetak', label: 'Cetak' }, { key: 'tonjokan', label: 'Tonjokan' }, { key: 'tanpa', label: 'Tanpa undangan' }];
 const SIDE = { pria: ['Pria', 'pp'], wanita: ['Wanita', 'pw'], bersama: ['Bersama', 'po'] };
 const TONE = { c0: 'w1', c1: 'w4', c2: 'w2', c3: 'w3', c4: 'w5', c5: 'w3', c6: 'w4' };
 const CK = { c0: 'on', c1: 'on1', c2: 'on2', c3: 'on3', c4: 'on1', c5: 'on3', c6: 'on1' };
@@ -176,6 +177,7 @@ export default function Tamu() {
                 <span>Orang diundang</span><b>{S.people}</b>
                 <span>Konfirmasi hadir</span><b style={{ color: '#3F7457' }}>{S.hadirPax} orang</b>
                 <span>Belum jawab</span><b>{S.belum}</b>
+                <span>Jenis undangan</span><b style={{ textAlign: 'right' }}>{INV_TYPES.map(t => [t.label.replace(' undangan', ''), inv.filter(i => (i.g.invite_type || 'digital') === t.key).length]).filter(x => x[1]).map(x => x[0] + ' ' + x[1]).join(' · ') || '–'}</b>
                 <span>Sudah dikirim</span><b>{S.sent} / {inv.length}</b>
               </div>
               <Bar value={pct(S.sent, inv.length)} />
@@ -236,10 +238,8 @@ function GuestDrawer({ g, targets, cur, onClose }) {
           <Field label="Sumber"><input className="inp" list="gsrc" value={f.source} onChange={(e) => set('source')(e.target.value)} placeholder="mis. Keluarga Rina" /><datalist id="gsrc">{sources.map(x => <option key={x} value={x} />)}</datalist></Field>
         </div>
         <Field label="Tamu pihak"><Seg value={f.side} onChange={set('side')} items={[{ key: 'wanita', label: 'Wanita' }, { key: 'pria', label: 'Pria' }, { key: 'bersama', label: 'Bersama' }]} /></Field>
-        <div className="g2">
-          <Field label="Jenis undangan"><Seg small value={f.invite_type} onChange={set('invite_type')} items={[{ key: 'digital', label: 'Digital' }, { key: 'cetak', label: 'Cetak' }]} /></Field>
-          <Field label="Jumlah orang (pax)"><NumIn value={f.pax} onChange={set('pax')} /></Field>
-        </div>
+        <Field label="Jenis undangan"><Seg small value={f.invite_type} onChange={set('invite_type')} items={INV_TYPES} /></Field>
+        <Field label="Jumlah orang (pax)"><NumIn value={f.pax} onChange={set('pax')} /></Field>
         <Field div label="Diundang ke">
           <div className="catg">{targets.map(x => <button type="button" key={x.id} className={to[x.id] ? 'on' : ''} onClick={() => setTo(t => ({ ...t, [x.id]: !t[x.id] }))}>{to[x.id] ? '✓ ' : '+ '}{x.name}</button>)}</div>
         </Field>
@@ -284,7 +284,7 @@ function mapRow(obj) {
   return {
     name: String(out.name).trim().slice(0, 160), relation: String(out.relation || '').trim(), source: String(out.source || '').trim(),
     side: (side.startsWith('p') && !side.startsWith('per')) || side.startsWith('l') || side.startsWith('cpp') ? 'pria' : side.startsWith('w') || side.startsWith('per') ? 'wanita' : 'bersama',
-    invite_type: inv.startsWith('c') ? 'cetak' : 'digital', phone: String(out.phone || '').trim(), address: String(out.address || '').trim(),
+    invite_type: inv.startsWith('c') ? 'cetak' : inv.startsWith('ton') ? 'tonjokan' : inv.startsWith('tanpa') || inv.startsWith('tidak') ? 'tanpa' : 'digital', phone: String(out.phone || '').trim(), address: String(out.address || '').trim(),
     pax: Math.max(0, parseInt(out.pax, 10) || 2), notes: String(out.notes || '').trim(), _table: String(out.table_no || '').trim(),
   };
 }
@@ -328,7 +328,7 @@ function ImportModal({ targets, cur, onClose }) {
   return (
     <Modal open onClose={onClose} title="Impor ke buku tamu induk"
       footer={<><button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" disabled={!rows || !rows.length} onClick={submit}>Impor {rows ? rows.length : ''} tamu</button></>}>
-      <div className="sm" style={{ lineHeight: 1.55 }}>Pilih file Excel (.xlsx) atau CSV. Baris pertama berisi judul kolom: <b>Nama</b> (wajib), Hubungan, Pihak, Sumber, Undangan, HP, Alamat, Jumlah, Meja, Catatan.</div>
+      <div className="sm" style={{ lineHeight: 1.55 }}>Pilih file Excel (.xlsx) atau CSV. Baris pertama berisi judul kolom: <b>Nama</b> (wajib), Hubungan, Pihak, Sumber, Undangan (Digital / Cetak / Tonjokan / Tanpa), HP, Alamat, Jumlah, Meja, Catatan.</div>
       <button type="button" className="lnk" style={{ alignSelf: 'flex-start' }} onClick={template}>Unduh contoh template</button>
       <label className="up"><span className="thumb"><Icon name="upload" size={20} /></span><span className="sm"><b>{busy ? 'Membaca…' : 'Pilih file'}</b><span className="xs muted" style={{ display: 'block' }}>Dari Google Sheets: File › Download › Excel</span></span><input type="file" hidden accept=".xlsx,.xls,.csv" onChange={readFile} /></label>
       <Field div label="Langsung undang ke"><div className="catg">{targets.map(x => <button type="button" key={x.id} className={to[x.id] ? 'on' : ''} onClick={() => setTo(t => ({ ...t, [x.id]: !t[x.id] }))}>{to[x.id] ? '✓ ' : '+ '}{x.name}</button>)}</div></Field>

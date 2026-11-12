@@ -1,0 +1,92 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Tahap persiapan bisa diatur</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../v4/v4.css">
+<style>
+body{margin:0;background:#EFE6E3;font-family:'Plus Jakarta Sans',sans-serif}
+.board{margin:28px auto;width:1440px}
+.ttl{font:700 13px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#6F5E66;margin:0 0 10px 6px}
+.app{border-radius:24px;min-height:980px}
+.ovl{position:absolute;inset:0;background:rgba(51,38,46,.28);z-index:3}
+.drw{position:absolute;top:16px;right:16px;bottom:16px;width:520px;z-index:4;height:auto}
+.drb{overflow:auto}
+.srow{display:flex;align-items:center;gap:10px}
+.srow .grip{color:#9A8790;cursor:grab}
+.srow .cnt{font-size:12px;font-weight:700;color:#6F5E66;width:58px;text-align:right}
+.srow .inp.edit{border-color:#B25A6E;box-shadow:0 0 0 4px rgba(210,122,134,.15)}
+.cardrow{display:flex;gap:28px;align-items:flex-start}
+.ask{border-radius:16px;padding:12px 14px;background:#FFF4EC;border:1px solid #F3D3B6;font-size:12.5px;color:#6B430F;display:flex;flex-direction:column;gap:8px}
+.callout{position:absolute;background:#33262E;color:#fff;font-size:12px;font-weight:700;border-radius:12px;padding:7px 11px;z-index:6;box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.callout:before{content:'';position:absolute;width:10px;height:10px;background:#33262E;transform:rotate(45deg)}
+.cl-l:before{left:-4px;top:12px}.cl-b:before{left:20px;top:-4px}
+.catg button{font-size:12.5px}
+</style></head><body>
+
+<div class="board">
+<div class="ttl">1 · Persiapan › Per tahap — tombol “Atur tahap” membuka panel</div>
+<div class="app" style="position:relative">
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
+<aside class="side">
+  <div class="brand"><span class="logo"><svg class="i l" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="13" r="5.5"/><circle cx="15" cy="13" r="5.5"/></svg></span><div><div class="bn">Wedding Planner</div><div class="by">by Wanncch</div></div></div>
+  <nav class="nav"><a href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/></svg>Beranda</a></nav>
+  <div class="lbl" style="padding:8px 10px 2px">Acara</div>
+  <div class="acg a1 open"><div class="ach"><a class="acb" href="#"><span class="acd c1"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></span><span class="acn"><b>Lamaran</b><span>16 &amp; 30 Jan 2027</span></span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><a class="pen" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg></a></div>
+   <nav class="nav"><a class="on" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>Persiapan</a><a href="#">Anggaran</a><a href="#">Vendor</a><a href="#">Seserahan</a><a href="#">Tamu</a><a href="#">Rundown</a><a href="#">Catatan</a></nav></div>
+  <div class="acg a2"><div class="ach"><a class="acb" href="#"><span class="acd c2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="13" r="5.5"/><circle cx="15" cy="13" r="5.5"/></svg></span><span class="acn"><b>Akad &amp; Resepsi</b><span>19 Jun 2027</span></span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="pen" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg></a></div></div>
+  <div class="acg a3"><div class="ach"><a class="acb" href="#"><span class="acd c3"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/></svg></span><span class="acn"><b>Unduh mantu</b><span>26 Jun 2027</span></span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="pen" href="#"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg></a></div></div>
+</aside>
+<main class="main">
+ <div class="top"><div><div class="eyb">Lamaran · Sabtu, 16 Januari 2027 · Rumah Rina, Bandung</div><h1 class="h1">Persiapan</h1></div>
+  <div class="row"><div class="seg"><button>Per periode</button><button class="on">Per tahap</button></div><button class="btn2"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>Atur tahap</button><button class="btn"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Tugas</button></div></div>
+ <div class="bagian"><button class="bg on"><span class="dot"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></span><span>Lamaran<small>16 Jan · 8 tugas</small></span></button><button class="bg"><span class="dot"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></span><span>Balasan lamaran<small>30 Jan · 5 tugas</small></span></button><button class="bg"><span class="dot"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg></span><span>Gabungan<small>13 tugas</small></span></button></div>
+ <section class="g"><div class="tw"><table class="t"><thead><tr><th style="width:32px"></th><th>Tugas</th><th>PIC</th><th>Deadline</th><th>Status</th></tr></thead><tbody><tr class="cat"><td colspan="5">Persiapan keluarga · 2 dari 3 selesai</td></tr><tr><td><span class="ck on"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span></td><td><b>Tentukan tanggal &amp; jumlah rombongan</b></td><td><span class="who"><span class="av avp">BP</span>Bagas</span></td><td>20 Okt</td><td><span class="pill p-ok">Selesai</span></td></tr><tr><td><span class="ck on"><svg class="i s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></span></td><td><b>Tentukan juru bicara keluarga</b></td><td><span class="who"><span class="av avp">OY</span>Om Yusuf</span></td><td>2 Jan</td><td><span class="pill p-ok">Selesai</span></td></tr><tr><td><span class="ck"></span></td><td><b>Konfirmasi kehadiran keluarga</b></td><td><span class="who"><span class="av avp">BP</span>Bagas</span></td><td>13 Jan</td><td><span class="pill p-no">Belum</span></td></tr><tr class="cat"><td colspan="5">Konsumsi &amp; dekorasi · 0 dari 1 selesai</td></tr><tr><td><span class="ck"></span></td><td><b>Pesan konsumsi lamaran</b></td><td><span class="who"><span class="av avw">IR</span>Ibu Rina</span></td><td>8 Nov</td><td><span class="pill p-bad">Telat 3 hari</span></td></tr><tr class="cat"><td colspan="5">Hantaran &amp; cincin · 0 dari 2 selesai</td></tr><tr><td><span class="ck"></span></td><td><b>Siapkan cincin tunangan</b></td><td><span class="who"><span class="av avp">BP</span>Bagas</span></td><td>26 Des</td><td><span class="pill p-wait">Proses</span></td></tr><tr><td><span class="ck"></span></td><td><b>Siapkan hantaran lamaran</b></td><td><span class="who"><span class="av avp">IS</span>Ibu Sri</span></td><td>2 Jan</td><td><span class="pill p-wait">Proses</span></td></tr></tbody></table></div></section>
+</main>
+<div class="ovl"></div>
+<section class="drw">
+ <div class="drh"><div class="between"><div><span class="pill ta1">Lamaran</span><div class="h2" style="font-size:23px;margin-top:6px">Atur tahap persiapan</div></div><button class="x"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="xs muted">Tahap dipakai untuk mengelompokkan tugas di tampilan <b>Per tahap</b>. Daftar ini khusus acara Lamaran (Lamaran &amp; Balasan). Acara lain punya daftarnya sendiri.</div></div>
+ <div class="drb" style="gap:10px">
+  <div class="between"><span class="lbl">5 tahap · seret untuk urutkan</span><a class="lnk" href="#">Pakai daftar contoh</a></div>
+  <div class="srow"><span class="grip"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01"/></svg></span><div class="inp" style="flex:1">Persiapan keluarga</div><span class="cnt">3 tugas</span><button class="ibtn" aria-label="Hapus"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div><div class="srow"><span class="grip"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01"/></svg></span><div class="inp edit" style="flex:1">Konsumsi &amp; dekorasi|</div><span class="cnt">1 tugas</span><button class="ibtn" aria-label="Hapus"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div><div class="srow"><span class="grip"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01"/></svg></span><div class="inp" style="flex:1">Hantaran &amp; cincin</div><span class="cnt">2 tugas</span><button class="ibtn" aria-label="Hapus"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div><div class="srow"><span class="grip"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01"/></svg></span><div class="inp" style="flex:1">Undangan keluarga</div><span class="cnt">0 tugas</span><button class="ibtn" aria-label="Hapus"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div><div class="srow"><span class="grip"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01"/></svg></span><div class="inp" style="flex:1">Hari H lamaran</div><span class="cnt">0 tugas</span><button class="ibtn" aria-label="Hapus"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div>
+  <button class="btn2" style="align-self:flex-start"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Tambah tahap</button>
+  <div class="ask"><b>Hapus “Hantaran &amp; cincin”? Ada 2 tugas di tahap ini.</b><span>Pindahkan tugasnya ke:</span>
+   <div class="inp" style="background:#fff">Persiapan keluarga <svg class="i caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+   <div class="row" style="justify-content:flex-end"><button class="btn2 sm">Batal</button><button class="btn sm danger">Hapus &amp; pindahkan</button></div></div>
+  <div class="note">Mengganti nama tahap otomatis ikut mengganti nama tahap di semua tugasnya. Tugas tidak ikut terhapus.</div>
+ </div>
+ <div class="drf"><button class="btn2">Batal</button><button class="btn">Simpan</button></div>
+</section>
+<div class="callout cl-l" style="right:548px;top:228px">Ketik langsung untuk ganti nama</div>
+</div>
+</div>
+
+<div class="board">
+<div class="ttl">2 · Form tugas — tahap jadi pilihan tombol + bisa tambah tahap baru di tempat</div>
+<div class="cardrow">
+ <section class="drw" style="position:relative;width:560px;height:auto;top:0;right:0">
+  <div class="drh"><div class="between"><div><div class="eyb">Lamaran › Lamaran</div><div class="h2" style="font-size:23px">Detail tugas</div></div><button class="x"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>
+  <div class="drb" style="gap:14px">
+   <div class="fld"><span class="dlbl">Tugas</span><div class="inp">Siapkan hantaran lamaran</div></div>
+   <div class="fld"><span class="dlbl">Tahap <a class="lnk" href="#" style="font-size:12px">Atur tahap…</a></span>
+    <div class="catg"><button>Persiapan keluarga</button><button>Konsumsi &amp; dekorasi</button><button class="on">Hantaran &amp; cincin</button><button>Undangan keluarga</button><button>Hari H lamaran</button><button class="add">+ Tahap baru</button></div></div>
+   <div class="fld"><span class="dlbl">Tahap baru <em style="color:#6F5E66;font-weight:600">langsung masuk daftar tahap Lamaran</em></span><div class="row nowrap"><div class="inp edit" style="flex:1;border-color:#B25A6E">Seragam keluarga|</div><button class="btn sm">Tambah</button></div></div>
+   <div class="fld"><span class="dlbl">PIC · yang mengurus <em>Wajib</em></span><div class="inp"><span class="av avp">IS</span>Ibu Sri <span class="xs muted">pihak pria</span><svg class="i caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div></div>
+  </div>
+  <div class="drf"><button class="btn2">Batal</button><button class="btn">Simpan</button></div>
+ </section>
+ <div class="g col" style="width:520px;gap:10px">
+  <div class="h3">Cara kerjanya</div>
+  <div class="sm" style="line-height:1.6">
+  • Setiap acara punya daftar tahap sendiri. Lamaran tidak lagi menampilkan “Administrasi &amp; dokumen” atau “Setelah menikah”.<br>
+  • Tahap bisa <b>ditambah</b>, <b>diganti namanya</b>, <b>dihapus</b>, dan <b>diurutkan</b> lewat tombol <b>Atur tahap</b> di Persiapan.<br>
+  • Saat menambah atau mengubah tugas, tahap baru bisa langsung dibuat dari form.<br>
+  • Ganti nama tahap → semua tugas di tahap itu ikut berganti. Hapus tahap yang masih berisi tugas → diminta memilih tahap tujuan, tugas tidak hilang.<br>
+  • Urutan tahap = urutan kelompok di tampilan Per tahap.<br>
+  • Daftar awal (bisa diubah):<br>
+  &nbsp;&nbsp;<b>Lamaran</b>: Persiapan keluarga · Konsumsi &amp; dekorasi · Hantaran &amp; cincin · Undangan keluarga · Hari H lamaran<br>
+  &nbsp;&nbsp;<b>Akad &amp; Resepsi</b>: daftar sekarang (Perencanaan awal, Booking vendor, Busana &amp; rias, …)<br>
+  &nbsp;&nbsp;<b>Unduh mantu &amp; acara lain</b>: Persiapan keluarga · Vendor &amp; konsumsi · Undangan &amp; tamu · Hari H<br>
+  • Data lama tetap aman: tahap yang sudah dipakai tugas otomatis masuk ke daftar acaranya.</div>
+ </div>
+</div>
+</div>
+</body></html>
