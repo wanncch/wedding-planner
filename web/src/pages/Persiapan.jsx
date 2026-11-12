@@ -4,7 +4,7 @@ import { Icon, Tabs, Chips, Pill, Check, Tile, Drawer, Field, Text, Area, DateIn
 import { PersonSelect, PersonChip } from '../components/People.jsx';
 import { useEv, EventHeader } from '../components/EventKit.jsx';
 import { STAGES, taskDue, taskState, periodOfTask, periodRange, currentPeriod, periodsFor, taskBase } from '../lib/calc.js';
-import { baseDate, personById } from '../lib/events.js';
+import { baseDate, personById, stagesOf, stageDefaults, familyIds } from '../lib/events.js';
 import { dShort, dMed, iso, today, addDays, daysBetween, pct } from '../lib/format.js';
 
 export default function Persiapan({ q }) {
@@ -16,7 +16,9 @@ export default function Persiapan({ q }) {
   const [filter, setFilter] = useState('semua');
   const [sel, setSel] = useState(null);
   const [edit, setEdit] = useState(null);
+  const [stOpen, setStOpen] = useState(false);
   const ids = scope.ids;
+  const stages = stagesOf(data, ev);
 
   useEffect(() => { if (q.t) { const t = data.tasks.find(x => x.id === q.t); if (t) setEdit(t); } }, [q.t]);
 
@@ -45,12 +47,12 @@ export default function Persiapan({ q }) {
   const toggle = (t, on) => save('tasks', t.id, { status: on ? 'selesai' : 'belum' });
   const what = scope.part ? scope.part.name.toLowerCase() : ev.name.toLowerCase();
   const evLabel = scope.part ? scope.part.name.toLowerCase() : ev.kind === 'akad' ? 'hari H' : ev.name.toLowerCase();
-  const newTask = () => setEdit({ _new: true, event_id: scope.target, stage: 'Lainnya', status: 'belum', priority: 'sedang', offset_days: Math.max(daysBetween(today(), baseDate(data, scope.target)) - 14, 0) });
+  const newTask = () => setEdit({ _new: true, event_id: scope.target, stage: stages[0] || 'Lainnya', status: 'belum', priority: 'sedang', offset_days: Math.max(daysBetween(today(), baseDate(data, scope.target)) - 14, 0) });
 
   return (
     <>
       <EventHeader title="Persiapan"
-        actions={<><Tabs value={view} onChange={setView} items={[{ key: 'periode', label: 'Per periode' }, { key: 'tahap', label: 'Per tahap' }]} />{canEdit && <button type="button" className="btn" onClick={newTask}><Icon name="plus" size={15} />Tugas</button>}</>}
+        actions={<><Tabs value={view} onChange={setView} items={[{ key: 'periode', label: 'Per periode' }, { key: 'tahap', label: 'Per tahap' }]} />{canEdit && view === 'tahap' && <button type="button" className="btn2" onClick={() => setStOpen(true)}><Icon name="edit" size={15} />Atur tahap</button>}{canEdit && <button type="button" className="btn" onClick={newTask}><Icon name="plus" size={15} />Tugas</button>}</>}
         partSub={(xs, p) => (p && p.event_date ? dShort(p.event_date) + ' · ' : '') + data.tasks.filter(t => xs.includes(t.event_id)).length + ' tugas'} />
       <div className="between">
         <span />
@@ -96,7 +98,7 @@ export default function Persiapan({ q }) {
         </section>
       ) : (
         <section className="g">
-          <TaskTable groups={STAGES.map(st => {
+          <TaskTable groups={stages.map(st => {
             const rows = list.filter(t => (t.stage || 'Lainnya') === st).sort((a, b) => a._due - b._due);
             const ts = active.filter(t => (t.stage || 'Lainnya') === st);
             return { key: st, title: st + ' · ' + ts.filter(t => t.status === 'selesai').length + ' dari ' + ts.length + ' selesai', rows };
@@ -104,7 +106,8 @@ export default function Persiapan({ q }) {
         </section>
       )}
       {all.length > 0 && !list.length && <Empty title="Tidak ada tugas untuk filter ini" />}
-      {edit && <TaskDrawer task={edit} onClose={() => setEdit(null)} />}
+      {edit && <TaskDrawer task={edit} onClose={() => setEdit(null)} onStages={() => setStOpen(true)} />}
+      {stOpen && <StageDrawer onClose={() => setStOpen(false)} />}
     </>
   );
 }
@@ -142,7 +145,7 @@ function TaskTable({ groups, onOpen, onToggle, canEdit, showPart }) {
   );
 }
 
-function TaskDrawer({ task, onClose }) {
+function TaskDrawer({ task, onClose, onStages }) {
   const { data, add, save, del, canEdit } = useW();
   const E = useEv();
   const isNew = !!task._new;
@@ -153,6 +156,8 @@ function TaskDrawer({ task, onClose }) {
   });
   const [err, setErr] = useState({});
   const set = (k) => (v) => setF(x => ({ ...x, [k]: v }));
+  const stages = stagesOf(data, E.ev);
+  const [newStage, setNewStage] = useState(null);
   const base = baseDate(data, f.event_id);
   const auto = iso(addDays(base, -(task.offset_days || 0)));
 
@@ -166,6 +171,7 @@ function TaskDrawer({ task, onClose }) {
     const row = { ...f, title: f.title.trim(), due_date: f.due_date || null };
     row.offset_days = row.due_date ? daysBetween(row.due_date, base) : (task.offset_days ?? 14);
     onClose();
+    if (!stages.includes(row.stage)) await save('events', E.ev.id, { stages: [...stages, row.stage] });
     if (isNew) await add('tasks', { ...row, sort: 999 });
     else await save('tasks', task.id, row);
   }
@@ -189,11 +195,112 @@ function TaskDrawer({ task, onClose }) {
           <Field label="Deadline" hint={f.due_date ? 'manual' : 'otomatis ' + dShort(auto)}><DateIn value={f.due_date || ''} onChange={set('due_date')} /></Field>
           <Field label="Prioritas"><Seg small value={f.priority} onChange={set('priority')} items={[{ key: 'tinggi', label: 'Tinggi' }, { key: 'sedang', label: 'Sedang' }, { key: 'biasa', label: 'Biasa' }]} /></Field>
         </div>
-        <Field label="Tahap"><Select value={f.stage} onChange={(v) => set('stage')(v || 'Lainnya')} options={STAGES} /></Field>
+        <Field div label={<><span>Tahap</span>{canEdit && <button type="button" className="lnk" style={{ fontSize: 12 }} onClick={() => { onClose(); onStages(); }}>Atur tahap…</button>}</>}>
+          <div className="catg">
+            {stages.map(st => <button type="button" key={st} className={f.stage === st && newStage === null ? 'on' : ''} onClick={() => { set('stage')(st); setNewStage(null); }}>{st}</button>)}
+            {!stages.includes(f.stage) && <button type="button" className="on">{f.stage}</button>}
+            {newStage === null && <button type="button" className="add" onClick={() => setNewStage('')}>+ Tahap baru</button>}
+          </div>
+          {newStage !== null && (
+            <div className="row nowrap" style={{ marginTop: 8 }}>
+              <input className="inp" autoFocus placeholder="Nama tahap baru" value={newStage} onChange={(e) => setNewStage(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (newStage.trim()) { set('stage')(newStage.trim()); setNewStage(null); } } }} />
+              <button type="button" className="btn sm" disabled={!newStage.trim()} onClick={() => { set('stage')(newStage.trim()); setNewStage(null); }}>Tambah</button>
+              <button type="button" className="btn2 sm" onClick={() => setNewStage(null)}>Batal</button>
+            </div>
+          )}
+          {!stages.includes(f.stage) && newStage === null && <span className="xs muted" style={{ marginTop: 6 }}>Tahap baru “{f.stage}” masuk daftar tahap {E.ev.name} saat disimpan.</span>}
+        </Field>
         <Field label="Hasil / keterangan"><Area value={f.result} onChange={set('result')} rows={2} placeholder="mis. Shortlist: Dapur Ibu Ratna" /></Field>
         <Field label="Link lampiran" hint="Drive, IG, kontrak…" error={err.link}><Text value={f.link_url} onChange={set('link_url')} placeholder="https://" inputMode="url" /></Field>
         {f.due_date && <button type="button" className="lnk" style={{ alignSelf: 'flex-start' }} onClick={() => set('due_date')('')}>Kembalikan deadline otomatis ({dShort(auto)})</button>}
       </fieldset>
+    </Drawer>
+  );
+}
+
+/** Atur tahap persiapan acara: tambah, ganti nama, hapus (pindahkan tugas), urutkan */
+function StageDrawer({ onClose }) {
+  const { data, save, canEdit } = useW();
+  const { ev } = useEv();
+  const fam = familyIds(data, ev.id);
+  const famTasks = data.tasks.filter(t => fam.includes(t.event_id));
+  const count = (name) => famTasks.filter(t => (t.stage || 'Lainnya') === name).length;
+  const [rows, setRows] = useState(() => stagesOf(data, ev).map(n => ({ orig: n, name: n })));
+  const [ask, setAsk] = useState(null);
+  const [moves, setMoves] = useState([]);
+  const [drag, setDrag] = useState(null);
+  const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
+  const setName = (i, v) => setRows(rs => rs.map((r, j) => (j === i ? { ...r, name: v } : r)));
+  function remove(i) {
+    const r = rows[i];
+    const n = r.orig ? count(r.orig) : 0;
+    if (!n) { setRows(rs => rs.filter((_, j) => j !== i)); return; }
+    const others = rows.filter((_, j) => j !== i);
+    if (!others.length) { setErr('Sisakan minimal satu tahap untuk menampung tugas.'); return; }
+    setAsk({ i, target: others[0].name });
+  }
+  function confirmRemove() {
+    const r = rows[ask.i];
+    const tgt = rows.find(x => x.name === ask.target);
+    setMoves(ms => [...ms, { from: r.orig, toRow: tgt }]);
+    setRows(rs => rs.filter((_, j) => j !== ask.i));
+    setAsk(null);
+  }
+  function drop(i) {
+    if (drag === null || drag === i) return;
+    setRows(rs => { const a = [...rs]; const [x] = a.splice(drag, 1); a.splice(i, 0, x); return a; });
+    setDrag(null);
+  }
+  const move = (i, d) => setRows(rs => { const a = [...rs]; const j = i + d; if (j < 0 || j >= a.length) return a; [a[i], a[j]] = [a[j], a[i]]; return a; });
+  function useDefaults() {
+    const def = stageDefaults(ev);
+    setRows(rs => [...def.filter(n => !rs.some(r => r.name === n)).map(n => ({ orig: null, name: n })), ...rs].sort((a, b) => { const ia = def.indexOf(a.name), ib = def.indexOf(b.name); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); }));
+  }
+  async function submit() {
+    const names = rows.map(r => r.name.trim());
+    if (names.some(n => !n)) { setErr('Nama tahap tidak boleh kosong.'); return; }
+    if (new Set(names.map(n => n.toLowerCase())).size !== names.length) { setErr('Ada nama tahap yang sama.'); return; }
+    setBusy(true);
+    try {
+      const finalName = (row) => row.name.trim();
+      for (const m of moves) for (const t of famTasks.filter(x => (x.stage || 'Lainnya') === m.from)) await save('tasks', t.id, { stage: finalName(m.toRow) });
+      for (const r of rows) if (r.orig && r.orig !== r.name.trim()) for (const t of famTasks.filter(x => (x.stage || 'Lainnya') === r.orig)) await save('tasks', t.id, { stage: r.name.trim() });
+      await save('events', ev.id, { stages: names });
+      onClose();
+    } finally { setBusy(false); }
+  }
+  const askRow = ask ? rows[ask.i] : null;
+  return (
+    <Drawer open onClose={onClose} title="Atur tahap persiapan" eyebrow={ev.name}
+      head={<div className="xs muted">Tahap dipakai untuk mengelompokkan tugas di tampilan <b>Per tahap</b>. Daftar ini khusus acara {ev.name}{fam.length > 1 ? ' (semua bagiannya)' : ''}. Acara lain punya daftarnya sendiri.</div>}
+      footer={canEdit ? <><button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" disabled={busy || !!ask} onClick={submit}>{busy ? 'Menyimpan…' : 'Simpan'}</button></> : null}>
+      <div className="between"><span className="lbl">{rows.length} tahap · seret untuk urutkan</span><button type="button" className="lnk" onClick={useDefaults}>Pakai daftar contoh</button></div>
+      {rows.map((r, i) => (
+        <div key={(r.orig || 'baru') + i} className={'srow' + (drag === i ? ' drag' : '')} draggable onDragStart={() => setDrag(i)} onDragOver={(e) => e.preventDefault()} onDrop={() => drop(i)}>
+          <span className="grip" aria-hidden="true"><Icon name="grip2" size={16} /></span>
+          <input className="inp" value={r.name} onChange={(e) => setName(i, e.target.value)} aria-label={'Nama tahap ' + (i + 1)} />
+          <span className="row nowrap" style={{ gap: 2 }}>
+            <button type="button" className="ibtn" style={{ width: 28, height: 28 }} disabled={i === 0} onClick={() => move(i, -1)} aria-label={'Naikkan ' + r.name}>↑</button>
+            <button type="button" className="ibtn" style={{ width: 28, height: 28 }} disabled={i === rows.length - 1} onClick={() => move(i, 1)} aria-label={'Turunkan ' + r.name}>↓</button>
+          </span>
+          <span className="cnt">{r.orig ? count(r.orig) : 0} tugas</span>
+          <button type="button" className="ibtn" onClick={() => remove(i)} aria-label={'Hapus tahap ' + r.name}><Icon name="trash" size={15} /></button>
+        </div>
+      ))}
+      <button type="button" className="btn2" style={{ alignSelf: 'flex-start' }} onClick={() => setRows(rs => [...rs, { orig: null, name: '' }])}><Icon name="plus" size={15} />Tambah tahap</button>
+      {err && <div className="ferr">{err}</div>}
+      {ask && (
+        <div className="ask">
+          <b>Hapus “{askRow.name}”? Ada {count(askRow.orig)} tugas di tahap ini.</b>
+          <span>Pindahkan tugasnya ke:</span>
+          <select className="inp" value={ask.target} onChange={(e) => setAsk(a => ({ ...a, target: e.target.value }))}>
+            {rows.filter((_, j) => j !== ask.i).map(x => <option key={x.name} value={x.name}>{x.name}</option>)}
+          </select>
+          <div className="row" style={{ justifyContent: 'flex-end' }}><button type="button" className="btn2 sm" onClick={() => setAsk(null)}>Batal</button><button type="button" className="btn sm danger" onClick={confirmRemove}>Hapus &amp; pindahkan</button></div>
+        </div>
+      )}
+      <div className="note">Mengganti nama tahap otomatis ikut mengganti nama tahap di semua tugasnya. Tugas tidak ikut terhapus. Perubahan berlaku setelah Simpan.</div>
     </Drawer>
   );
 }

@@ -75,10 +75,10 @@
     DB.events.push({ ...base, id, parent_id: null, kind, name: (e.name || '').trim() || { lamaran: 'Lamaran', akad: 'Akad & Resepsi', unduh: 'Unduh mantu' }[kind] || 'Acara keluarga',
       event_date: e.date || (kind === 'akad' ? w.wedding_date : null) || (parts[0] && parts[0].date) || null, start_time: (e.time || (kind === 'akad' ? '08:00' : kind === 'lainnya' ? '' : '10:00')).slice(0, 5) ? (e.time || (kind === 'akad' ? '08:00' : '10:00')).slice(0, 5) + ':00' : null,
       end_time: kind === 'akad' ? '14:00:00' : null, location: e.location || '', is_main: kind === 'akad', sort, color: e.color || { lamaran: 'c1', akad: 'c2', unduh: 'c3' }[kind] || 'c' + (4 + sort % 3), icon: { lamaran: 'hati', akad: 'rings', unduh: 'rumah' }[kind] || 'bunga',
-      payer_id: pay(e.payer, kind === 'lamaran' || kind === 'unduh' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], detail: '' });
+      payer_id: pay(e.payer, kind === 'lamaran' || kind === 'unduh' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], stages: [], detail: '' });
     parts.forEach((pt, j) => {
       const pid = uid(); const pk = pt.kind || 'lainnya';
-      DB.events.push({ ...base, id: pid, parent_id: id, kind: pk, name: pt.name || { lamaran: 'Lamaran', balasan: 'Balasan lamaran' }[pk] || 'Bagian ' + (j + 1), event_date: pt.date || null, start_time: '10:00:00', end_time: null, location: pt.location || '', is_main: false, sort: j + 1, color: 'c0', icon: 'hati', payer_id: pay(pt.payer, pk === 'lamaran' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], detail: '' });
+      DB.events.push({ ...base, id: pid, parent_id: id, kind: pk, name: pt.name || { lamaran: 'Lamaran', balasan: 'Balasan lamaran' }[pk] || 'Bagian ' + (j + 1), event_date: pt.date || null, start_time: '10:00:00', end_time: null, location: pt.location || '', is_main: false, sort: j + 1, color: 'c0', icon: 'hati', payer_id: pay(pt.payer, pk === 'lamaran' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], stages: [], detail: '' });
       if (seed) seedTarget(wid, pid, pk, me);
     });
     if (!parts.length && seed) seedTarget(wid, id, kind, me);
@@ -261,11 +261,11 @@
     Object.assign(T('Siapkan hantaran lamaran'), { pic_id: ibuSri, status: 'proses', result: 'Seserahan › 4/9 siap' });
     Object.assign(T('Pesan konsumsi lamaran'), { pic_id: ibuRina, due_date: '2026-11-08', detail: '60 pax · masih membandingkan 2 katering' });
     Object.assign(T('Siapkan cincin tunangan'), { pic_id: bagas, status: 'proses' });
-    const NT = (o) => DB.tasks.push({ ...base, id: uid(), detail: '', stage: 'Seserahan & lamaran', event_kind: null, due_date: null, pic: '', priority: 'sedang', status: 'belum', result: '', link_url: '', done_at: null, sort: 50, ...o });
+    const NT = (o) => DB.tasks.push({ ...base, id: uid(), detail: '', stage: 'Persiapan keluarga', event_kind: null, due_date: null, pic: '', priority: 'sedang', status: 'belum', result: '', link_url: '', done_at: null, sort: 50, ...o });
     NT({ event_id: pLam.id, title: 'Tentukan tanggal & jumlah rombongan', offset_days: 88, pic_id: bagas, status: 'selesai', detail: 'Disepakati dua keluarga · 25 orang' });
     NT({ event_id: pLam.id, title: 'Sewa mobil rombongan', offset_days: 46, pic_id: omYusuf, status: 'selesai', detail: '2 mobil · 25 orang' });
-    NT({ event_id: akad.id, title: 'Survei 3 kandidat dokumentasi', offset_days: 217, due_date: '2026-11-14', pic_id: rina });
-    NT({ event_id: unduh.id, title: 'Izin acara ke RT setempat', offset_days: 30, due_date: '2026-11-17', pic_id: omYusuf });
+    NT({ event_id: akad.id, stage: 'Booking vendor', title: 'Survei 3 kandidat dokumentasi', offset_days: 217, due_date: '2026-11-14', pic_id: rina });
+    NT({ event_id: unduh.id, stage: 'Persiapan keluarga', title: 'Izin acara ke RT setempat', offset_days: 30, due_date: '2026-11-17', pic_id: omYusuf });
     DB.tasks.filter(t => t.event_id === unduh.id && t.title === 'Izin acara ke RT setempat' && !t.due_date).forEach(t => { DB.tasks.splice(DB.tasks.indexOf(t), 1); });
     // kontak vendor & slot per acara
     const V = (o) => { const v = { ...base, id: uid(), contact_name: '', phone: '', instagram: '', estimate: null, stage: 'belum', notes: '', sort: DB.vendors.length + 1, ...o }; DB.vendors.push(v); return v.id; };

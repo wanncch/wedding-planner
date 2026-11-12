@@ -22,7 +22,8 @@ Web app perencanaan pernikahan untuk banyak pasangan (dijual komersial). Satu ak
 - **Orang & pihak**: daftar orang (pihak pria/wanita/lainnya, bisa PIC, bisa penanggung, terhubung ke akun untuk Punyaku). Tugas & item anggaran **wajib PIC**; item anggaran **wajib Ditanggung oleh** (bisa **Patungan** dengan persen). Penanggung bawaan per acara/bagian.
 - **Anggaran** = rekap acara: kelompok **Vendor** (otomatis dari menu Vendor) dan **Seserahan** (otomatis dari menu Seserahan) terkunci; kelompok lain diisi langsung.
 - **Vendor**: papan Belum dipilih (slot) · Negosiasi · Deal · Lunas. Slot = `budget_items.source='vendor'`; kontak vendor (`vendors`) = buku kontak bersama semua acara.
-- **Tamu**: buku tamu induk (`guests`) + undangan per acara (`guest_invites`: RSVP, pax, kirim WA, meja, check-in per acara).
+- **Tamu**: buku tamu induk (`guests`, jenis undangan: Digital · Cetak · Tonjokan · Tanpa undangan) + undangan per acara (`guest_invites`: RSVP, pax, kirim WA, meja, check-in per acara).
+- **Tahap persiapan** per acara bisa ditambah, diganti nama, dihapus (tugas dipindah), diurutkan lewat tombol **Atur tahap** di Persiapan › Per tahap, atau dibuat langsung dari form tugas. Disimpan di `events.stages` (kosong = bawaan per jenis acara, lihat `STAGE_DEFAULTS` di `events.js`).
 - HP: menu bawah Beranda · Persiapan · Anggaran · Vendor · Lainnya; pemilih acara di atas halaman sub menu.
 - Layar HP penuh per acara: **Mode hari H** `#/w/<id>/live?e=<acara|bagian>` dan **Check-in** `#/w/<id>/checkin?e=…`.
 
@@ -52,13 +53,13 @@ Komersial (v3):
 - `web/src/styles.css` — design system (token warna, `.g` glass, `.tile w1–w4`, `.cc k1–k10`, dll).
 
 ### Database (`supabase/migrations/`, urut)
-`0001_schema` tabel · `0002_security` RLS & helper (`is_member`, `can_edit`, `is_owner`, storage policy per wedding) · `0003_templates` data template (dibuat `seed_data.py`) · `0004` cabut akses anon · `0005_fit_budget` `create_wedding` menyesuaikan anggaran · `0006_v3_commercial` ikon/warna kategori, plans, subscriptions, payment_requests, app_settings, admin_log, RPC admin · `0007_announcements` · `0008_v4_per_acara` (lihat di bawah).
-`supabase/setup-database.sql` = gabungan semua (untuk project baru). **Semua migrasi 0001–0008 sudah terpasang di project live.**
+`0001_schema` tabel · `0002_security` RLS & helper (`is_member`, `can_edit`, `is_owner`, storage policy per wedding) · `0003_templates` data template (dibuat `seed_data.py`) · `0004` cabut akses anon · `0005_fit_budget` `create_wedding` menyesuaikan anggaran · `0006_v3_commercial` ikon/warna kategori, plans, subscriptions, payment_requests, app_settings, admin_log, RPC admin · `0007_announcements` · `0008_v4_per_acara` (lihat di bawah) · `0009_tahap_jenis_undangan` (`events.stages`, jenis undangan tonjokan/tanpa, tahap template per acara).
+`supabase/setup-database.sql` = gabungan semua (untuk project baru). **Semua migrasi 0001–0009 sudah terpasang di project live.**
 
 **Model data v4 (0008):** `events` = acara (`parent_id` null) & bagian (`parent_id` = acara), kolom `color`, `icon`, `hidden`, `menus` (jsonb [{k,on}], kosong = bawaan), `payer_id`, `detail`; kind: lamaran/balasan/akad/unduh/lainnya. `people` (orang & pihak, `kind` bride/groom/fam_bride/fam_groom, `user_ids`). `tasks.event_id/pic_id` (deadline = tanggal acara/bagian − `offset_days`). `budget_items.pic_id/payer_id/shares/source/offer` (`source='vendor'` = slot vendor; `shares` = patungan). `gift_categories.event_id/pic_id/payer_id`. `reminders.event_id/pic_id`, `notes.event_id`. `guest_invites` (undangan per acara). RPC: `add_event`, `check_in_invite`; template per acara di `tpl_*.event_kind` (+ `tpl_catalog.is_vendor`). `create_wedding` menerima `p.events` = [{kind, date, location, payer, parts:[…]}].
 Pemindahan data lama (sekali jalan di 0008): tugas lamaran → Lamaran, lainnya → Akad & Resepsi; anggaran ikut acaranya (tanpa acara → Akad & Resepsi); vendor & seserahan → Akad & Resepsi; tamu → buku induk + diundang ke Akad & Resepsi; PIC teks dicocokkan ke orang (tidak cocok → tampil "Pilih ulang").
 
-Migrasi baru: buat file `0009_…sql`, jalankan di Supabase (SQL Editor / MCP Supabase / Management API), lalu tambahkan juga ke `setup-database.sql`.
+Migrasi baru: buat file `0010_…sql`, jalankan di Supabase (SQL Editor / MCP Supabase / Management API), lalu tambahkan juga ke `setup-database.sql`.
 
 Menambah admin:
 ```sql
@@ -71,7 +72,7 @@ Folder `tests/` memakai Supabase tiruan (`mock.js`, data demo pernikahan `w-demo
 ```bash
 cd web && npm install && npm run build && npx vite preview --port 4173 &
 cd ../tests && npm install && npx playwright install chromium
-node flow.js x desk   # 31 pemeriksaan alur v4 (juga: node flow.js x hp)
+node flow.js x desk   # 34 pemeriksaan alur v4 (juga: node flow.js x hp)
 node v3.js            # admin, upgrade, kategori, trial habis
 node ann.js           # pengumuman
 node shots.js "beranda,lam/persiapan,akad/vendor,unduh/atur,pengaturan?tab=orang" desk   # screenshot ke tests/out/ (lam/akad/unduh = acara)

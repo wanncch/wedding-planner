@@ -84,6 +84,33 @@ const BASE = 'http://localhost:4173';
   await page.waitForTimeout(300);
   ok(await db(() => { const t = __DB__.tasks.find(t => t.title === 'Beli kado untuk orang tua'); const p = __DB__.people.find(p => p.id === t.pic_id); return p && p.name === 'Ibu Rina'; }), 'tugas baru dengan PIC dari daftar');
 
+  // 2b Tahap persiapan bisa diatur
+  await goE('lam', 'persiapan');
+  await page.locator('.top .tab', { hasText: 'Per tahap' }).click();
+  await page.locator('.top .btn2', { hasText: 'Atur tahap' }).click();
+  await page.waitForTimeout(300);
+  await page.locator('.dr .srow input').nth(1).fill('Konsumsi & tempat');
+  await page.locator('.dr .srow', { has: page.locator('input[value="Hantaran & cincin"]') }).getByRole('button', { name: /Hapus tahap/ }).click();
+  await page.locator('.dr .ask select').selectOption('Persiapan keluarga');
+  await shot('atur-tahap');
+  await page.locator('.dr .ask .btn', { hasText: 'Hapus & pindahkan' }).click();
+  await page.locator('.dr .btn2', { hasText: 'Tambah tahap' }).click();
+  await page.locator('.dr .srow input').last().fill('Seragam keluarga');
+  await page.locator('.drf .btn', { hasText: 'Simpan' }).click();
+  await page.waitForTimeout(600);
+  const stg = await db(() => { const e = __DB__.events.find(x => x.name === 'Lamaran' && !x.parent_id); const T = (n) => __DB__.tasks.find(t => t.title === n); return { stages: e.stages, konsumsi: T('Pesan konsumsi lamaran').stage, cincin: T('Siapkan cincin tunangan').stage }; });
+  ok(stg.stages.includes('Konsumsi & tempat') && stg.stages.includes('Seragam keluarga') && !stg.stages.includes('Hantaran & cincin') && stg.konsumsi === 'Konsumsi & tempat' && stg.cincin === 'Persiapan keluarga', 'atur tahap: ganti nama, hapus & pindahkan, tambah ' + JSON.stringify(stg));
+  ok(await page.locator('tr.cat', { hasText: 'Konsumsi & tempat' }).count() === 1, 'tampilan Per tahap ikut nama baru');
+  await page.locator('tr', { hasText: 'Siapkan cincin tunangan' }).click();
+  await page.locator('.dr .catg button', { hasText: '+ Tahap baru' }).click();
+  await page.locator('.dr input[placeholder="Nama tahap baru"]').fill('Cincin');
+  await page.locator('.dr .btn', { hasText: /^Tambah$/ }).click();
+  await shot('tahap-baru-form');
+  await page.locator('.drf .btn', { hasText: 'Simpan' }).click();
+  await page.waitForTimeout(500);
+  ok(await db(() => __DB__.tasks.find(t => t.title === 'Siapkan cincin tunangan').stage === 'Cincin' && __DB__.events.find(x => x.name === 'Lamaran' && !x.parent_id).stages.includes('Cincin')), 'tahap baru langsung dari form tugas');
+  await page.locator('.top .tab', { hasText: 'Per periode' }).click();
+
   // 3 Bagian acara Lamaran: tab diingat saat pindah sub menu
   await goE('lam', 'persiapan');
   await page.locator('.bagian .bg', { hasText: 'Balasan lamaran' }).click();
@@ -157,9 +184,10 @@ const BASE = 'http://localhost:4173';
   await shot('tamu-induk');
   await page.locator('.top .btn', { hasText: 'Tamu' }).click();
   await page.locator('.dr input').first().fill('Keluarga Pak Hadi');
+  await page.locator('.dr .seg button', { hasText: 'Tonjokan' }).click();
   await page.locator('.drf .btn', { hasText: /^Simpan$/ }).click();
   await page.waitForTimeout(400);
-  ok(await db(() => { const g = __DB__.guests.find(x => x.name === 'Keluarga Pak Hadi'); return g && __DB__.guest_invites.some(i => i.guest_id === g.id); }), 'tamu baru masuk buku induk + acara ini');
+  ok(await db(() => { const g = __DB__.guests.find(x => x.name === 'Keluarga Pak Hadi'); return g && g.invite_type === 'tonjokan' && __DB__.guest_invites.some(i => i.guest_id === g.id); }), 'tamu baru (tonjokan) masuk buku induk + acara ini');
 
   // 7 Check-in per acara
   await page.locator('a.btn3', { hasText: 'Mode check-in' }).click();
