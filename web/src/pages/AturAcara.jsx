@@ -5,7 +5,7 @@ import { epath, wpath } from '../lib/nav.js';
 import { Icon, Field, Text, DateIn, TimeIn, Toggle, Modal, confirm, Spinner, Pill } from '../components/ui.jsx';
 import { PersonSelect } from '../components/People.jsx';
 import { useEv } from '../components/EventKit.jsx';
-import { MENU_DEFS, EV_COLORS, eventMenus, partsOf, personByKind, topEvents } from '../lib/events.js';
+import { MENU_DEFS, EV_COLORS, eventMenus, partsOf, personByKind, topEvents, mainPart } from '../lib/events.js';
 import { dLong } from '../lib/format.js';
 
 const DATA_TABLES = ['tasks', 'budget_items', 'gift_categories', 'reminders', 'notes', 'rundown_items', 'guest_invites'];
@@ -16,7 +16,7 @@ export default function AturAcara() {
   const toast = useToast();
   const { ev } = useEv();
   const parts0 = partsOf(data, ev.id);
-  const [f, setF] = useState({ name: ev.name, event_date: ev.event_date || '', start_time: ev.start_time ? String(ev.start_time).slice(0, 5) : '', location: ev.location || '', color: ev.color || 'c0', payer_id: ev.payer_id || null, detail: ev.detail || '' });
+  const [f, setF] = useState({ name: ev.name, event_date: ev.event_date || '', start_time: ev.start_time ? String(ev.start_time).slice(0, 5) : '', location: ev.location || '', color: ev.color || 'c0', payer_id: ev.payer_id || null, detail: ev.detail || '', main_part_id: ev.main_part_id || '' });
   const [parts, setParts] = useState(parts0.map(p => ({ ...p, event_date: p.event_date || '', start_time: p.start_time ? String(p.start_time).slice(0, 5) : '' })));
   const [menus, setMenus] = useState(eventMenus(ev));
   const [drag, setDrag] = useState(null);
@@ -42,7 +42,7 @@ export default function AturAcara() {
     if (!f.name.trim()) { toast('Nama acara wajib diisi.', 'error'); return; }
     setBusy(true);
     try {
-      await save('events', ev.id, { name: f.name.trim(), event_date: f.event_date || null, start_time: f.start_time || null, location: f.location, color: f.color, payer_id: f.payer_id, menus, detail: f.detail });
+      await save('events', ev.id, { name: f.name.trim(), event_date: f.event_date || null, start_time: f.start_time || null, location: f.location, color: f.color, payer_id: f.payer_id, menus, detail: f.detail, main_part_id: f.main_part_id && parts.some(p => p.id === f.main_part_id && !p._del) ? f.main_part_id : null });
       if (isMain && f.event_date && f.event_date !== data.wedding.wedding_date) await save('weddings', data.wedding.id, { wedding_date: f.event_date });
       const live = parts.filter(p => !p._del);
       const firstNew = parts0.length === 0 && live.some(p => p._new);
@@ -109,6 +109,17 @@ export default function AturAcara() {
             <div className="swatch" role="radiogroup">{EV_COLORS.map(c => <button type="button" key={c} role="radio" aria-checked={f.color === c} aria-label={'Warna ' + c} className={c + (f.color === c ? ' on' : '')} onClick={() => set('color')(c)}>{f.color === c && <Icon name="check" size={16} stroke={2.6} />}</button>)}</div>
           </Field>
           <Field div label="Penanggung bawaan"><PersonSelect mode="pay" value={f.payer_id} onChange={set('payer_id')} /><span className="xs muted" style={{ marginTop: 6 }}>Terisi otomatis saat menambah item anggaran di acara ini. Tetap bisa diganti per item.</span></Field>
+          {parts0.length > 0 && (() => {
+            const auto = mainPart(data, { ...ev, main_part_id: null });
+            return (
+              <Field label="Bagian utama" hint="untuk hitung mundur & H-xx di Beranda">
+                <select className="inp" value={f.main_part_id} onChange={(e) => set('main_part_id')(e.target.value)}>
+                  <option value="">Otomatis · {auto.name}</option>
+                  {parts.filter(p => !p._new && !p._del).map(p => <option key={p.id} value={p.id}>{p.name}{p.event_date ? ' · ' + dLong(p.event_date) : ' · tanggal belum diisi'}</option>)}
+                </select>
+              </Field>
+            );
+          })()}
           <Field div label="Bagian acara">
             <div className="col" style={{ gap: 10 }}>
               {!livePs.length && <div className="partbox sm muted" style={{ lineHeight: 1.55 }}>Belum ada bagian. Pakai bagian bila acaranya punya dua sesi, seperti Lamaran dan Balasan lamaran. Setiap sub menu lalu punya tab per bagian.</div>}

@@ -1,0 +1,61 @@
+/* Opsi B ringkas — ukuran ikut lebar kartu (container query), bukan ukuran tetap */
+.hb2{container:hero / inline-size;width:100%}
+.hb2in{position:relative;overflow:hidden;border-radius:24px;color:#fff;background:linear-gradient(128deg,#7A3850 0%,#A24C60 46%,#BA675C 100%);box-shadow:0 16px 36px rgba(150,70,90,.28),inset 0 1px 0 rgba(255,255,255,.25);
+  padding:14px;display:grid;gap:12px;grid-template-columns:minmax(0,1fr);grid-template-areas:"info" "flip" "ev";
+  --dw:11.5cqi;--sw:9cqi;--gg:2.4cqi;--cap:66px;--caps:48px}
+.hb2in::before{content:"";position:absolute;right:-110px;top:-140px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 68%);pointer-events:none}
+.hb2in > *{position:relative;z-index:1;min-width:0}
+
+.hb-info{grid-area:info;display:flex;flex-direction:column;gap:5px}
+.nx2{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:3px 10px 3px 3px;font-size:10.5px;font-weight:800;letter-spacing:.05em;white-space:nowrap}
+.nx2 .acd{width:20px;height:20px;border-radius:50%;box-shadow:none}
+.rdy{font-size:10.5px;font-weight:800;white-space:nowrap;background:rgba(255,255,255,.14);border-radius:999px;padding:3px 9px}
+.cpl2{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:22px;line-height:1.1;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dt2{font-size:11.5px;font-weight:600;color:rgba(255,255,255,.88)}
+
+/* papan flip */
+.hb-flip{grid-area:flip;display:flex;align-items:flex-start;justify-content:space-between;gap:var(--gg)}
+.fg{display:flex;flex-direction:column;align-items:center;gap:5px}
+.fr{display:flex;gap:3px}
+.fl2{--w:min(var(--dw),var(--cap));position:relative;display:block;width:var(--w);height:calc(var(--w)*1.32);line-height:calc(var(--w)*1.32);font-size:calc(var(--w)*.98);border-radius:calc(var(--w)*.18);
+  background:linear-gradient(180deg,#FFFFFF 0 50%,#F4E6EA 50% 100%);color:#8E3E55;font-family:Fraunces,Georgia,serif;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;box-shadow:0 8px 18px rgba(70,15,35,.26),inset 0 1px 0 #fff}
+.fl2::after{content:"";position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:-.75px;background:rgba(122,56,80,.24)}
+.fl2.s{--w:min(var(--sw),var(--caps))}
+.fl-l{font-size:9px;letter-spacing:.14em;font-weight:800;color:rgba(255,255,255,.9);white-space:nowrap}
+
+/* tiga acara utama */
+.hb-ev{grid-area:ev;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.ev2{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ic h" "t t";align-items:center;gap:5px 6px;padding:8px 9px;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.24);color:#fff;text-decoration:none;min-width:0}
+.ev2:hover{background:rgba(255,255,255,.2);color:#fff}
+.ev2 .ic{grid-area:ic;width:22px;height:22px;border-radius:8px;box-shadow:none}
+.ev2 .h{grid-area:h;justify-self:end;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:17px;line-height:1;white-space:nowrap}
+.ev2 .t{grid-area:t;display:flex;flex-direction:column;gap:1px;min-width:0}
+.ev2 .t b{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:800;line-height:1.2}
+.ev2 .t span{font-size:10.5px;font-weight:600;opacity:.86}
+.ev2 .dl{display:none}
+.ev2.on{background:rgba(255,255,255,.95);color:#33262E;border-color:#fff;box-shadow:0 10px 22px rgba(80,20,40,.24)}
+.ev2.on:hover{color:#33262E}
+.ev2.on .t span{color:#6F5E66;opacity:1}
+
+/* tablet & layar sedang: info | flip, lalu 3 acara sebaris */
+@container hero (min-width: 600px){
+  .hb2in{padding:16px 20px;gap:14px 24px;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"info flip" "ev ev";align-items:center;--dw:6.4cqi;--sw:4.9cqi;--gg:1.6cqi}
+  .cpl2{font-size:28px}
+  .dt2{font-size:12.5px}
+  .nx2{font-size:11px}
+  .fl-l{font-size:10px}
+  .hb-ev{gap:10px}
+  .ev2{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"ic t h";gap:10px;padding:9px 12px}
+  .ev2 .ic{width:28px;height:28px;border-radius:10px}
+  .ev2 .h{font-size:20px}
+  .ev2 .t b{font-size:10.5px}
+  .ev2 .t span{font-size:11.5px}
+  .ev2 .dl{display:inline}.ev2 .ds{display:none}
+}
+/* desktop lebar: info | flip | daftar acara, satu baris */
+@container hero (min-width: 980px){
+  .hb2in{grid-template-columns:minmax(0,1fr) auto minmax(250px,300px);grid-template-areas:"info flip ev";--dw:5.1cqi;--sw:3.9cqi;--gg:1.4cqi}
+  .cpl2{font-size:30px}
+  .hb-ev{grid-template-columns:minmax(0,1fr);gap:6px}
+  .ev2{padding:7px 10px}
+}

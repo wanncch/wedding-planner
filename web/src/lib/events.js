@@ -53,17 +53,16 @@ export function baseDate(data, id) {
   return data.wedding.wedding_date;
 }
 
-/** "16 & 30 Jan 2027" atau "19 Jun 2027" */
+/** Rentang tanggal acara: "19 Jun 2027", "26 & 30 Des 2026", "19 Sep – 2 Okt 2027" */
 export function eventDateLabel(data, ev) {
-  const ps = partsOf(data, ev.id).filter(p => p.event_date);
-  if (ps.length > 1) {
-    const ds = ps.map(p => toDate(p.event_date));
-    const sameMonth = ds.every(d => d.getMonth() === ds[0].getMonth() && d.getFullYear() === ds[0].getFullYear());
-    if (sameMonth) return ds.map(d => d.getDate()).join(' & ') + ' ' + dMed(ds[0]).split(' ').slice(1).join(' ');
-    return ps.map(p => dShort(p.event_date)).join(' & ') + ' ' + toDate(ps[ps.length - 1].event_date).getFullYear();
-  }
-  const d = ev.event_date || (ps[0] && ps[0].event_date);
-  return d ? dMed(d) : 'Tanggal belum diisi';
+  const ps = partsOf(data, ev.id);
+  const ds = Array.from(new Set((ps.length ? ps.map(p => p.event_date || ev.event_date) : [ev.event_date]).filter(Boolean))).sort();
+  if (!ds.length) return 'Tanggal belum diisi';
+  if (ds.length === 1) return dMed(ds[0]);
+  const a = toDate(ds[0]), b = toDate(ds[ds.length - 1]);
+  const sameY = a.getFullYear() === b.getFullYear();
+  if (ds.length === 2 && sameY && a.getMonth() === b.getMonth()) return a.getDate() + ' & ' + dMed(b);
+  return (sameY ? dShort(a) : dMed(a)) + ' – ' + dMed(b);
 }
 export function eventLongLabel(data, ev, part) {
   const e = part || ev;
@@ -140,3 +139,30 @@ export function stagesOf(data, ev) {
   used.forEach(s => { if (!out.includes(s)) out.push(s); });
   return out;
 }
+
+/* ---------------- tanggal utama acara & hitung mundur (WIB) ---------------- */
+const WIB = 7 * 3600000;
+/** Bagian utama: pilihan pengguna, atau Lamaran → bagian lamaran, Akad & Resepsi → bagian "Akad", lainnya → bagian pertama. */
+export function mainPart(data, ev) {
+  const ps = partsOf(data, ev.id);
+  if (!ps.length) return ev;
+  const pick = ps.find(p => p.id === ev.main_part_id);
+  if (pick) return pick;
+  if (ev.kind === 'lamaran') { const l = ps.find(p => p.kind === 'lamaran'); if (l) return l; }
+  if (ev.kind === 'akad') { const a = ps.find(p => /\bakad\b/i.test(p.name)); if (a) return a; }
+  return ps[0];
+}
+/** Tanggal + jam utama acara → { date:'YYYY-MM-DD', time:'HH:MM', at: ms (WIB) } atau null */
+export function mainWhen(data, ev) {
+  const p = mainPart(data, ev);
+  const date = p.event_date || ev.event_date;
+  if (!date) return null;
+  const time = String(p.start_time || (p === ev ? '' : ev.start_time) || '00:00').slice(0, 5) || '00:00';
+  return { date, time, at: Date.parse(date + 'T' + time + ':00+07:00'), part: p };
+}
+/** Nomor hari kalender WIB */
+export const wibDay = (ms) => Math.floor((ms + WIB) / 86400000);
+export const dateDay = (iso) => Math.floor(Date.parse(iso + 'T00:00:00Z') / 86400000);
+/** Selisih hari kalender (WIB) dari sekarang ke tanggal: >0 = H-xx, 0 = hari H, <0 = lewat */
+export function hMinus(now, date) { return dateDay(date) - wibDay(now); }
+export function hLabel(n) { return n > 0 ? 'H-' + n : n === 0 ? 'Hari H' : 'Selesai'; }

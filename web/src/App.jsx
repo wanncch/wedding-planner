@@ -188,7 +188,7 @@ function Shell({ route, q }) {
                   <div className="ach">
                     <a className="acb" href={epath(wid, e.id, open ? pageKey : (ms.includes(route.menu) ? route.menu : ms[0] || 'atur'))}>
                       <span className={'acd ' + (e.color || 'c0')}><Icon name={e.icon || 'hati'} size={15} /></span>
-                      <span className="acn"><b className="ell">{e.name}</b><span className="ell">{eventDateLabel(data, e)}</span></span>
+                      <span className="acn"><b className="ell">{e.name}</b><span>{eventDateLabel(data, e)}</span></span>
                       <Icon name={open ? 'down' : 'right'} size={15} className="chev" />
                     </a>
                     {w.canEdit && <a className={'pen' + (open && pageKey === 'atur' ? ' sel' : '')} href={epath(wid, e.id, 'atur')} aria-label={'Atur acara ' + e.name}><Icon name="edit" size={15} /></a>}
@@ -218,7 +218,7 @@ function Shell({ route, q }) {
         </aside>
 
         <main className="main">
-          {!evRoot && (
+          {!evRoot && route.menu !== 'beranda' && (
             <div className="mtop">
               <a href={wpath(wid, 'beranda')} className="row nowrap" style={{ textDecoration: 'none', color: 'inherit', gap: 8 }}>
                 <span className="logo" style={{ width: 34, height: 34, borderRadius: 12 }}><Icon name="rings" size={18} /></span>

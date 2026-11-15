@@ -2212,3 +2212,9 @@ update public.tpl_tasks set stage = case stage
     when 'Persiapan akhir' then 'Hari H'
     else case when title ilike '%konsumsi%' then 'Vendor & konsumsi' else 'Persiapan keluarga' end end
  where event_kind in ('unduh', 'lainnya');
+
+
+-- ===== migrations/0010_bagian_utama.sql =====
+-- v4.2: bagian utama acara (dipakai hitung mundur & H-xx di Beranda)
+-- Kosong = aturan bawaan: Lamaran → bagian Lamaran; Akad & Resepsi → bagian "Akad"; lainnya → bagian pertama.
+alter table public.events add column if not exists main_part_id uuid references public.events on delete set null;

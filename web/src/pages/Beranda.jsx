@@ -4,6 +4,7 @@ import { wpath, epath } from '../lib/nav.js';
 import { Icon, Pill, Seg, Avatar, useIsMobile } from '../components/ui.jsx';
 import SaveBadge from '../components/SaveBadge.jsx';
 import Rincian from '../components/Rincian.jsx';
+import Countdown from '../components/Countdown.jsx';
 import { PersonChip } from '../components/People.jsx';
 import { rpShort, dLong, dShort, dDay, daysBetween, today, greeting, pct, addDays, toDate } from '../lib/format.js';
 import { readiness, costLines, summarize, taskState, taskDue, upcomingBills, giftStats, invitesFor, inviteSummary } from '../lib/calc.js';
@@ -104,37 +105,17 @@ export default function Beranda() {
 
   return (
     <>
-      <div className="top">
-        <div className="hide-m"><div className="eyb">{dLong(t0)} · {greeting()}, {profile ? profile.display_name : ''}</div><h1 className="h1">Beranda</h1></div>
-        <div className="row"><Seg value={mode} onChange={setMode} items={[{ key: 'semua', label: 'Semua' }, { key: 'punyaku', label: 'Punyaku' }]} /><span className="hide-m"><SaveBadge /></span><button type="button" className="btn2 hide-m" onClick={reload}><Icon name="refresh" size={15} />Muat ulang</button></div>
+      <div className="top hide-m">
+        <div><div className="eyb">{dLong(t0)} · {greeting()}, {profile ? profile.display_name : ''}</div><h1 className="h1">Beranda</h1></div>
+        <div className="row"><Seg value={mode} onChange={setMode} items={[{ key: 'semua', label: 'Semua' }, { key: 'punyaku', label: 'Punyaku' }]} /><SaveBadge /><button type="button" className="btn2" onClick={reload}><Icon name="refresh" size={15} />Muat ulang</button></div>
+      </div>
+      <div className="mhead between nowrap">
+        <span className="row nowrap" style={{ gap: 8 }}><span className="logo" style={{ width: 34, height: 34, borderRadius: 12 }}><Icon name="rings" size={18} /></span><b style={{ fontFamily: 'var(--serif)', fontSize: 18 }}>Beranda</b></span>
+        <Seg small value={mode} onChange={setMode} items={[{ key: 'semua', label: 'Semua' }, { key: 'punyaku', label: 'Punyaku' }]} />
       </div>
       {onlyMe && !mine.length && <div className="note">Akunmu belum terhubung ke nama di daftar orang. Hubungkan di <a href={wpath(wid, 'pengaturan', { tab: 'orang' })}>Pengaturan › Orang &amp; pihak</a> supaya Punyaku bisa menyaring tugas dan tagihanmu.</div>}
 
-      {mobile ? (
-        <section className="hero v4" style={{ padding: 18 }}>
-          <div className="between nowrap" style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, opacity: .92 }}>Acara terdekat · {next ? next.label : '–'}</div>
-              <div className="row nowrap" style={{ alignItems: 'flex-end', gap: 8 }}><span className="big" style={{ fontSize: 44 }}>{Math.abs(left)}</span><span style={{ fontWeight: 600, paddingBottom: 6 }}>{left > 0 ? 'hari lagi' : left === 0 ? 'hari ini!' : 'hari lalu'}</span></div>
-              <div className="xs" style={{ opacity: .9 }}>{next ? dDay(next.date) + ' ' + new Date(next.date).getFullYear() + (next.p.location ? ' · ' + next.p.location : '') : ''}</div>
-            </div>
-            <Ring value={ready.score} size={70} />
-          </div>
-        </section>
-      ) : (<section className="hero v4">
-        <div className="between" style={{ alignItems: 'flex-start', position: 'relative', zIndex: 1, gap: 16, flexWrap: mobile ? 'wrap' : 'nowrap' }}>
-          <div className="col" style={{ gap: 8, minWidth: 0, flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, opacity: .92 }}>Acara terdekat · {next ? next.label + ', ' + dLong(next.date) : '–'}</div>
-            <div style={{ fontFamily: 'var(--serif)', fontWeight: 700, fontSize: mobile ? 24 : 32, lineHeight: 1.1 }}>{w.bride_name} &amp; {w.groom_name}</div>
-            <div className="row" style={{ alignItems: 'flex-end', gap: 10 }}><span className="big">{Math.abs(left)}</span><span style={{ fontSize: 15, fontWeight: 600, paddingBottom: 8 }}>{left > 0 ? 'hari lagi menuju ' + (next ? next.label.toLowerCase() : '') : left === 0 ? 'hari ini!' : 'hari sejak acara'}</span></div>
-            {!mobile && <div className="row" style={{ gap: 8 }}>{stops.map(s => <a key={s.p.id} className="chipw" href={L(s.e, 'persiapan')}><span className={'dt ' + s.e.color} />{s.label} · {s.date ? dShort(s.date) : '–'}{s.date ? ' · ' + (daysBetween(t0, s.date) >= 0 ? daysBetween(t0, s.date) + ' hari' : 'selesai') : ''}</a>)}</div>}
-          </div>
-          <div className="row nowrap" style={{ gap: 14 }}>
-            <Ring value={ready.score} size={mobile ? 72 : 118} />
-            {!mobile && <div style={{ fontSize: 12.5, lineHeight: 1.75 }}><b style={{ fontSize: 13 }}>Skor kesiapan</b><br />{perEv.map(x => <span key={x.e.id}>{x.e.name} {x.r.score}%<br /></span>)}</div>}
-          </div>
-        </div>
-      </section>)}
+      <Countdown />
 
       {mobile ? (
         <section className="g col" style={{ gap: 8 }}>
