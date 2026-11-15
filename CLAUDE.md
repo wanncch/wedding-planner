@@ -14,7 +14,7 @@ File ini dibaca otomatis oleh Claude saat membuka repo ini. Isinya: apa proyek i
 Web app perencanaan pernikahan untuk banyak pasangan (dijual komersial). Satu akun bisa punya beberapa pernikahan; tiap pernikahan bisa dibagikan ke pasangan, keluarga, atau WO dengan peran Pemilik / Bisa edit / Lihat saja.
 
 **v4 · Per acara** (mockup `design-mockup/v4/`): sidebar disusun per ACARA, bukan per fitur.
-- Atas: **Beranda** (dashboard gabungan semua acara: resume anggaran pria/wanita, per acara, minggu ini, beban kerja, tagihan 30 hari; saklar Semua/Punyaku; panel *Rincian pengeluaran*).
+- Atas: **Beranda** (kartu hitung mundur **papan flip** `components/Countdown.jsx`, mockup `design-mockup/v4/countdown/`: acara utama terdekat + HARI·JAM·MENIT·DETIK + 3 kartu acara utama, ukuran ikut lebar kartu lewat container query; dashboard gabungan semua acara: resume anggaran pria/wanita, per acara, minggu ini, beban kerja, tagihan 30 hari; saklar Semua/Punyaku; panel *Rincian pengeluaran*).
 - Grup acara (accordion): **Lamaran** (bagian: Lamaran + Balasan lamaran) · **Akad & Resepsi** (acara utama, wajib, berisi Dokumen) · **Unduh mantu** · acara lain (Pengajian, Midodareni, …) lewat **+ Tambah acara**.
 - Sub menu tiap acara (bisa disembunyikan/diurutkan/ditambah dari katalog lewat tombol pensil = **Atur acara**): Persiapan · Anggaran · Vendor · Seserahan · Tamu · Rundown · (Dokumen) · Catatan. "Undangan web" = *Segera*.
 - Acara berbagian punya tab **[bagian] · [bagian] · Gabungan** di semua sub menu; pilihan tab diingat per acara (localStorage `wp-part-<id>`).
@@ -24,6 +24,7 @@ Web app perencanaan pernikahan untuk banyak pasangan (dijual komersial). Satu ak
 - **Vendor**: papan Belum dipilih (slot) · Negosiasi · Deal · Lunas. Slot = `budget_items.source='vendor'`; kontak vendor (`vendors`) = buku kontak bersama semua acara.
 - **Tamu**: buku tamu induk (`guests`, jenis undangan: Digital · Cetak · Tonjokan · Tanpa undangan) + undangan per acara (`guest_invites`: RSVP, pax, kirim WA, meja, check-in per acara).
 - **Tahap persiapan** per acara bisa ditambah, diganti nama, dihapus (tugas dipindah), diurutkan lewat tombol **Atur tahap** di Persiapan › Per tahap, atau dibuat langsung dari form tugas. Disimpan di `events.stages` (kosong = bawaan per jenis acara, lihat `STAGE_DEFAULTS` di `events.js`).
+- **Tanggal utama acara** = tanggal + jam **bagian utama** (`events.main_part_id`, dipilih di Atur acara; kosong → Lamaran: bagian Lamaran, Akad & Resepsi: bagian bernama "Akad", lainnya: bagian pertama). Hitung mundur & H-xx pakai WIB (Asia/Jakarta), H-xx dari tanggal kalender. Helper: `mainPart`, `mainWhen`, `hMinus` di `events.js`. Sidebar menampilkan rentang tanggal acara (`eventDateLabel`).
 - HP: menu bawah Beranda · Persiapan · Anggaran · Vendor · Lainnya; pemilih acara di atas halaman sub menu.
 - Layar HP penuh per acara: **Mode hari H** `#/w/<id>/live?e=<acara|bagian>` dan **Check-in** `#/w/<id>/checkin?e=…`.
 
@@ -53,13 +54,13 @@ Komersial (v3):
 - `web/src/styles.css` — design system (token warna, `.g` glass, `.tile w1–w4`, `.cc k1–k10`, dll).
 
 ### Database (`supabase/migrations/`, urut)
-`0001_schema` tabel · `0002_security` RLS & helper (`is_member`, `can_edit`, `is_owner`, storage policy per wedding) · `0003_templates` data template (dibuat `seed_data.py`) · `0004` cabut akses anon · `0005_fit_budget` `create_wedding` menyesuaikan anggaran · `0006_v3_commercial` ikon/warna kategori, plans, subscriptions, payment_requests, app_settings, admin_log, RPC admin · `0007_announcements` · `0008_v4_per_acara` (lihat di bawah) · `0009_tahap_jenis_undangan` (`events.stages`, jenis undangan tonjokan/tanpa, tahap template per acara).
-`supabase/setup-database.sql` = gabungan semua (untuk project baru). **Semua migrasi 0001–0009 sudah terpasang di project live.**
+`0001_schema` tabel · `0002_security` RLS & helper (`is_member`, `can_edit`, `is_owner`, storage policy per wedding) · `0003_templates` data template (dibuat `seed_data.py`) · `0004` cabut akses anon · `0005_fit_budget` `create_wedding` menyesuaikan anggaran · `0006_v3_commercial` ikon/warna kategori, plans, subscriptions, payment_requests, app_settings, admin_log, RPC admin · `0007_announcements` · `0008_v4_per_acara` (lihat di bawah) · `0009_tahap_jenis_undangan` (`events.stages`, jenis undangan tonjokan/tanpa, tahap template per acara) · `0010_bagian_utama` (`events.main_part_id`).
+`supabase/setup-database.sql` = gabungan semua (untuk project baru). **Semua migrasi 0001–0010 sudah terpasang di project live.**
 
 **Model data v4 (0008):** `events` = acara (`parent_id` null) & bagian (`parent_id` = acara), kolom `color`, `icon`, `hidden`, `menus` (jsonb [{k,on}], kosong = bawaan), `payer_id`, `detail`; kind: lamaran/balasan/akad/unduh/lainnya. `people` (orang & pihak, `kind` bride/groom/fam_bride/fam_groom, `user_ids`). `tasks.event_id/pic_id` (deadline = tanggal acara/bagian − `offset_days`). `budget_items.pic_id/payer_id/shares/source/offer` (`source='vendor'` = slot vendor; `shares` = patungan). `gift_categories.event_id/pic_id/payer_id`. `reminders.event_id/pic_id`, `notes.event_id`. `guest_invites` (undangan per acara). RPC: `add_event`, `check_in_invite`; template per acara di `tpl_*.event_kind` (+ `tpl_catalog.is_vendor`). `create_wedding` menerima `p.events` = [{kind, date, location, payer, parts:[…]}].
 Pemindahan data lama (sekali jalan di 0008): tugas lamaran → Lamaran, lainnya → Akad & Resepsi; anggaran ikut acaranya (tanpa acara → Akad & Resepsi); vendor & seserahan → Akad & Resepsi; tamu → buku induk + diundang ke Akad & Resepsi; PIC teks dicocokkan ke orang (tidak cocok → tampil "Pilih ulang").
 
-Migrasi baru: buat file `0010_…sql`, jalankan di Supabase (SQL Editor / MCP Supabase / Management API), lalu tambahkan juga ke `setup-database.sql`.
+Migrasi baru: buat file `0011_…sql`, jalankan di Supabase (SQL Editor / MCP Supabase / Management API), lalu tambahkan juga ke `setup-database.sql`.
 
 Menambah admin:
 ```sql
@@ -75,6 +76,7 @@ cd ../tests && npm install && npx playwright install chromium
 node flow.js x desk   # 34 pemeriksaan alur v4 (juga: node flow.js x hp)
 node v3.js            # admin, upgrade, kategori, trial habis
 node ann.js           # pengumuman
+node countdown.js     # hitung mundur: jam tiruan (sebelum lamaran, hari H, setelah lamaran, semua lewat) di 360/390/430/tablet 1210×760/1440
 node shots.js "beranda,lam/persiapan,akad/vendor,unduh/atur,pengaturan?tab=orang" desk   # screenshot ke tests/out/ (lam/akad/unduh = acara)
 ```
 Kalau menambah tabel/RPC baru, tambahkan juga tiruannya di `tests/mock.js` (`createWedding`/`addEvent`/`seedTarget` meniru fungsi SQL; template di `tests/tpl.json`). Di mesin cloud: Playwright sudah terpasang global, jalankan dengan `PW_PATH=$(npm root -g)/playwright`. Selalu cek screenshot desktop (1440) dan HP (390).

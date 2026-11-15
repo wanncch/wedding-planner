@@ -1,0 +1,91 @@
+/* Revisi countdown Beranda — tambahan untuk v4.css */
+.cb{background:linear-gradient(135deg,#2F5A85,#6D96BF)}
+.ta-b{background:#DCE7F3;color:#24476B}
+
+/* kartu hero */
+.hx{position:relative;border-radius:30px;padding:24px 26px 22px;color:#fff;background:linear-gradient(128deg,#7A3850 0%,#A24C60 46%,#BA675C 100%);box-shadow:0 24px 50px rgba(150,70,90,.32),inset 0 1px 0 rgba(255,255,255,.25);overflow:hidden;display:flex;flex-direction:column;gap:18px}
+.hx::before{content:"";position:absolute;right:-120px;top:-150px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.24),transparent 68%);pointer-events:none}
+.hx::after{content:"";position:absolute;left:-90px;bottom:-170px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,170,.28),transparent 68%);pointer-events:none}
+.hx > *{position:relative;z-index:1}
+.hx .muted{color:rgba(255,255,255,.86)}
+.nx{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px 12px 5px 5px;font-size:12px;font-weight:800;letter-spacing:.04em}
+.nx .acd{width:24px;height:24px;border-radius:50%;box-shadow:none}
+.cpl{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:36px;line-height:1.05;letter-spacing:-.01em}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.9}
+.live i{width:8px;height:8px;border-radius:50%;background:#FFD7DF;box-shadow:0 0 0 0 rgba(255,215,223,.7);animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,215,223,.7)}80%,100%{box-shadow:0 0 0 10px rgba(255,215,223,0)}}
+
+/* A · ubin kaca */
+.cd{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap}
+.cdt{min-width:104px;padding:14px 12px 11px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.1));border:1px solid rgba(255,255,255,.34);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 24px rgba(90,25,45,.18);text-align:center}
+.cdn{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:62px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.cdl{font-size:11px;letter-spacing:.18em;font-weight:800;opacity:.86;margin-top:8px}
+.cds{font-family:Fraunces,Georgia,serif;font-size:40px;font-weight:600;opacity:.45;align-self:center;padding-bottom:18px}
+.cdt.sec{background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,.14))}
+
+/* kartu 3 acara di dalam hero */
+.ev3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.evc{position:relative;border-radius:22px;padding:14px 15px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.26);color:#fff;display:flex;flex-direction:column;gap:9px;text-decoration:none;min-width:0}
+.evc:hover{background:rgba(255,255,255,.2);color:#fff}
+.evc .top3{display:flex;align-items:center;gap:10px;min-width:0}
+.evc .acd{width:34px;height:34px;border-radius:12px}
+.evc .nm{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evc .dt{font-size:12px;font-weight:600;opacity:.86}
+.evc .hb{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:30px;line-height:1}
+.evc .hs{font-size:12px;font-weight:700;opacity:.86}
+.evc .rb{height:6px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden}
+.evc .rb i{display:block;height:100%;border-radius:999px;background:#fff}
+.evc.on{background:rgba(255,255,255,.95);color:#33262E;border-color:#fff;box-shadow:0 16px 34px rgba(80,20,40,.28)}
+.evc.on:hover{color:#33262E}
+.evc.on .dt,.evc.on .hs{color:#6F5E66;opacity:1}
+.evc.on .rb{background:rgba(107,78,160,.14)}
+.evc.on .rb i{background:linear-gradient(90deg,#5F4392,#9A7CC9)}
+.tagn{position:absolute;top:-9px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:#FFE3A8;color:#6B430F;box-shadow:0 4px 10px rgba(80,20,40,.2)}
+.arrw{position:absolute;right:-12px;top:50%;width:12px;height:2px;background:rgba(255,255,255,.4)}
+
+/* B · papan flip */
+.flip{display:flex;gap:6px}
+.fl{position:relative;width:92px;height:122px;border-radius:16px;background:linear-gradient(180deg,#FFFFFF 0 50%,#F4E6EA 50% 100%);color:#8E3E55;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:92px;line-height:122px;text-align:center;box-shadow:0 14px 28px rgba(70,15,35,.28),inset 0 1px 0 #fff;font-variant-numeric:tabular-nums}
+.fl::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:rgba(122,56,80,.22)}
+.fl::before{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:8px;margin-top:-4px;background:linear-gradient(90deg,#5E2C3E 0 4px,transparent 4px calc(100% - 4px),#5E2C3E calc(100% - 4px));border-radius:2px;opacity:.55}
+.fl.s{width:52px;height:68px;font-size:46px;line-height:68px;border-radius:11px}
+.flg{display:flex;flex-direction:column;align-items:center;gap:8px}
+.flg .cdl{margin:0}
+.evr{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.24);color:#fff;text-decoration:none}
+.evr.on{background:rgba(255,255,255,.95);color:#33262E;border-color:#fff}
+.evr .hb{margin-left:auto;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:24px;white-space:nowrap}
+.evr .dt{font-size:12px;font-weight:600;opacity:.86}
+.evr.on .dt{color:#6F5E66;opacity:1}
+
+/* C · tiga cincin */
+.ring3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.rc{position:relative;border-radius:26px;padding:18px 16px 16px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;overflow:hidden;box-shadow:0 18px 36px rgba(60,30,60,.2),inset 0 1px 0 rgba(255,255,255,.35);text-decoration:none}
+.rc::before{content:"";position:absolute;right:-60px;top:-70px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 68%)}
+.rc > *{position:relative}
+.rc1{background:linear-gradient(150deg,#563A8A 0%,#8A6BC0 100%)}
+.rc2{background:linear-gradient(150deg,#2A5079 0%,#6390BB 100%)}
+.rc3{background:linear-gradient(150deg,#2F6146 0%,#6FA885 100%)}
+.rc .nm{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}
+.rc .dt{font-size:12.5px;font-weight:600;opacity:.88}
+.rc .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rc .big{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:48px;line-height:1}
+.rc .sm2{font-size:11.5px;font-weight:700;opacity:.9;margin-top:4px}
+.rc .tick{display:inline-flex;gap:6px;font-variant-numeric:tabular-nums;font-weight:800;font-size:13px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px 12px}
+.rc.on{outline:3px solid rgba(255,255,255,.9);outline-offset:-3px}
+
+/* HP */
+.ph .hx{padding:16px;border-radius:24px;gap:12px}
+.ph .cpl{font-size:24px}
+.ph .cd{gap:6px;flex-wrap:nowrap}
+.ph .cdt{min-width:0;flex:1;padding:10px 4px 8px;border-radius:16px}
+.ph .cdn{font-size:34px}
+.ph .cdl{font-size:9.5px;letter-spacing:.12em;margin-top:5px}
+.ph .ev3{gap:7px}
+.ph .evc{padding:10px 9px;border-radius:16px;gap:6px}
+.ph .evc .acd{width:26px;height:26px;border-radius:9px}
+.ph .evc .nm{font-size:10px;letter-spacing:.06em}
+.ph .evc .hb{font-size:21px}
+.ph .evc .hs{font-size:10.5px}
+.ph .tagn{font-size:9px;top:-8px;right:8px;padding:2px 7px}
+
+@media (prefers-reduced-motion: reduce){.live i{animation:none}}

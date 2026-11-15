@@ -75,10 +75,10 @@
     DB.events.push({ ...base, id, parent_id: null, kind, name: (e.name || '').trim() || { lamaran: 'Lamaran', akad: 'Akad & Resepsi', unduh: 'Unduh mantu' }[kind] || 'Acara keluarga',
       event_date: e.date || (kind === 'akad' ? w.wedding_date : null) || (parts[0] && parts[0].date) || null, start_time: (e.time || (kind === 'akad' ? '08:00' : kind === 'lainnya' ? '' : '10:00')).slice(0, 5) ? (e.time || (kind === 'akad' ? '08:00' : '10:00')).slice(0, 5) + ':00' : null,
       end_time: kind === 'akad' ? '14:00:00' : null, location: e.location || '', is_main: kind === 'akad', sort, color: e.color || { lamaran: 'c1', akad: 'c2', unduh: 'c3' }[kind] || 'c' + (4 + sort % 3), icon: { lamaran: 'hati', akad: 'rings', unduh: 'rumah' }[kind] || 'bunga',
-      payer_id: pay(e.payer, kind === 'lamaran' || kind === 'unduh' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], stages: [], detail: '' });
+      payer_id: pay(e.payer, kind === 'lamaran' || kind === 'unduh' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], stages: [], main_part_id: null, detail: '' });
     parts.forEach((pt, j) => {
       const pid = uid(); const pk = pt.kind || 'lainnya';
-      DB.events.push({ ...base, id: pid, parent_id: id, kind: pk, name: pt.name || { lamaran: 'Lamaran', balasan: 'Balasan lamaran' }[pk] || 'Bagian ' + (j + 1), event_date: pt.date || null, start_time: '10:00:00', end_time: null, location: pt.location || '', is_main: false, sort: j + 1, color: 'c0', icon: 'hati', payer_id: pay(pt.payer, pk === 'lamaran' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], stages: [], detail: '' });
+      DB.events.push({ ...base, id: pid, parent_id: id, kind: pk, name: pt.name || { lamaran: 'Lamaran', balasan: 'Balasan lamaran' }[pk] || 'Bagian ' + (j + 1), event_date: pt.date || null, start_time: '10:00:00', end_time: null, location: pt.location || '', is_main: false, sort: j + 1, color: 'c0', icon: 'hati', payer_id: pay(pt.payer, pk === 'lamaran' ? 'fam_groom' : 'fam_bride'), hidden: false, menus: [], stages: [], main_part_id: null, detail: '' });
       if (seed) seedTarget(wid, pid, pk, me);
     });
     if (!parts.length && seed) seedTarget(wid, id, kind, me);

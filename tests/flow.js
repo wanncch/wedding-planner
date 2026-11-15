@@ -261,7 +261,7 @@ const BASE = 'http://localhost:4173';
   ok(/Ditanggung pihak pria/.test(await page.locator('.dr .dtitle').innerText()), 'panel rincian dari angka penanggung');
   await shot('rincian');
   await page.locator('.dr .x').click();
-  await page.locator('.seg button', { hasText: 'Punyaku' }).click();
+  await page.locator('.seg button:visible', { hasText: 'Punyaku' }).click();
   await page.waitForTimeout(300);
   ok(await page.locator('.li', { hasText: 'PIC Bagas' }).count() === 0, 'Punyaku menyaring tugas orang lain');
 
