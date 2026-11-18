@@ -47,7 +47,7 @@ Komersial (v3):
 - `web/src/components/Money.jsx` — detail item & pembayaran; `Rincian.jsx` — panel rincian pengeluaran.
 - `web/src/pages/AturAcara.jsx` — Atur acara (detail, bagian, sub menu, katalog) + `AddEventModal`.
 - `web/src/lib/store.jsx` — AuthProvider (session, profile, `account` dari RPC `my_account`), WeddingProvider (`fetchAll`, optimistic `add/save/del` + undo, realtime, `canEdit`).
-- `web/src/lib/calc.js` — rumus: `costLines` (semua baris biaya acara: vendor, seserahan, item), `summarize` (per pihak/orang/untuk apa), `upcomingBills`, `taskDue/taskState` (dari tanggal acara/bagian), `periodsFor`, `invitesFor`, `readiness`. `format.js` — format Rupiah/tanggal. `files.js` — upload ke bucket `wedding-files` (referensi `sb:<path>`).
+- `web/src/lib/calc.js` — rumus: `costLines` (semua baris biaya acara: vendor, seserahan, item), `summarize` (per pihak/orang/untuk apa), `upcomingBills`, `taskDue/taskState` (dari tanggal acara/bagian), `periodsFor`, `invitesFor`, `readiness`. `format.js` — format Rupiah/tanggal. `files.js` — upload ke bucket `wedding-files` (referensi `sb:<path>`); setiap foto dikompres otomatis maksimal **700 KB** (`compressPhoto`: turunkan kualitas lalu ukuran, HEIC/GIF diubah ke JPG, foto kecil & PDF tidak diubah).
 - `web/src/components/ui.jsx` — semua komponen UI + kamus ikon `P` (termasuk 24 ikon kategori `CAT_ICONS`, warna `CAT_COLORS` k1–k10).
 - `web/src/components/Account.jsx` — PlanBadge, AccountBanner (trial/habis), AnnouncementBar, StoredImg.
 - `web/src/pages/*` — satu file per menu; `Admin.jsx` Pusat Kontrol; `Upgrade.jsx`.
@@ -76,6 +76,7 @@ cd ../tests && npm install && npx playwright install chromium
 node flow.js x desk   # 34 pemeriksaan alur v4 (juga: node flow.js x hp)
 node v3.js            # admin, upgrade, kategori, trial habis
 node ann.js           # pengumuman
+node foto.js          # kompresi foto: 12 MP & PNG besar ≤ 700 KB, foto kecil & PDF tidak diubah
 node countdown.js     # hitung mundur: jam tiruan (sebelum lamaran, hari H, setelah lamaran, semua lewat) di 360/390/430/tablet 1210×760/1440
 node shots.js "beranda,lam/persiapan,akad/vendor,unduh/atur,pengaturan?tab=orang" desk   # screenshot ke tests/out/ (lam/akad/unduh = acara)
 ```
