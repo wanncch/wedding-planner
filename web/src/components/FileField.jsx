@@ -4,6 +4,8 @@ import { uploadFile, fileUrl, openFile, fileName } from '../lib/files.js';
 import { Icon } from './ui.jsx';
 
 /** Isian file: unggah foto/PDF ke penyimpanan, atau tempel link (Drive, Pinterest, IG, toko). */
+const kb = (n) => (n >= 1048576 ? (n / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.round(n / 1024) + ' KB');
+
 export default function FileField({ value, onChange, folder = 'umum', label = 'Tambah foto / file', hint = 'atau tempel link', accept = 'image/*,application/pdf', image }) {
   const { wid, canEdit } = useW();
   const toast = useToast();
@@ -26,7 +28,11 @@ export default function FileField({ value, onChange, folder = 'umum', label = 'T
     e.target.value = '';
     if (!f) return;
     setBusy(true);
-    try { onChange(await uploadFile(wid, folder, f)); toast('File terunggah.', 'ok'); }
+    let info = null;
+    try {
+      onChange(await uploadFile(wid, folder, f, (x) => { info = x; }));
+      toast(info ? 'Foto dikompres ' + kb(info.before) + ' → ' + kb(info.after) + ' lalu terunggah.' : 'File terunggah.', 'ok');
+    }
     catch (er) { toast(er.message, 'error'); }
     finally { setBusy(false); }
   }
@@ -57,7 +63,7 @@ export default function FileField({ value, onChange, folder = 'umum', label = 'T
     <div className="up" onClick={() => !busy && ref.current.click()} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') ref.current.click(); }}>
       <span className="thumb"><Icon name={image ? 'camera' : 'upload'} size={20} /></span>
       <div style={{ flex: 1, fontSize: 13 }}>
-        <b>{busy ? 'Mengunggah…' : label}</b>
+        <b>{busy ? 'Mengompres & mengunggah…' : label}</b>
         <div className="xs muted">maks. 10 MB · <button type="button" className="lnk xs" onClick={(e) => { e.stopPropagation(); setLink(true); }}>{hint}</button></div>
       </div>
       <input ref={ref} type="file" accept={accept} hidden onChange={pick} />

@@ -215,7 +215,7 @@
     },
     storage: {
       from: () => ({
-        upload: async (path, f) => { files[path] = URL.createObjectURL(f); return { data: { path }, error: null }; },
+        upload: async (path, f) => { files[path] = URL.createObjectURL(f); (window.__UPLOADS__ = window.__UPLOADS__ || []).push({ path, size: f.size, type: f.type }); return { data: { path }, error: null }; },
         createSignedUrl: async (path) => ({ data: { signedUrl: files[path] || 'about:blank' }, error: null }),
         list: async () => ({ data: [], error: null }),
         remove: async () => ({ data: [], error: null }),
