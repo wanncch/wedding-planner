@@ -76,6 +76,7 @@ cd ../tests && npm install && npx playwright install chromium
 node flow.js x desk   # 34 pemeriksaan alur v4 (juga: node flow.js x hp)
 node v3.js            # admin, upgrade, kategori, trial habis
 node ann.js           # pengumuman
+node modal.js         # jendela kecil (konfirmasi hapus, dll.) muat di HP 320–430 px
 node foto.js          # kompresi foto: 12 MP & PNG besar ≤ 700 KB, foto kecil & PDF tidak diubah
 node countdown.js     # hitung mundur: jam tiruan (sebelum lamaran, hari H, setelah lamaran, semua lewat) di 360/390/430/tablet 1210×760/1440
 node shots.js "beranda,lam/persiapan,akad/vendor,unduh/atur,pengaturan?tab=orang" desk   # screenshot ke tests/out/ (lam/akad/unduh = acara)
