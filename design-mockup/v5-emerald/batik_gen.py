@@ -1,159 +1,174 @@
-import math, random, sys
-OUT = sys.argv[1]
-def f(x): return f'{x:.1f}'
-class S:
-    def __init__(s, line, acc): s.o=[]; s.line=line; s.acc=acc
-    def add(s, x): s.o.append(x)
-def rot(x,y,a,cx=0,cy=0):
-    c,si=math.cos(a),math.sin(a); return cx+x*c-y*si, cy+x*si+y*c
-def petal_path(cx,cy,ang,L,W,shape='point'):
-    pts=[(0,0),(W,-L*.30),(W*.75,-L*.85),(0,-L),(-W*.75,-L*.85),(-W,-L*.30),(0,0)] if shape=='point' else [(0,0),(W*1.05,-L*.25),(W*1.15,-L*1.0),(0,-L*.92),(-W*1.15,-L*1.0),(-W*1.05,-L*.25),(0,0)]
-    p=[rot(x,y,ang,cx,cy) for x,y in pts]
-    return f'M{f(p[0][0])} {f(p[0][1])}C{f(p[1][0])} {f(p[1][1])} {f(p[2][0])} {f(p[2][1])} {f(p[3][0])} {f(p[3][1])}C{f(p[4][0])} {f(p[4][1])} {f(p[5][0])} {f(p[5][1])} {f(p[6][0])} {f(p[6][1])}Z'
-def flower(s,cx,cy,R,n=6,rot0=0,shape='point'):
-    a0=math.radians(rot0)
-    for i in range(n):
-        a=a0+2*math.pi*i/n
-        s.add(f'<path d="{petal_path(cx,cy,a,R,R*.42,shape)}" stroke-width="1.8"/>')
-        s.add(f'<path d="{petal_path(cx,cy,a,R*.66,R*.25,shape)}" stroke-width="1"/>')
-        for t in (.74,.82,.9):  # titik isen-isen di ujung kelopak
-            for side in (-1,1):
-                x,y=rot(side*R*.17*(1.1-t),-R*t,a,cx,cy); s.add(f'<circle cx="{f(x)}" cy="{f(y)}" r="{R*.018+.5:.1f}" fill="{s.line}" stroke="none"/>')
-        for sd in (-.5,0,.5):
-            p1=rot(sd*R*.05,-R*.28,a,cx,cy); p2=rot(sd*R*.12,-R*.58,a,cx,cy)
-            s.add(f'<path d="M{f(p1[0])} {f(p1[1])}L{f(p2[0])} {f(p2[1])}" stroke-width=".7"/>')
-    s.add(f'<circle cx="{f(cx)}" cy="{f(cy)}" r="{f(R*.24)}" fill="{s.acc}" fill-opacity=".35"/>')
-    s.add(f'<circle cx="{f(cx)}" cy="{f(cy)}" r="{f(R*.15)}"/>')
-    for i in range(14):
-        a=2*math.pi*i/14; s.add(f'<circle cx="{f(cx+R*.3*math.cos(a))}" cy="{f(cy+R*.3*math.sin(a))}" r="{R*.02+.6:.1f}" fill="{s.line}" stroke="none"/>')
-    s.add(f'<circle cx="{f(cx)}" cy="{f(cy)}" r="{f(R*.05)}" fill="{s.acc}" stroke="none"/>')
-def scallop(s,cx,cy,R,n=8):
-    # bunga bergerigi (kelopak bulat berlapis)
-    pts=[]
-    for k,(rr,w) in enumerate(((R,1.8),(R*.68,1.1))):
-        d=''
-        for i in range(n):
-            a1=2*math.pi*i/n; a2=2*math.pi*(i+1)/n; am=(a1+a2)/2
-            x1,y1=cx+rr*.78*math.cos(a1),cy+rr*.78*math.sin(a1); x2,y2=cx+rr*.78*math.cos(a2),cy+rr*.78*math.sin(a2)
-            c1=(cx+rr*1.12*math.cos(am-.28),cy+rr*1.12*math.sin(am-.28)); c2=(cx+rr*1.12*math.cos(am+.28),cy+rr*1.12*math.sin(am+.28))
-            d+=(f'M{f(x1)} {f(y1)}' if i==0 else '')+f'C{f(c1[0])} {f(c1[1])} {f(c2[0])} {f(c2[1])} {f(x2)} {f(y2)}'
-        s.add(f'<path d="{d}Z" stroke-width="{w}"/>')
-    s.add(f'<circle cx="{f(cx)}" cy="{f(cy)}" r="{f(R*.32)}" fill="{s.acc}" fill-opacity=".3"/>')
-    for i in range(n):
-        a=2*math.pi*(i+.5)/n; s.add(f'<path d="M{f(cx+R*.36*math.cos(a))} {f(cy+R*.36*math.sin(a))}L{f(cx+R*.6*math.cos(a))} {f(cy+R*.6*math.sin(a))}" stroke-width=".9"/>')
-    s.add(f'<circle cx="{f(cx)}" cy="{f(cy)}" r="{f(R*.12)}" fill="{s.line}" stroke="none"/>')
-def floret(s,cx,cy,R):
-    for i in range(5):
-        a=2*math.pi*i/5-math.pi/2; s.add(f'<circle cx="{f(cx+R*.62*math.cos(a))}" cy="{f(cy+R*.62*math.sin(a))}" r="{f(R*.42)}" stroke-width="1.2"/>')
-    s.add(f'<circle cx="{f(cx)}" cy="{f(cy)}" r="{f(R*.24)}" fill="{s.acc}" stroke="none"/>')
-def leaf(s,x,y,ang,L,W,veins=True):
-    p=[rot(a,b,ang,x,y) for a,b in [(0,0),(W,-L*.5),(0,-L),(-W,-L*.5)]]
-    s.add(f'<path d="M{f(p[0][0])} {f(p[0][1])}Q{f(p[1][0])} {f(p[1][1])} {f(p[2][0])} {f(p[2][1])}Q{f(p[3][0])} {f(p[3][1])} {f(p[0][0])} {f(p[0][1])}Z" stroke-width="1.5"/>')
-    m=[rot(0,-L*t,ang,x,y) for t in (0,.92)]
-    s.add(f'<path d="M{f(m[0][0])} {f(m[0][1])}L{f(m[1][0])} {f(m[1][1])}" stroke-width=".9"/>')
-    if veins:
-        for t in (.25,.42,.59,.75):
-            for sd in (-1,1):
-                a1=rot(0,-L*t,ang,x,y); a2=rot(sd*W*.55*(1-abs(t-.5)),-L*(t+.12),ang,x,y)
-                s.add(f'<path d="M{f(a1[0])} {f(a1[1])}L{f(a2[0])} {f(a2[1])}" stroke-width=".8"/>')
-def spiral(s,cx,cy,R,a0,turns=1.6,dirn=1,w=1.6):
-    pts=[]; N=40
-    for i in range(N+1):
-        t=i/N; a=a0+dirn*t*turns*2*math.pi; r=R*(1-t*.82); pts.append((cx+r*math.cos(a),cy+r*math.sin(a)))
-    s.add(f'<path d="M'+' L'.join(f'{f(x)} {f(y)}' for x,y in pts)+f'" stroke-width="{w}"/>')
-def bez(p0,p1,p2,p3,t):
-    u=1-t; return (u**3*p0[0]+3*u*u*t*p1[0]+3*u*t*t*p2[0]+t**3*p3[0], u**3*p0[1]+3*u*u*t*p1[1]+3*u*t*t*p2[1]+t**3*p3[1])
-def vine(s,P,leaves=(),dots=True,w=2.2,double=True):
-    p0,p1,p2,p3=P
-    s.add(f'<path d="M{f(p0[0])} {f(p0[1])}C{f(p1[0])} {f(p1[1])} {f(p2[0])} {f(p2[1])} {f(p3[0])} {f(p3[1])}" stroke-width="{w}"/>')
-    if double:  # garis kedua tipis + titik di antaranya (khas batik)
-        off=[(x+5,y+5) for x,y in P]
-        s.add(f'<path d="M{f(off[0][0])} {f(off[0][1])}C{f(off[1][0])} {f(off[1][1])} {f(off[2][0])} {f(off[2][1])} {f(off[3][0])} {f(off[3][1])}" stroke-width=".9"/>')
-    for t,side,L in leaves:
-        x,y=bez(p0,p1,p2,p3,t); x2,y2=bez(p0,p1,p2,p3,min(1,t+.01))
-        ang=math.atan2(y2-y,x2-x)+math.pi/2+side*1.0
-        leaf(s,x,y,ang,L*1.6,L*.55)
-    if dots:
-        for i in range(2,30,2):
-            x,y=bez(p0,p1,p2,p3,i/30); s.add(f'<circle cx="{f(x+9)}" cy="{f(y-6)}" r="1.4" fill="{s.line}" stroke="none"/>')
-def cloud(s,cx,cy,W,H,levels=4):
-    # mega mendung: kontur berlekuk yang diulang mengecil ke tengah, ujung bawah melingkar
-    lobes=[(-1.0,.05,.42),(-.62,-.45,.5),(-.1,-.72,.58),(.45,-.5,.5),(.9,-.02,.42),(.5,.42,.36),(0,.5,.34),(-.5,.42,.36)]
-    def outline(k):
-        pts=[(cx+W*x,cy+H*y) for x,y,_ in lobes]
-        d=''
-        n=len(pts)
-        for i in range(n):
-            x1,y1=pts[i]; x2,y2=pts[(i+1)%n]
-            mx,my=(x1+x2)/2,(y1+y2)/2
-            dx,dy=mx-cx,my-cy; L=math.hypot(dx,dy) or 1
-            bulge=.55*math.hypot(x2-x1,y2-y1)
-            c=(mx+dx/L*bulge, my+dy/L*bulge)
-            if i==0: d+=f'M{f(x1)} {f(y1)}'
-            d+=f'Q{f(c[0])} {f(c[1])} {f(x2)} {f(y2)}'
-        return d+'Z'
-    for k in range(levels):
-        sc=1-k*.22
-        s.add(f'<g transform="translate({f(cx)} {f(cy)}) scale({sc:.2f}) translate({f(-cx)} {f(-cy)})"><path d="{outline(k)}" fill="{s.acc}" fill-opacity="{.08+.07*k:.2f}" stroke-width="{(1.8 if k==0 else 1.2)/sc:.2f}"/></g>')
-    spiral(s,cx-W*1.05,cy+H*.35,H*.32,0,1.4,1,1.4)
-    spiral(s,cx+W*.98,cy+H*.38,H*.3,math.pi,1.4,-1,1.4)
-def dotcluster(s,cx,cy,n=3,r=2.2):
-    for i in range(n):
-        a=2*math.pi*i/n; s.add(f'<circle cx="{f(cx+r*2.2*math.cos(a))}" cy="{f(cy+r*2.2*math.sin(a))}" r="{r}" fill="{s.line}" stroke="none"/>')
-def drop(s,x,y,ang,L):
-    p=[rot(a,b,ang,x,y) for a,b in [(0,0),(L*.35,-L*.6),(0,-L),(-L*.12,-L*.55)]]
-    s.add(f'<path d="M{f(p[0][0])} {f(p[0][1])}Q{f(p[1][0])} {f(p[1][1])} {f(p[2][0])} {f(p[2][1])}Q{f(p[3][0])} {f(p[3][1])} {f(p[0][0])} {f(p[0][1])}Z" fill="{s.line}" stroke="none"/>')
+import math, random, sys, os
+F=lambda v:f'{v:.1f}'
+def lerp(a,b,t): return a+(b-a)*t
+def catmull(pts,n=24):
+    out=[]; P=[pts[0]]+pts+[pts[-1]]
+    for i in range(1,len(P)-2):
+        p0,p1,p2,p3=P[i-1],P[i],P[i+1],P[i+2]
+        for k in range(n):
+            t=k/n; t2=t*t; t3=t2*t
+            out.append(tuple(.5*((2*p1[j])+(-p0[j]+p2[j])*t+(2*p0[j]-5*p1[j]+4*p2[j]-p3[j])*t2+(-p0[j]+3*p1[j]-3*p2[j]+p3[j])*t3) for j in (0,1)))
+    out.append(pts[-1]); return out
+def normals(pts):
+    N=[]
+    for i in range(len(pts)):
+        a=pts[max(0,i-1)]; b=pts[min(len(pts)-1,i+1)]
+        dx,dy=b[0]-a[0],b[1]-a[1]; L=math.hypot(dx,dy) or 1; N.append((-dy/L,dx/L))
+    return N
+def poly(pts): return 'M'+' L'.join(F(x)+' '+F(y) for x,y in pts)+'Z'
+def line(pts): return 'M'+' L'.join(F(x)+' '+F(y) for x,y in pts)
+class Art:
+    def __init__(s,dark,acc,light): s.o=[]; s.D=dark; s.A=acc; s.L=light
+    def fill(s,d,c=None,op=1): s.o.append(f'<path d="{d}" fill="{c or s.D}"'+(f' fill-opacity="{op}"' if op<1 else '')+'/>')
+    def stroke(s,d,c=None,w=1,op=1): s.o.append(f'<path d="{d}" fill="none" stroke="{c or s.L}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round"'+(f' stroke-opacity="{op}"' if op<1 else '')+'/>')
+    def dot(s,x,y,r,c=None): s.o.append(f'<circle cx="{F(x)}" cy="{F(y)}" r="{F(r)}" fill="{c or s.D}"/>')
+    # ---- sapuan menipis
+    def taper(s,ctrl,w0,w1,c=None,n=20):
+        pts=catmull(ctrl,n); N=normals(pts); m=len(pts)
+        Lp=[];Rp=[]
+        for i,(p,nv) in enumerate(zip(pts,N)):
+            t=i/(m-1); w=lerp(w0,w1,t)/2
+            Lp.append((p[0]+nv[0]*w,p[1]+nv[1]*w)); Rp.append((p[0]-nv[0]*w,p[1]-nv[1]*w))
+        s.fill(poly(Lp+Rp[::-1]),c); return pts
+    def curl(s,cx,cy,R,a0,turns=1.25,d=1,w=3,c=None):
+        ctrl=[]
+        for i in range(31):
+            t=i/30; a=a0+d*t*turns*2*math.pi; r=R*(1-t*.78); ctrl.append((cx+r*math.cos(a),cy+r*math.sin(a)))
+        s.taper(ctrl,w,.6,c,4); s.dot(ctrl[-1][0],ctrl[-1][1],w*.55,c)
+    # ---- bentuk berpusat sumbu (kelopak/daun)
+    def blade(s,base,ang,L,W,bend=0,tip=0,prof=.9,asym=0,n=40):
+        """Kelopak/daun: sumbu melengkung (bend), ujung melintir (tip), lebar W."""
+        cen=[];Lp=[];Rp=[]
+        for i in range(n+1):
+            t=i/n
+            x=bend*L*math.sin(math.pi*t)*.5+tip*L*t**3*.6; y=-L*t
+            cen.append((x,y))
+        cen2=[];
+        for i,(x,y) in enumerate(cen):
+            c,si=math.cos(ang),math.sin(ang); cen2.append((base[0]+x*c-y*si,base[1]+x*si+y*c))
+        N=normals(cen2)
+        for i,(p,nv) in enumerate(zip(cen2,N)):
+            t=i/n; w=W*(math.sin(math.pi*min(1,t**.85)))**prof/2
+            wl=w*(1+asym); wr=w*(1-asym)
+            Lp.append((p[0]+nv[0]*wl,p[1]+nv[1]*wl)); Rp.append((p[0]-nv[0]*wr,p[1]-nv[1]*wr))
+        return cen2,Lp,Rp
+    def leaf(s,base,ang,L,W,bend=.25,tip=.15,style='dark'):
+        cen,Lp,Rp=s.blade(base,ang,L,W,bend,tip)
+        if style=='dark':
+            s.fill(poly(Lp+Rp[::-1]))
+            s.stroke(line(cen[3:-6]),s.L,max(1,W*.07))
+            for t in (.22,.38,.54,.7):
+                i=int(t*len(cen)); j=min(len(cen)-1,i+5)
+                for side in (Lp,Rp):
+                    q=side[j]; p=cen[i]; s.stroke(line([p,(lerp(p[0],q[0],.78),lerp(p[1],q[1],.78))]),s.L,max(.8,W*.045))
+        else:  # daun emas bergaris tepi
+            s.fill(poly(Lp+Rp[::-1]),s.A,.55); s.stroke(poly(Lp+Rp[::-1]),s.D,max(1.2,W*.07)); s.stroke(line(cen[2:-4]),s.D,max(.8,W*.05))
+            for i in range(6,len(cen)-6,5): s.dot(cen[i][0]+(Lp[i][0]-cen[i][0])*.45,cen[i][1]+(Lp[i][1]-cen[i][1])*.45,max(.9,W*.05)); s.dot(cen[i][0]+(Rp[i][0]-cen[i][0])*.45,cen[i][1]+(Rp[i][1]-cen[i][1])*.45,max(.9,W*.05))
+    # ---- bunga mekar berlapis
+    def bloom(s,cx,cy,R,n=6,rot=0,curl=.35):
+        a0=math.radians(rot)
+        for i in range(n):  # lapisan belakang (emas, lebar)
+            a=a0+2*math.pi*(i+.5)/n
+            cen,Lp,Rp=s.blade((cx,cy),a+math.pi/2,R*1.05,R*.8,.18,curl*.7,.55,.1)
+            s.fill(poly(Lp+Rp[::-1]),s.A,.5); s.stroke(poly(Lp+Rp[::-1]),s.D,R*.025+.6)
+            for k in range(4,len(cen)-4,4): s.dot(cen[k][0],cen[k][1],R*.022+.4)
+        for i in range(n):  # lapisan depan (gelap, ujung melintir)
+            a=a0+2*math.pi*i/n
+            cen,Lp,Rp=s.blade((cx,cy),a+math.pi/2,R*.9,R*.78,.16,curl,.6,.12)
+            s.fill(poly(Lp+Rp[::-1]))
+            inner=[(lerp(c[0],p[0],.62),lerp(c[1],p[1],.62)) for c,p in zip(cen,Lp)][6:-4]
+            inner2=[(lerp(c[0],p[0],.62),lerp(c[1],p[1],.62)) for c,p in zip(cen,Rp)][6:-4]
+            s.stroke(line(inner+inner2[::-1]),s.L,R*.022+.5)
+            for k in range(12,len(cen)-8,4): s.dot(cen[k][0],cen[k][1],R*.02+.4,s.L)
+        s.dot(cx,cy,R*.3); s.dot(cx,cy,R*.22,s.A)
+        for i in range(16):
+            a=2*math.pi*i/16; s.dot(cx+R*.26*math.cos(a),cy+R*.26*math.sin(a),R*.025+.4,s.L)
+        for i in range(10):  # benang sari
+            a=2*math.pi*i/10+.2; p=(cx+R*.12*math.cos(a),cy+R*.12*math.sin(a)); q=(cx+R*.2*math.cos(a),cy+R*.2*math.sin(a))
+            s.stroke(line([p,q]),s.D,R*.018+.4); s.dot(q[0],q[1],R*.022+.4)
+        s.dot(cx,cy,R*.07)
+    def bud(s,base,ang,L):
+        cen,Lp,Rp=s.blade(base,ang,L,L*.5,0,.1,.6)
+        s.fill(poly(Lp+Rp[::-1]),s.A,.55); s.stroke(poly(Lp+Rp[::-1]),s.D,L*.04+.5)
+        for side in (-1,1):  # kelopak pelindung
+            c2,L2,R2=s.blade(base,ang+side*.45,L*.7,L*.28,side*.2,side*.25,.8)
+            s.fill(poly(L2+R2[::-1]))
+        s.dot(cen[-1][0],cen[-1][1],L*.05)
+    def blossom(s,cx,cy,R,rot=0):
+        for i in range(5):
+            a=math.radians(rot)+2*math.pi*i/5
+            cen,Lp,Rp=s.blade((cx,cy),a,R,R*.85,0,.15,.6)
+            s.fill(poly(Lp+Rp[::-1])); s.stroke(line(cen[8:-8]),s.L,R*.06+.3)
+        s.dot(cx,cy,R*.28,s.A); s.dot(cx,cy,R*.12)
+    # ---- mega mendung berpita
+    def mega(s,cx,cy,W,H,bands=5):
+        lob=[(-1.0,.18),(-.86,-.30),(-.55,-.62),(-.18,-.90),(.2,-.66),(.5,-.84),(.82,-.45),(1.0,.08),(.72,.42),(.3,.30),(-.1,.48),(-.55,.40)]
+        def outline(sc):
+            pts=[(cx+W*x*sc,cy+H*y*sc) for x,y in lob]; d=''; n=len(pts)
+            for i in range(n):
+                x1,y1=pts[i]; x2,y2=pts[(i+1)%n]; mx,my=(x1+x2)/2,(y1+y2)/2
+                dx,dy=mx-cx,my-cy; L=math.hypot(dx,dy) or 1; b=.5*math.hypot(x2-x1,y2-y1)
+                d+=(f'M{F(x1)} {F(y1)}' if i==0 else '')+f'Q{F(mx+dx/L*b)} {F(my+dy/L*b)} {F(x2)} {F(y2)}'
+            return d+'Z'
+        nb=bands*2+1
+        for k in range(nb):
+            sc=1-k*(.86/nb)
+            if k%2==0: col,op=s.D,(1 if k==0 else max(.35,1-k*.09))
+            else: col,op=(s.A,.55) if k%4==3 else (s.L,1)
+            s.o.append(f'<path d="{outline(sc)}" fill="{col}"'+(f' fill-opacity="{op:.2f}"' if op<1 else '')+'/>')
+        s.curl(cx-W*1.0,cy+H*.42,H*.38,-.4,1.2,1,H*.09)
+        s.curl(cx+W*.95,cy+H*.25,H*.34,math.pi+.4,1.2,-1,H*.09)
+    def cecek(s,box,n,seed,r=(1,1.8),avoid=None):
+        random.seed(seed)
+        for _ in range(n):
+            x=random.uniform(box[0],box[2]); y=random.uniform(box[1],box[3])
+            if avoid and not avoid(x,y): continue
+            k=random.random()
+            if k<.6: s.dot(x,y,random.uniform(*r))
+            else:
+                for i in range(3): a=2*math.pi*i/3; s.dot(x+3.6*math.cos(a),y+3.6*math.sin(a),r[0]*1.1)
+    def svg(s,w,h): return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'+''.join(s.o)+'</svg>'
 
-def svg(w,h,s): return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><g fill="none" stroke="{s.line}" stroke-linecap="round" stroke-linejoin="round">'+''.join(s.o)+'</g></svg>'
+def ornament(D,A,L):
+    s=Art(D,A,L)
+    s.mega(650,610,150,78); s.mega(150,120,92,48,4); s.mega(720,180,80,42,4)
+    s.cecek((0,0,900,900),220,5,avoid=lambda x,y: x+y<1150)
+    # batang utama menipis + cabang
+    main=s.taper([(10,900),(70,760),(110,620),(170,500),(270,400),(390,330),(520,300),(640,230),(740,120)],18,4)
+    b1=s.taper([(270,400),(250,300),(300,210),(390,150),(470,150)],9,3)
+    b2=s.taper([(170,500),(270,540),(360,610),(400,700),(380,790)],10,3)
+    b3=s.taper([(520,300),(560,380),(620,420),(700,420)],7,2.5)
+    b4=s.taper([(110,620),(40,560),(30,470),(70,420)],7,2.5)
+    for (x,y,R,a,d) in [(470,128,22,math.pi/2,1),(362,800,22,0,-1),(712,402,18,-math.pi/2,1),(88,402,18,math.pi,-1),(752,96,20,math.pi/2,-1)]:
+        s.curl(x,y,R,a,1.3,d,4.5)
+    # sulur kecil
+    for c in [[(390,330),(430,380),(470,380)],[(640,230),(680,270),(720,260)],[(70,760),(130,780),(160,760)],[(300,210),(260,170),(240,120)]]:
+        s.taper(c,3.2,1); s.curl(c[-1][0],c[-1][1]-10,10,math.pi/2,1.1,1,2.6)
+    # daun
+    for (x,y,a,Lf,st) in [(60,720,-.9,95,'dark'),(110,640,.9,80,'gold'),(150,520,-1.1,85,'dark'),(220,440,1.2,78,'gold'),(330,355,-1.9,90,'dark'),(450,315,.95,80,'dark'),(590,260,-1.6,76,'gold'),(690,170,1.0,70,'dark'),
+                          (260,330,-.8,64,'dark'),(330,180,1.4,60,'gold'),(270,560,1.9,70,'dark'),(370,680,-.5,66,'gold'),(560,390,1.6,58,'dark'),(40,520,-1.2,55,'gold')]:
+        s.leaf((x,y),a,Lf*1.3,Lf*.5,.3 if a>0 else -.3,.2 if a>0 else -.2,st)
+    # bunga
+    s.bloom(300,400,112,6,8)
+    s.bloom(470,150,62,5,-15)
+    s.bloom(380,790,58,6,20)
+    s.bloom(700,420,44,5,0,.45)
+    s.bloom(70,420,40,5,30,.45)
+    s.bud((740,120),.6,58); s.bud((160,760),1.4,40); s.bud((720,260),1.0,36); s.bud((240,120),-.3,38)
+    for (x,y,R) in [(560,520,16),(200,250,14),(470,470,13),(120,330,12),(820,300,12),(270,880,12),(520,810,13),(850,60,11)]:
+        s.blossom(x,y,R,x%37)
+    return s.svg(900,900)
 
-def ornament(line,acc):
-    """Rangkaian sudut 900x900 (mekar dari sudut kiri atas)."""
-    s=S(line,acc); random.seed(7)
-    # sulur utama
-    vine(s,[(20,880),(120,640),(60,420),(260,300)],leaves=[(.2,1,46),(.35,-1,40),(.55,1,44),(.75,-1,36)])
-    vine(s,[(260,300),(420,210),(520,120),(700,90)],leaves=[(.2,-1,40),(.45,1,46),(.7,-1,38)])
-    vine(s,[(260,300),(330,420),(480,470),(600,420)],leaves=[(.3,1,40),(.6,-1,36)])
-    vine(s,[(160,560),(260,600),(330,700),(300,800)],leaves=[(.35,-1,36),(.65,1,34)],double=False)
-    vine(s,[(420,210),(400,110),(320,60),(260,40)],leaves=[(.4,1,32)],double=False)
-    for (x,y,r,a,d) in [(700,90,34,0,1),(600,420,30,2,-1),(300,800,28,1,1),(260,40,22,3,-1),(20,880,0,0,1)]:
-        if r: spiral(s,x+r*.2,y-r*.9,r,a,1.7,d)
-    flower(s,260,300,96,6,10)
-    flower(s,560,250,62,5,-12,'round')
-    scallop(s,130,470,52,9)
-    scallop(s,470,470,44,8)
-    flower(s,690,170,40,6,30)
-    scallop(s,360,650,40,8)
-    flower(s,80,760,34,5,20,'round'); scallop(s,610,90,24,8); flower(s,250,520,30,6,0)
-    for (x,y,r) in [(390,110,20),(180,190,18),(640,330,16),(90,700,18),(230,700,15),(520,70,14),(780,250,14),(420,360,14)]:
-        floret(s,x,y,r)
-    cloud(s,700,560,120,60)
-    cloud(s,120,110,80,40,3)
-    cloud(s,560,760,90,46,3)
-    for i in range(40):
-        x,y=random.uniform(30,860),random.uniform(30,860)
-        if x+y<1100: dotcluster(s,x,y,3,1.8)
-    for (x,y,a) in [(340,190,-.6),(200,400,.8),(620,480,2),(470,140,-1.2),(150,600,1.4),(780,140,.4),(300,520,2.6)]:
-        drop(s,x,y,a,16)
-    return svg(900,900,s)
+def tile(D,A,L):
+    s=Art(D,A,L)
+    s.mega(150,150,64,34,4); s.mega(420,410,58,30,4)
+    s.blossom(410,130,16,10); s.blossom(130,410,18,0); s.blossom(280,280,12,20); s.blossom(490,270,9,5); s.blossom(30,290,9,40)
+    for (c,cx,cy) in [([(200,230),(240,270),(280,240)],280,230),([(330,350),(300,320),(260,345)],260,335),([(450,170),(470,210),(500,215)],500,205)]:
+        s.taper(c,2.6,.8); s.curl(cx,cy,8,0,1.1,1,2)
+    s.cecek((0,0,520,520),120,9,(.9,1.5))
+    return s.svg(520,520)
 
-def tile(line,acc):
-    """Ubin 520 isen-isen: awan kecil, bunga kecil, titik & sulur pendek (lebih jarang)."""
-    s=S(line,acc); random.seed(3)
-    cloud(s,130,150,62,32,3)
-    cloud(s,400,400,54,28,3)
-    scallop(s,390,120,26,8)
-    flower(s,130,400,30,5,0,'round')
-    floret(s,260,260,14); floret(s,470,260,10); floret(s,40,280,10); floret(s,260,480,11)
-    for P in [[(180,210),(220,250),(250,200),(300,230)],[(330,330),(300,300),(260,330),(230,300)],[(440,150),(480,190),(470,230),(500,240)]]:
-        vine(s,P,leaves=[(.5,1,18)],dots=False,w=1.4,double=False)
-    spiral(s,60,40,16,0,1.5,1,1.2); spiral(s,330,30,14,2,1.5,-1,1.2); spiral(s,480,480,14,1,1.5,1,1.2)
-    for i in range(70):
-        x,y=random.uniform(5,515),random.uniform(5,515)
-        s.add(f'<circle cx="{f(x)}" cy="{f(y)}" r="{random.choice((1,1.2,1.6))}" fill="{line}" stroke="none"/>')
-    return svg(520,520,s)
-
-import os
-open(os.path.join(OUT,'batik-ornamen.svg'),'w').write(ornament('#0B5843','#B8914F'))
-open(os.path.join(OUT,'batik.svg'),'w').write(tile('#0B5843','#B8914F'))
-open(os.path.join(OUT,'batik-light.svg'),'w').write(tile('#F5EDDF','#D6B57A'))
-open(os.path.join(OUT,'batik-ornamen-light.svg'),'w').write(ornament('#F5EDDF','#D6B57A'))
+out=sys.argv[1]
+for name,fn,cols in [('batik-ornamen.svg',ornament,('#0B5843','#B8914F','#F7F0E2')),('batik-ornamen-light.svg',ornament,('#F5EDDF','#D6B57A','#0E5A46')),
+                     ('batik.svg',tile,('#0B5843','#B8914F','#F7F0E2')),('batik-light.svg',tile,('#F5EDDF','#D6B57A','#0E5A46'))]:
+    open(os.path.join(out,name),'w').write(fn(*cols))

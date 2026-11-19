@@ -17,7 +17,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--i
 .app::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;
   background-image:url("batik.svg");background-size:520px 520px}
 /* ornamen floral besar di sudut (di bawah lapisan warna) */
-.orn{position:absolute;pointer-events:none;width:900px;height:900px;background:url("batik-ornamen.svg") no-repeat;background-size:contain;opacity:.32}
+.orn{position:absolute;pointer-events:none;width:900px;height:900px;background:url("batik-ornamen.svg") no-repeat;background-size:contain;opacity:.24}
 .orn.bl{left:-60px;bottom:-80px}
 .orn.tr{right:-80px;top:-90px;transform:scale(-1,-1)}
 .ph .orn{width:520px;height:520px}.ph .orn.bl{left:-60px;bottom:40px}.ph .orn.tr{right:-90px;top:-60px}
