@@ -339,7 +339,7 @@ function ItemDrawer({ mode: initialMode, cat: initialCat, item, name, list: init
                     const has = existing.has(t.name.toLowerCase());
                     return (
                       <label key={t.id} className="li" style={{ padding: '7px 2px', opacity: has ? .5 : 1, cursor: has ? 'default' : 'pointer' }}>
-                        <input type="checkbox" disabled={has} checked={!!pick[t.id]} onChange={(e) => setPick(p => ({ ...p, [t.id]: e.target.checked }))} style={{ width: 18, height: 18, accentColor: '#B0566B' }} />
+                        <input type="checkbox" disabled={has} checked={!!pick[t.id]} onChange={(e) => setPick(p => ({ ...p, [t.id]: e.target.checked }))} style={{ width: 18, height: 18, accentColor: '#0E6650' }} />
                         <span className="grow">{t.name}{t.qty > 1 ? ' · ' + t.qty + ' ' + t.unit : ''}</span>
                         <span className="xs muted">{has ? 'sudah ada' : t.planned ? rpShort(t.planned) : ''}</span>
                       </label>

@@ -83,7 +83,7 @@ export default function App() {
 export function Bg({ children }) {
   return (
     <>
-      <div className="bgfx" aria-hidden="true"><div className="orb o1" /><div className="orb o2" /><div className="orb o3" /><div className="orb o4" /></div>
+      <div className="bgfx" aria-hidden="true"><div className="bat-tile" /><div className="bat-orn tr" /><div className="bat-orn bl" /><div className="orb o1" /><div className="orb o2" /><div className="orb o3" /><div className="orb o4" /></div>
       {children}
     </>
   );
