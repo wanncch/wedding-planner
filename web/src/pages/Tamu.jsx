@@ -357,7 +357,7 @@ function WaModal({ list, onClose }) {
   return (
     <Modal open onClose={onClose} title={'Kirim undangan ' + E.ev.name} footer={<button type="button" className="btn2" onClick={onClose}>Selesai</button>}>
       <Field label="Pesan" hint="{nama} diganti otomatis"><Area value={msg} onChange={setMsg} rows={7} /></Field>
-      <label className="row nowrap sm" style={{ gap: 8 }}><input type="checkbox" checked={only} onChange={(e) => setOnly(e.target.checked)} style={{ accentColor: '#B0566B' }} />Hanya yang belum dikirim</label>
+      <label className="row nowrap sm" style={{ gap: 8 }}><input type="checkbox" checked={only} onChange={(e) => setOnly(e.target.checked)} style={{ accentColor: '#0E6650' }} />Hanya yang belum dikirim</label>
       <div style={{ maxHeight: 260, overflowY: 'auto' }}>
         {rows.map(i => (
           <div key={i.id} className="li"><span className="grow"><b className="ell" style={{ display: 'block' }}>{i.g.name}</b><span className="xs muted">{i.g.phone}{i.sent ? ' · terkirim' : ''}</span></span><button type="button" className="btn3 sm" onClick={() => send(i)}><Icon name="wa" size={14} />Kirim</button></div>

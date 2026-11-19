@@ -6,6 +6,7 @@ File ini dibaca otomatis oleh Claude saat membuka repo ini. Isinya: apa proyek i
 - Selalu pakai **Bahasa Indonesia**, santai tapi jelas. Pemilik bukan programmer: jelaskan hasil, bukan detail kode.
 - **Mockup dulu, baru kode.** Setiap fitur/tampilan baru: buat mockup (HTML statis yang bisa dilihat) → pemilik review & setuju → baru dibangun. Jangan langsung menulis kode untuk perubahan tampilan tanpa persetujuan. Contoh mockup lama ada di `design-mockup/`.
 - Gaya visual yang disukai: **glass (kaca buram) yang hidup dan berwarna lembut** — orb warna di latar, kartu transparan dengan blur, kartu ringkasan berwarna dengan ikon. Jangan jadi flat/pucat.
+- **Tema v5 · Emerald & Beige** (mockup `design-mockup/v5-emerald/`): warna utama hijau emerald (`#0E6650`), warna kedua beige (`#F5EDDF`) + aksen emas; huruf judul Cormorant Garamond. Latar = motif batik floral (ornamen di 2 sudut + isian tipis, `web/src/assets/batik*.svg`, dibuat oleh `design-mockup/v5-emerald/batik_gen.py`) yang **sangat samar** (ornamen 0.11, isian 0.07) ditutup lapisan warna transparan. Pemilik minta motif tidak terlalu terlihat — jangan dinaikkan. Penimpaan tema ada di akhir `styles.css` (blok "Tema v5").
 - Semua input lewat halaman web. **Tidak ada** edit lewat spreadsheet, tidak pakai Apps Script (dulu terlalu lambat).
 - Kalau pemilik bilang "lanjutkan, aku tinggal", kerjakan sampai selesai, uji, deploy, lalu laporkan singkat.
 - Jangan pernah mengetik kata sandi / API key / SMTP key ke form. Minta pemilik yang mengisi.

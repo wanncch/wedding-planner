@@ -160,7 +160,7 @@ function SideName({ shares }) {
   if (shares.length > 1) return <b style={{ color: '#4A3275' }}>Patungan</b>;
   const p = personById(data, shares[0] && shares[0].p);
   if (!p) return null;
-  return <b style={{ color: p.side === 'pria' ? '#24476B' : p.side === 'wanita' ? '#7A2E44' : '#5E4A55' }}>{p.name.replace(/^Keluarga /, 'Kel. ')}</b>;
+  return <b style={{ color: p.side === 'pria' ? '#24476B' : p.side === 'wanita' ? '#A0524A' : '#5E4A55' }}>{p.name.replace(/^Keluarga /, 'Kel. ')}</b>;
 }
 
 export function PayerPanel({ S, onPick }) {
@@ -315,7 +315,7 @@ function CatalogDrawer({ onClose }) {
   const groups = Array.from(new Set(rows.map(c => c.category)));
   return (
     <Drawer open onClose={onClose} title="Tambah dari katalog" eyebrow={E.ev.name + ' · harga perkiraan · ' + w.target_invites + ' undangan'} wide
-      head={<div className="row"><Seg value={tier} onChange={setTier} items={[{ key: 'min', label: 'Hemat' }, { key: 'std', label: 'Standar' }, { key: 'prem', label: 'Premium' }]} /><label className="row nowrap sm" style={{ gap: 8 }}><input type="checkbox" checked={onlyMine} onChange={(e) => setOnlyMine(e.target.checked)} style={{ accentColor: '#B0566B' }} />Hanya yang cocok untuk {target ? target.name : 'acara ini'}</label></div>}
+      head={<div className="row"><Seg value={tier} onChange={setTier} items={[{ key: 'min', label: 'Hemat' }, { key: 'std', label: 'Standar' }, { key: 'prem', label: 'Premium' }]} /><label className="row nowrap sm" style={{ gap: 8 }}><input type="checkbox" checked={onlyMine} onChange={(e) => setOnlyMine(e.target.checked)} style={{ accentColor: '#0E6650' }} />Hanya yang cocok untuk {target ? target.name : 'acara ini'}</label></div>}
       footer={<><span className="sm muted" style={{ marginRight: 'auto' }}>{chosen.length} dipilih · {rp(chosen.reduce((s, c) => s + est(c), 0))}</span><button type="button" className="btn2" onClick={onClose}>Batal</button><button type="button" className="btn" disabled={!chosen.length} onClick={submit}>Tambahkan</button></>}>
       {!cat ? <Spinner /> : groups.map(g => (
         <div key={g}>
@@ -324,7 +324,7 @@ function CatalogDrawer({ onClose }) {
             const exists = have.has(c.code);
             return (
               <label key={c.code} className="li" style={{ cursor: exists ? 'default' : 'pointer', opacity: exists ? .55 : 1 }}>
-                <input type="checkbox" disabled={exists} checked={!!pick[c.code]} onChange={(e) => setPick(p => ({ ...p, [c.code]: e.target.checked }))} style={{ width: 18, height: 18, accentColor: '#B0566B' }} />
+                <input type="checkbox" disabled={exists} checked={!!pick[c.code]} onChange={(e) => setPick(p => ({ ...p, [c.code]: e.target.checked }))} style={{ width: 18, height: 18, accentColor: '#0E6650' }} />
                 <span className="grow"><b>{c.name}</b>{c.is_vendor && <span className="pill p-sel" style={{ marginLeft: 6 }}>slot vendor</span>}<span className="cell-sub">{c.detail}</span></span>
                 <span style={{ textAlign: 'right' }}><b>{rpShort(est(c))}</b><span className="xs muted" style={{ display: 'block' }}>{exists ? 'sudah ada' : c.unit === 'persen' ? tierPrice(c, tier) + '% subtotal' : rpShort(tierPrice(c, tier)) + ' / ' + UNIT_LABEL[c.unit]}</span></span>
               </label>
