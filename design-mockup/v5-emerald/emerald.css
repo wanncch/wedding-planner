@@ -14,8 +14,13 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--i
 .app{position:relative;overflow:hidden;display:flex;gap:0;min-height:100%;
   background:linear-gradient(160deg,#F7F0E2 0%,#EFE5D2 45%,#E6EDE4 100%)}
 /* lapisan latar: motif batik → lapisan warna transparan */
-.app::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.17;
-  background-image:url("batik.svg");background-size:260px 260px}
+.app::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;
+  background-image:url("batik.svg");background-size:520px 520px}
+/* ornamen floral besar di sudut (di bawah lapisan warna) */
+.orn{position:absolute;pointer-events:none;width:900px;height:900px;background:url("batik-ornamen.svg") no-repeat;background-size:contain;opacity:.32}
+.orn.bl{left:-60px;bottom:-80px}
+.orn.tr{right:-80px;top:-90px;transform:scale(-1,-1)}
+.ph .orn{width:520px;height:520px}.ph .orn.bl{left:-60px;bottom:40px}.ph .orn.tr{right:-90px;top:-60px}
 .layer{position:absolute;border-radius:50%;pointer-events:none;filter:blur(10px)}
 .l1{left:-160px;top:-140px;width:620px;height:620px;background:radial-gradient(circle,rgba(20,122,95,.30),transparent 68%)}
 .l2{right:-180px;top:80px;width:640px;height:640px;background:radial-gradient(circle,rgba(214,181,122,.38),transparent 68%)}
@@ -71,7 +76,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--i
 /* hitung mundur */
 .hero{position:relative;overflow:hidden;border-radius:24px;color:var(--be0);padding:18px 22px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(250px,290px);gap:20px;align-items:center;
   background:linear-gradient(130deg,var(--em9) 0%,var(--em7) 55%,#2F7D5E 100%);box-shadow:0 20px 44px rgba(6,61,46,.35),inset 0 1px 0 rgba(255,255,255,.18)}
-.hero::before{content:"";position:absolute;inset:0;background-image:url("batik-light.svg");background-size:220px;opacity:.14;pointer-events:none}
+.hero::before{content:"";position:absolute;right:-40px;top:-60px;width:620px;height:620px;transform:scale(-1,1);background:url("batik-ornamen-light.svg") no-repeat;background-size:contain;opacity:.16;pointer-events:none}
 .hero::after{content:"";position:absolute;right:-90px;top:-120px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(214,181,122,.35),transparent 68%)}
 .hero>*{position:relative;z-index:1}
 .nx{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:3px 10px 3px 3px;font-size:10.5px;font-weight:800;letter-spacing:.06em;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28)}
@@ -100,7 +105,7 @@ body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--i
 .acards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
 .acard{border-radius:22px;overflow:hidden}
 .ah{padding:15px 17px;display:flex;flex-direction:column;gap:5px;position:relative}
-.ah::before{content:"";position:absolute;inset:0;background-image:url("batik.svg");background-size:180px;opacity:.12}
+.ah::before{content:"";position:absolute;right:-30px;top:-40px;width:260px;height:260px;transform:scale(-1,1);background:url("batik-ornamen.svg") no-repeat;background-size:contain;opacity:.16}
 .ah>*{position:relative}
 .ab{padding:13px 16px 16px;display:flex;flex-direction:column;gap:9px}
 .t-lam{background:linear-gradient(140deg,rgba(236,226,243,.92),rgba(206,186,222,.82));color:#3F2A4E}
