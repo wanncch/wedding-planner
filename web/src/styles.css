@@ -631,8 +631,8 @@ html,body{background:linear-gradient(160deg,#F7F0E2 0%,#EFE5D2 45%,#E6EDE4 100%)
 .h1{font-size:36px}.h2{font-size:21px;font-weight:700}.v{font-size:27px}.bn{font-size:21px;font-weight:700}
 .by{color:var(--gold)}
 /* lapisan latar: motif batik → lapisan warna transparan */
-.bat-tile{position:absolute;inset:0;background:url("./assets/batik.svg");background-size:520px 520px;opacity:.07}
-.bat-orn{position:absolute;width:900px;height:900px;background:url("./assets/batik-ornamen.svg") no-repeat;background-size:contain;opacity:.11}
+.bat-tile{position:absolute;inset:0;background:url("./assets/batik.svg");background-size:520px 520px;opacity:.05}
+.bat-orn{position:absolute;width:900px;height:900px;background:url("./assets/batik-ornamen.svg") no-repeat;background-size:contain;opacity:.075}
 .bat-orn.bl{left:-60px;bottom:-80px}
 .bat-orn.tr{right:-80px;top:-90px;transform:scale(-1,-1)}
 .o1{background:radial-gradient(circle,rgba(20,122,95,.30),transparent 68%)}
