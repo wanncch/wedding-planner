@@ -84,7 +84,7 @@ export default function Rundown() {
                           <button type="button" className={'ev' + (st === 'now' ? ' cur' : '')} onClick={() => setEdit(r)}>
                             <div className="between"><b style={{ fontSize: st === 'now' ? 15 : 14 }}>{r.title}</b>{st === 'now' && <Pill cls="p-rose">● Sedang berlangsung</Pill>}</div>
                             <div className="meta">{r.pic && <span>PIC <b>{r.pic}</b></span>}{r.location && <span>Lokasi <b>{r.location}</b></span>}{r.needs && <span>Perlu <b>{r.needs}</b></span>}</div>
-                            {r.notes && <div className="xs" style={{ marginTop: 6, color: '#8E3B50', fontWeight: 600 }}>Catatan: {r.notes}</div>}
+                            {r.notes && <div className="xs" style={{ marginTop: 6, color: '#A0524A', fontWeight: 600 }}>Catatan: {r.notes}</div>}
                           </button>
                         </div>
                       );
