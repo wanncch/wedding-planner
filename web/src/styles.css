@@ -4,7 +4,7 @@
   --bg:#F5EDDF;--line:rgba(14,102,80,.12);
   --glass:rgba(255,255,255,.46);--glass-b:rgba(255,255,255,.75);
   --sh:0 18px 40px rgba(6,61,46,.10);
-  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+  --serif:Fraunces,Georgia,serif;--sans:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:linear-gradient(160deg,#F7F0E2 0%,#F5EDDF 40%,#E6EDE4 100%) fixed;color:var(--ink);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
@@ -628,7 +628,6 @@ table.t.cmp .pc .ell{max-width:74px}table.t.cmp .n{padding-left:4px}
 :root{--glass:rgba(252,248,241,.58);--glass-b:rgba(255,255,255,.72);--gold:#B8914F;--gold2:#D6B57A;--em9:#063D2E;--em7:#0E6650}
 html,body{background:linear-gradient(160deg,#F7F0E2 0%,#EFE5D2 45%,#E6EDE4 100%) fixed}
 .h1,.h2,.v,.bn,.cpl2,.fl2,.ev2 .h{font-variant-numeric:lining-nums tabular-nums}
-.h1{font-size:36px}.h2{font-size:21px;font-weight:700}.v{font-size:27px}.bn{font-size:21px;font-weight:700}
 .by{color:var(--gold)}
 /* lapisan latar: motif batik → lapisan warna transparan */
 .bat-tile{position:absolute;inset:0;background:url("./assets/batik.svg");background-size:520px 520px;opacity:.05}

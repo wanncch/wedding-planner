@@ -19,7 +19,7 @@ function Ring({ value, size = 118 }) {
     <svg className="ring" viewBox="0 0 120 120" aria-hidden="true" style={{ width: size, height: size }}>
       <circle cx="60" cy="60" r={r} fill="none" stroke="rgba(255,255,255,.28)" strokeWidth="10" />
       <circle cx="60" cy="60" r={r} fill="none" stroke="#fff" strokeWidth="10" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - value / 100)} transform="rotate(-90 60 60)" />
-      <text x="60" y="70" textAnchor="middle" fontFamily="Cormorant Garamond, serif" fontWeight="700" fontSize="32" fill="#fff">{value}</text>
+      <text x="60" y="70" textAnchor="middle" fontFamily="Fraunces, serif" fontWeight="700" fontSize="32" fill="#fff">{value}</text>
     </svg>
   );
 }
