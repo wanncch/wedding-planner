@@ -92,7 +92,7 @@ export default function Admin({ tab: tabParam }) {
         </nav>
         <div className="couple">
           <Avatar name={profile ? profile.display_name : 'Admin'} />
-          <span style={{ minWidth: 0 }}><b className="ell" style={{ display: 'block' }}>{profile ? profile.display_name : ''}</b><button type="button" className="lnk xs" style={{ color: '#F3B3C0' }} onClick={signOut}>Admin · keluar</button></span>
+          <span style={{ minWidth: 0 }}><b className="ell" style={{ display: 'block' }}>{profile ? profile.display_name : ''}</b><button type="button" className="lnk xs" style={{ color: '#D6B57A' }} onClick={signOut}>Admin · keluar</button></span>
         </div>
       </aside>
 

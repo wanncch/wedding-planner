@@ -6,7 +6,7 @@ import { readiness } from '../lib/calc.js';
 import { topEvents, familyIds, eventDateLabel, mainWhen, hMinus, hLabel, visibleMenus } from '../lib/events.js';
 import { dDay, dMed } from '../lib/format.js';
 
-const INK = { c0: '#7A2E44', c1: '#4A3275', c2: '#6B3A12', c3: '#2F5A43', c4: '#24476B', c5: '#215B50', c6: '#6A2D5B' };
+const INK = { c0: '#5A431C', c1: '#4A3275', c2: '#6B3A12', c3: '#2F5A43', c4: '#24476B', c5: '#215B50', c6: '#6A2D5B' };
 const pad = (n) => String(n).padStart(2, '0');
 
 /** Kartu hitung mundur "papan flip": acara utama terdekat + 3 acara utama. */
